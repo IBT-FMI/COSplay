@@ -1,0 +1,13 @@
+{
+	"sequence1":{
+		"numberOfEvents":1,
+		"event1": {
+				"onset":100,
+				"duration":20,
+				"frequency":20,
+				"amplitude":100,
+				"OUTchannel":"A",
+				}
+	}
+	
+}

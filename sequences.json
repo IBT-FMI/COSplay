@@ -5,6 +5,7 @@
 				"onset":100,
 				"duration":20,
 				"frequency":20,
+				"pulse_length":5,
 				"amplitude":100,
 				"OUTchannel":"A",
 				}

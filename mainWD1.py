@@ -1,5 +1,11 @@
+# main.py -- put your code here!
+
+#import json_echo
+
 import time
 import micropython
+import random
+
 import fct
 
 micropython.alloc_emergency_exception_buf(100)
@@ -18,7 +24,7 @@ laserLED = pyb.LED(2)
 def switchLaser(t):
 	val = laser.value()
 	laser.value(not val)
-	laserLED.intensity(val)					#Laser is on when laser.value() = 0 (closing the curcuit switches the laser off)
+	laserLED.intensity(val)			#Laser is on when laser.value() = 0 (closing the curcuit switches the laser off)
 
 def callback1(line):
 	global triggerRecieved
@@ -36,32 +42,32 @@ sw.callback(callback2)
 
 seqs = fct.load("sequences.json")
 
-micros = pyb.Timer(2, prescaler=83, period=0x3fffffff) # micro second counter cycles back to zero after approx 17min
 
-seqName = "sequence1"
+seqName = "sequence0"
 eventName = "event0"
-tim = pyb.Timer(8)
+T = 1/seqs[seqName][eventName]["frequency"]*1000000
 
 while not triggerRecieved:
-	time.sleep_ms(1)
+	time.sleep_us(1)
 
-#print("Trigger recieved")
 triggerLED.on()
-micros.counter(0)
-#print("Micro counter set to zero")
+start_ticks = time.ticks_us()
+extint.disable()
 
-for i in range(1,seqs[seqName]["numberOfEvents"]+1):
-	#print("first line in loop")
+for i in range(0,len(seqs[seqName])):
+	
 	eventName = "event" + str(i)
-	#print("event name set")
-	tim.init(freq=seqs[seqName][eventName]["frequency"])
-	#print("timer is initialised")
-	while micros.counter()<seqs[seqName][eventName]["onset"]:
-		time.sleep_ms(1)
-	#print("event should start now")
-	tim.callback(switchLaser)
-	while micros.counter()<(seqs[seqName][eventName]["onset"]+seqs[seqName][eventName]["duration"]*1000000): #conversion form seconds to microseconds
-		time.sleep_ms(1)
-	#print("event should be done now")
-	tim.callback(None)
-	fct.switchLaserOff(laser,laserLED)
+	scheduled_time = time.ticks_add(start_ticks,seqs[seqName][eventName]["onset"]*1000)
+	end_time = time.ticks_add(start_ticks,(seqs[seqName][eventName]["onset"]+seqs[seqName][eventName]["duration"])*1000)
+	
+	while time.ticks_diff(scheduled_time,end_time) < 0:
+		now = time.ticks_us()
+		if time.ticks_diff(now,scheduled_time) < 0:
+			time.sleep_us(time.ticks_diff(scheduled_time,now))
+			fct.laserPulse(laser,seqs[seqName][eventName][pulseWidth],laserLED)
+		elif time.ticks_diff(now,scheduled_time) == 0:
+			fct.laserPulse(laser,seqs[seqName][eventName][pulseWidth],laserLED)
+		elif time.ticks_diff(now,scheduled_time) > 0:
+			raise NameError("Missed scheduled onset time of " + seqName + ": " + eventName)
+		scheduled_time = time.ticks_add(scheduled_time,T)
+

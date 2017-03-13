@@ -1,14 +1,46 @@
 {
-	"sequence1":{
-		"numberOfEvents":1,
-		"event1": {
-				"onset":100,
-				"duration":20,
+	"sequence0":{
+		"event0": {
+				"onset":10000,
+				"duration":20000,
+				"pulswidth":5,
 				"frequency":20,
-				"pulse_length":5,
 				"amplitude":100,
-				"OUTchannel":"A",
+				"OUTchannel":"D",
+				},
+		"event1": {
+				"onset":35000,
+				"duration":10000,
+				"pulswidth":5,
+				"frequency":20,
+				"amplitude":100,
+				"OUTchannel":"D",
+				},
+		"event2": {
+				"onset":50000,
+				"duration":5000,
+				"pulswidth":5,
+				"frequency":20,
+				"amplitude":100,
+				"OUTchannel":"D",
+				},
+		"event3": {
+				"onset":65000,
+				"duration":20000,
+				"pulswidth":5,
+				"frequency":20,
+				"amplitude":100,
+				"OUTchannel":"D",
+				}
+	},
+	"sequence1":{
+		"event0": {
+				"onset":1000,
+				"duration":20000,
+				"pulswidth":5,
+				"frequency":20,
+				"amplitude":100,
+				"OUTchannel":"D",
 				}
 	}
-	
 }

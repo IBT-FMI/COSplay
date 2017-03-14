@@ -39,7 +39,7 @@ sw.callback(callback2)
 seqs = fct.load("sequences.json")
 
 
-seqName = "sequence0"
+seqName = "sequence" + random.randrange(len(seqs))
 eventName = "event0"
 T = int(1/seqs[seqName][eventName]["frequency"]*1000000)
 

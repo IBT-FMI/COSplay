@@ -1,4 +1,5 @@
 import json
+import time
 
 def load(filename):
 	with open(filename) as data_file:
@@ -9,13 +10,13 @@ def switchLaserOff(laser,laserLED):
 	laser.value(1)
 	laserLED.off()
 
-def switchLaserOn(laser,laserLED):
+def switchLaserOn(laser,amplitude,laserLED):
 	laser.value(0)
 	laserLED.on()
 
-def laserPulse(laser,pulseWidth,laserLED):
+def laserPulse(laser,pulseWidth,laserLED,amplitude=100):
 	now = time.ticks_us()
-	switchLaserOn(laser,laserLED)
+	switchLaserOn(laser,amplitude,laserLED)
 	scheduled_time = time.ticks_add(now,pulseWidth*1000)
 	if time.ticks_diff(now,scheduled_time) < 0:
 		time.sleep_us(time.ticks_diff(scheduled_time,now))

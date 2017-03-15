@@ -20,3 +20,12 @@ while True:
 		if obj is not None:
 			print('Rcvd', obj)
 			break
+
+print("Delivered sequence:")
+while True:
+	byte = port.read_byte()
+	if byte is not None:
+		obj = jpkt.process_byte(byte)
+		if obj is not None:
+			print('Rcvd', obj)
+			break

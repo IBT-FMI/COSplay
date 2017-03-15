@@ -53,6 +53,7 @@ while not skipRecievingFile:
 		seqs = jpkt.process_byte(byte)
 		if seqs is not None:
 			jpkt.send(seqs)
+			break
 			
 if seqs is  None:
 	seqs = fct.load("sequences.json")
@@ -91,3 +92,4 @@ for i in range(0,len(seqs[seqName])):
 			raise NameError("Missed scheduled onset time of " + seqName + ": " + eventName)
 		scheduled_time = time.ticks_add(scheduled_time,T)
 
+jpkt.send(seqs[seqName])

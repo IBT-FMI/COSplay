@@ -9,24 +9,41 @@ from serial_port import SerialPort
 from json_pkt import JSON_Packet
 
 
-VENDOR = 'Bruker'
-VERBOSE = 2
-
-
 def main():
 
 	parser = argparse.ArgumentParser(prog="COSplay",
-					usage="%(prog)s [options] [command]",
-					description="main program running on host computer for usage with a pyboard running COSplay")
+					description="Main program running on host computer for usage with a pyboard running COSplay")
 	parser.add_argument("-v","--verbose",
-			dest="VERBOSE",
+			dest="verbose",
 			action="store",
 			type=int,
 			help="Set the verbosity.",
-			default=1)
-	
+			default='1')
+	parser.add_argument('--vendor',
+			dest='vendor',
+			action='store',
+			type=str,
+			help='Is needed to find the correct folder. Program knows "bruker" (default=bruker)',
+			default='bruker')
+	parser.add_argument('--port',
+			dest='port',
+			action='store',
+			type=str,
+			help='Name of port pyboard is connected to. Generally not necessary as system should find the right port automatically.',
+			default=None)
+	parser.add_argument('--file',
+			dest='file',
+			action='store',
+			type=str,
+			help='Path to json file containing the sequences.',
+			default='sequences.json')
+	args = parser.parse_args()
+	verbose = args.verbose
+	vendor = args.vendor
+	seqFileName = args.file
+
 	"""Establishing connection to pyboard"""
-	portName = None
+	portName = args.port
 	print('Seraching port...')
 	while not portName:
 		portName = serial_port.autoscan()
@@ -41,30 +58,38 @@ def main():
 	print('Connection established')
 	
 	
-	"""Loading sequence and sending it to the board"""
+	"""Loading sequences and sending them to the board"""
 	seqs = None
 	
-	with open("sequences.json") as data_file:
+	with open(seqFileName) as data_file:
 		seqs = json.load(data_file)
-	if VERBOSE >= 2:
+	if verbose >= 2:
 		jpkt = JSON_Packet(port,show_packets=True)
 	else:	
 		jpkt = JSON_Packet(port)
 	
 	jpkt.send(seqs)
-	if VERBOSE >= 2:
-		print('Sent sequence:\n' + str(seqs))
+	if verbose == 1:
+		print('Sequences sent to board')
+	elif verbose >= 2:
+		print('Sent sequences:\n' + str(seqs))
 	
 	"""Recieving delivered sequence and storing it in appropriate directory"""
+	print('Press Ctrl+c when you are done to close the program.')	
+	try:
+		while True:
+			rcvdSeq = None
+			while True:
+				byte = port.read_byte()
+				if byte is not None:
+					rcvdSeq = jpkt.process_byte(byte)
+					if rcvdSeq is not None:
+						break
+			if verbose >= 2:
+				print('Received sequence:\n' + str(rcvdSeq))
+	except KeyboardInterrupt:
+		print("Ending program!")
 	
-	rcvdSeq = None
-	while True:
-		byte = port.read_byte()
-		if byte is not None:
-			rcvdSeq = jpkt.process_byte(byte)
-			if rcvdSeq is not None:
-				break
-	if VERBOSE >= 2:
-		print('Recieved sequence:\n' + str(rcvdSeq))
+	port.close_serial()
 
 main()

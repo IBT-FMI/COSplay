@@ -10,7 +10,7 @@ import fct
 
 micropython.alloc_emergency_exception_buf(100)
 
-triggerRecieved = False
+triggerReceived = False
 
 triggerDuration = 1
 
@@ -23,12 +23,12 @@ laserLED = pyb.LED(2)
 
 
 def callback1(line):
-	global triggerRecieved
-	triggerRecieved = True
+	global triggerReceived
+	triggerReceived = True
 
 def callback2():
-	global triggerRecieved
-	triggerRecieved=True
+	global triggerReceived
+	triggerReceived=True
 
 
 extint = pyb.ExtInt('X1', pyb.ExtInt.IRQ_FALLING, pyb.Pin.PULL_UP, callback1)
@@ -43,11 +43,11 @@ seqName = "sequence0"
 eventName = "event0"
 T = int(1/seqs[seqName][eventName]["frequency"]*1000000)
 
-while not triggerRecieved:
+while not triggerReceived:
 	time.sleep_us(1)
 
 triggerLED.on()
-print('trigger recieved')
+print('trigger received')
 start_ticks = time.ticks_us()
 extint.disable()
 

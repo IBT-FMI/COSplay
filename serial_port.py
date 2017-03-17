@@ -26,6 +26,12 @@ class SerialPort(object):
         except:
             return False
         return True
+
+    def close_serial(self):
+        if self.serial_port:
+            print('Closing serial...')
+            self.serial_port.close()
+        self.serial_port = None
 	
     def is_byte_available(self):
         readable, _, _ = select.select([self.serial_port.fileno()], [], [], 0)

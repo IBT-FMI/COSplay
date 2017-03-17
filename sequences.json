@@ -1,7 +1,7 @@
 {
 	"sequence0":{
 		"event0": {
-				"onset":10000,
+				"onset":1000,
 				"duration":20000,
 				"pulsewidth":5,
 				"frequency":20,

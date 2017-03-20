@@ -17,7 +17,7 @@ def switchLaserOn(laser,amplitude,laserLED):
 def laserPulse(laser,pulseWidth,laserLED,amplitude=100):
 	now = time.ticks_us()
 	switchLaserOn(laser,amplitude,laserLED)
-	scheduled_time = time.ticks_add(now,pulseWidth*1000)
+	scheduled_time = time.ticks_add(now,pulseWidth)
 	if time.ticks_diff(now,scheduled_time) < 0:
 		time.sleep_us(time.ticks_diff(scheduled_time,now))
 		switchLaserOff(laser,laserLED)

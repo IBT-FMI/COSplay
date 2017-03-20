@@ -1,14 +1,14 @@
 import json
 
-sequence_onset = 2000
+sequence_onset = 192
 numEvents = 8
-onset_distance = 150000
+onset_distance = 150
 
 dic = {'sequence0':{}}
 for i in range(0,numEvents):
 	dic['sequence0']['event' + str(i)] = {"onset":sequence_onset+i*onset_distance,
-					      "duration":20000,
-					      "pulsewidth":5,
+					      "duration":20,
+					      "pulsewidth":0.005,
 					      "frequency":20,
 					      "amplitude":100,
 					      "OUTchannel":"D"}

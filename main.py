@@ -84,13 +84,13 @@ def main():
 		rangeOfEvents = range(0,numOfEvents)
 		eventName = ["event0"]
 		T = [int(1/seqs[seqName][eventName[0]]["frequency"]*1000000)]
-		onset = [seqs[seqName][eventName[0]]["onset"]*1000]
-		duration = [(seqs[seqName][eventName[0]]["onset"]+seqs[seqName][eventName[0]]["duration"])*1000]
+		onset = [seqs[seqName][eventName[0]]["onset"]*1000000]
+		duration = [(seqs[seqName][eventName[0]]["onset"]+seqs[seqName][eventName[0]]["duration"])*1000000]
 		for i in range(1,numOfEvents):
 			eventName.append("event" + str(i))
 			T.append(int(1/seqs[seqName][eventName[i]]["frequency"]*1000000))
-			onset.append(seqs[seqName][eventName[i]]["onset"]*1000)
-			duration.append((seqs[seqName][eventName[i]]["onset"]+seqs[seqName][eventName[i]]["duration"])*1000)
+			onset.append(seqs[seqName][eventName[i]]["onset"]*1000000)
+			duration.append((seqs[seqName][eventName[i]]["onset"]+seqs[seqName][eventName[i]]["duration"])*1000000)
 
 		armedLED.on()
 
@@ -114,11 +114,11 @@ def main():
 				now = time.ticks_us()
 				if time.ticks_diff(now,scheduled_time) < 0:
 					time.sleep_us(time.ticks_diff(scheduled_time,now))
-					fct.laserPulse(laser,seqs[seqName][eventName[i]]["pulsewidth"],laserLED)
+					fct.laserPulse(laser,seqs[seqName][eventName[i]]["pulsewidth"]*1000000,laserLED)
 				elif time.ticks_diff(now,scheduled_time) == 0:
-					fct.laserPulse(laser,seqs[seqName][eventName[i]]["pulsewidth"],laserLED)
+					fct.laserPulse(laser,seqs[seqName][eventName[i]]["pulsewidth"]*1000000,laserLED)
 				elif time.ticks_diff(now,scheduled_time) > 0:
-					fct.laserPulse(laser,seqs[seqName][eventName[i]]["pulsewidth"],laserLED)
+					fct.laserPulse(laser,seqs[seqName][eventName[i]]["pulsewidth"]*1000000,laserLED)
 					try:				
 						raise TimingErr("Missed scheduled onset time of {0}:{1} by {2} us ".format(seqName,
 								eventName[i],time.ticks_diff(now,scheduled_time)))

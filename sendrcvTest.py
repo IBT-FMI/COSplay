@@ -6,7 +6,7 @@ import argparse
 import json
 import serial_port
 from serial_port import SerialPort
-from json_pkt import JSON_Packet
+from pkt import Packet
 
 
 def main():
@@ -64,11 +64,11 @@ def main():
 	with open(seqFileName) as data_file:
 		seqs = json.load(data_file)
 	if verbose >= 2:
-		jpkt = JSON_Packet(port,show_packets=True)
+		pkt = Packet(port,show_packets=True)
 	else:	
-		jpkt = JSON_Packet(port)
+		pkt = Packet(port)
 	
-	jpkt.send(seqs)
+	pkt.send(seqs)
 	if verbose == 1:
 		print('Sequences sent to board')
 	elif verbose >= 2:
@@ -78,15 +78,17 @@ def main():
 	print('Press Ctrl+c when you are done to close the program.')	
 	try:
 		while True:
-			rcvdSeq = None
+			rcvd = None
 			while True:
 				byte = port.read_byte()
 				if byte is not None:
-					rcvdSeq = jpkt.process_byte(byte)
-					if rcvdSeq is not None:
+					rcvd = pkt.process_byte(byte)
+					if rcvd is not None:
 						break
-			if verbose >= 2:
-				print('Received sequence:\n' + str(rcvdSeq))
+			if type(rcvd) is str:
+				print(rcvd)
+			elif verbose >= 1:
+				print('Received sequence:\n' + str(rcvd))
 	except KeyboardInterrupt:
 		print("Ending program!")
 	

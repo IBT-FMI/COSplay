@@ -4,15 +4,16 @@ import time
 import micropython
 import random
 
+import config
 import fct
-#from stm_usb_port import USB_Port
-#from json_pkt import JSON_Packet
+from stm_usb_port import USB_Port
+from pkt import Packet
 
 micropython.alloc_emergency_exception_buf(100)
 
 armed = False
 triggerReceived = False
-#skipReceivingFile = False
+skipReceivingFile = False
 
 class TimingErr(Exception):
 	pass
@@ -44,38 +45,32 @@ def main():
 	laser.value(1)
 	laserLED = pyb.LED(4)
 	
-#	serial_port = USB_Port()
+	serial_port = USB_Port()
 	armedLED = pyb.LED(3)			#indicates when the system is waiting for a trigger
 	triggerLED = pyb.LED(2)
 	
 	
 	extint = pyb.ExtInt('X1', pyb.ExtInt.IRQ_FALLING, pyb.Pin.PULL_DOWN, callbackTrigger)
-	print('before switch definition')
 	sw = pyb.Switch()     			
-#	sw.callback(callbackRcvFile)			#by pressing the switch the reception of the json file can be skiped
-	print('after switch initialisations')
+	sw.callback(callbackRcvFile)			#by pressing the switch the reception of the json file can be skiped
 	seqs = None
-#	jpkt = JSON_Packet(serial_port)
-#	print('before while not skipReceivingFile')
-#	while not skipReceivingFile:
-#		print(skipReceivingFile)
-#		byte = serial_port.read_byte()
-#		if byte is not None:
-#			seqs = jpkt.process_byte(byte)
-#			if seqs is not None:
-#				jpkt.send(seqs)
-#				break
-#		time.sleep_ms(100)
-	print('before loading file')
+	pkt = Packet(serial_port)
+	while not skipReceivingFile:
+		byte = serial_port.read_byte()
+		if byte is not None:
+			seqs = pkt.process_byte(byte)
+			if type(seqs) is dict:
+				pkt.send('Sequences received!')
+				break
+		time.sleep_ms(100)
 	if seqs is  None:
-		seqs = fct.load("sequences.json")
-	print('before changin switch function')
-	
-	print('after loading json file')	
+		pkt.send('Loading {0} stored on pyboard!'.format(config.fileName))
+		seqs = fct.load(config.fileName)
 
 	seqName = "sequence0" # + random.randrange(len(seqs))
 
 	sw.callback(callbackArm)
+	pkt.send('Ready to be armed!')
 	while not armed:
 		time.sleep(0.5)
 
@@ -102,7 +97,6 @@ def main():
 		start_ticks = time.ticks_us()
 		triggerLED.on()
 		armedLED.off()
-		print('trigger received')
 		extint.disable()
 		
 		for i in rangeOfEvents:
@@ -123,17 +117,18 @@ def main():
 						raise TimingErr("Missed scheduled onset time of {0}:{1} by {2} us ".format(seqName,
 								eventName[i],time.ticks_diff(now,scheduled_time)))
 					except TimingErr:
-						print("Missed scheduled onset time of {0}:{1} by {2} us ".format(seqName,
+						pkt.send("Missed scheduled onset time of {0}:{1} by {2} us ".format(seqName,
 							eventName[i],time.ticks_diff(now,scheduled_time)))
 				scheduled_time = time.ticks_add(scheduled_time,T[i])
 
-#		jpkt.send(seqs[seqName])
+		pkt.send(seqs[seqName])
 
 		triggerReceived = False
 		triggerLED.off()
 
 		sw.callback(callbackArm)
 		armed = False
+		pkt.send('Ready to be armed!')
 		while not armed:
 			time.sleep(0.5)
 

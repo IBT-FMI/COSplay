@@ -6,7 +6,7 @@
             "duration":20,
             "frequency":20,
             "onset":192,
-            "pulsewidth":0.005
+            "pulse_width":0.005
         },
         "event1":{
             "OUTchannel":"D",
@@ -14,7 +14,7 @@
             "duration":20,
             "frequency":20,
             "onset":342,
-            "pulsewidth":0.005
+            "pulse_width":0.005
         },
         "event2":{
             "OUTchannel":"D",
@@ -22,7 +22,7 @@
             "duration":20,
             "frequency":20,
             "onset":492,
-            "pulsewidth":0.005
+            "pulse_width":0.005
         },
         "event3":{
             "OUTchannel":"D",
@@ -30,7 +30,7 @@
             "duration":20,
             "frequency":20,
             "onset":642,
-            "pulsewidth":0.005
+            "pulse_width":0.005
         },
         "event4":{
             "OUTchannel":"D",
@@ -38,7 +38,7 @@
             "duration":20,
             "frequency":20,
             "onset":792,
-            "pulsewidth":0.005
+            "pulse_width":0.005
         },
         "event5":{
             "OUTchannel":"D",
@@ -46,7 +46,7 @@
             "duration":20,
             "frequency":20,
             "onset":942,
-            "pulsewidth":0.005
+            "pulse_width":0.005
         },
         "event6":{
             "OUTchannel":"D",
@@ -54,7 +54,7 @@
             "duration":20,
             "frequency":20,
             "onset":1092,
-            "pulsewidth":0.005
+            "pulse_width":0.005
         },
         "event7":{
             "OUTchannel":"D",
@@ -62,7 +62,7 @@
             "duration":20,
             "frequency":20,
             "onset":1242,
-            "pulsewidth":0.005
+            "pulse_width":0.005
         }
     }
 }

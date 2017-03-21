@@ -12,50 +12,50 @@ from pkt import Packet
 micropython.alloc_emergency_exception_buf(100)
 
 armed = False
-triggerReceived = False
-skipReceivingFile = False
+trigger_received = False
+skip_receiving_file = False
 
 class TimingErr(Exception):
 	pass
 
 
-def callbackTrigger(line):
-	global triggerReceived
-	triggerReceived = True
+def callback_trigger(line):
+	global trigger_received
+	trigger_received = True
 
-def callbackTrigger2():
-	global triggerReceived
-	triggerReceived = True
+def callback_trigger2():
+	global trigger_received
+	trigger_received = True
 
-def callbackRcvFile():
-	global skipReceivingFile
-	skipReceivingFile = True
+def callback_rcv_file():
+	global skip_receiving_file
+	skip_receiving_file = True
 
-def callbackArm():
+def callback_arm():
 	global armed
 	armed = True
 
 def main():
 
 	global armed
-	global triggerReceived
-	global skipReceivingFile
+	global trigger_received
+	global skip_receiving_file
 	
-	laser = pyb.Pin('Y1',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_UP)
-	laser.value(1)
-	laserLED = pyb.LED(4)
+	pin_out = pyb.Pin('Y1',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_UP)
+	pin_out.value(1)
+	pin_outLED = pyb.LED(4)
 	
 	serial_port = USB_Port()
 	armedLED = pyb.LED(3)			#indicates when the system is waiting for a trigger
 	triggerLED = pyb.LED(2)
 	
 	
-	extint = pyb.ExtInt('X1', pyb.ExtInt.IRQ_FALLING, pyb.Pin.PULL_DOWN, callbackTrigger)
+	extint = pyb.ExtInt('X1', pyb.ExtInt.IRQ_FALLING, pyb.Pin.PULL_DOWN, callback_trigger)
 	sw = pyb.Switch()     			
-	sw.callback(callbackRcvFile)			#by pressing the switch the reception of the json file can be skiped
+	sw.callback(callback_rcv_file)			#by pressing the switch the reception of the json file can be skiped
 	seqs = None
 	pkt = Packet(serial_port)
-	while not skipReceivingFile:
+	while not skip_receiving_file:
 		byte = serial_port.read_byte()
 		if byte is not None:
 			seqs = pkt.process_byte(byte)
@@ -69,7 +69,7 @@ def main():
 
 	seqName = "sequence0" # + random.randrange(len(seqs))
 
-	sw.callback(callbackArm)
+	sw.callback(callback_arm)
 	pkt.send('Ready to be armed!')
 	while not armed:
 		time.sleep(0.5)
@@ -89,9 +89,9 @@ def main():
 
 		armedLED.on()
 
-		sw.callback(callbackTrigger2)			#for test purposes the switch can be used to trigger
+		sw.callback(callback_trigger2)			#for test purposes the switch can be used to trigger
 		extint.enable()
-		while not triggerReceived:
+		while not trigger_received:
 			time.sleep_us(1)
 
 		start_ticks = time.ticks_us()
@@ -108,11 +108,11 @@ def main():
 				now = time.ticks_us()
 				if time.ticks_diff(now,scheduled_time) < 0:
 					time.sleep_us(time.ticks_diff(scheduled_time,now))
-					fct.laserPulse(laser,seqs[seqName][eventName[i]]["pulsewidth"]*1000000,laserLED)
+					fct.pulse_delivery(pin_out,seqs[seqName][eventName[i]]["pulse_width"]*1000000,pin_outLED)
 				elif time.ticks_diff(now,scheduled_time) == 0:
-					fct.laserPulse(laser,seqs[seqName][eventName[i]]["pulsewidth"]*1000000,laserLED)
+					fct.pulse_delivery(pin_out,seqs[seqName][eventName[i]]["pulse_width"]*1000000,pin_outLED)
 				elif time.ticks_diff(now,scheduled_time) > 0:
-					fct.laserPulse(laser,seqs[seqName][eventName[i]]["pulsewidth"]*1000000,laserLED)
+					fct.pulse_delivery(pin_out,seqs[seqName][eventName[i]]["pulse_width"]*1000000,pin_outLED)
 					try:				
 						raise TimingErr("Missed scheduled onset time of {0}:{1} by {2} us ".format(seqName,
 								eventName[i],time.ticks_diff(now,scheduled_time)))
@@ -123,10 +123,10 @@ def main():
 
 		pkt.send(seqs[seqName])
 
-		triggerReceived = False
+		trigger_received = False
 		triggerLED.off()
 
-		sw.callback(callbackArm)
+		sw.callback(callback_arm)
 		armed = False
 		pkt.send('Ready to be armed!')
 		while not armed:

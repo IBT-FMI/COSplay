@@ -8,7 +8,7 @@ dic = {'sequence0':{}}
 for i in range(0,numEvents):
 	dic['sequence0']['event' + str(i)] = {"onset":sequence_onset+i*onset_distance,
 					      "duration":20,
-					      "pulsewidth":0.005,
+					      "pulse_width":0.005,
 					      "frequency":20,
 					      "amplitude":100,
 					      "OUTchannel":"D"}

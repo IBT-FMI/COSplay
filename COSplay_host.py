@@ -142,7 +142,10 @@ def main():
 						print('Sequence saved as {0}'.format(path+'sequence.json'))
 					if msg != '':
 						with open(path+'errors.txt','w+') as fp:
-							print(msg,file=fp)
+							try:
+								eval(print(msg,file=fp))
+							except SyntaxError:
+								print >>fp, msg
 							print('Error messages saved as {0}'.format(path+'errors.txt'))
 				else:
 					with open(storage_path+'sequece'+str(file_idx)+'.json','w+') as fp:
@@ -150,7 +153,10 @@ def main():
 						print('Sequence saved as {0}'.format(storage_path+'sequece'+str(file_idx)+'.json'))
 						if msg != '':
 							with open(storage_path+'errors'+str(file_idx)+'.txt','w+') as fp:
-								print(msg,file=fp)
+								try:
+									eval(print(msg,file=fp))
+								except SyntaxError:
+									print >>fp, msg
 								print('Error messages saved as {0}'.format(storage_path+'errors'+str(file_idx)+'.txt'))
 					file_idx += 1
 	port.close_serial()

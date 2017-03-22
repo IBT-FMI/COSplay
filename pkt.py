@@ -124,3 +124,7 @@ class Packet:
 				elif self.pkt_type == STA:
 					return str(self.pkt, 'ascii')
 
+	def is_safe_to_end(self):
+		if self.state == Packet.STATE_SOH:
+			return True
+		return False

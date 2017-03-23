@@ -18,7 +18,10 @@ INS = 0x07			#instruction form pyboard to COSplay_host
 def lrc(str):
 	sum = 0
 	for b in str:
-		sum = (sum + b) & 0xff
+		try:
+			sum = (sum + b) & 0xff
+		except TypeError:
+			sum = (sum + ord(b)) & 0xff
 	return ((sum ^ 0xff) + 1) & 0xff
 
 class Packet:

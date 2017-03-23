@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import time
 import argparse
@@ -143,7 +143,7 @@ def main():
 					if msg != '':
 						with open(path+'errors.txt','w+') as fp:
 							try:
-								eval(print(msg,file=fp))
+								eval('print(msg,file=fp)')
 							except SyntaxError:
 								print >>fp, msg
 							print('Error messages saved as {0}'.format(path+'errors.txt'))
@@ -154,7 +154,7 @@ def main():
 						if msg != '':
 							with open(storage_path+'errors'+str(file_idx)+'.txt','w+') as fp:
 								try:
-									eval(print(msg,file=fp))
+									eval('print(msg,file=fp)')
 								except SyntaxError:
 									print >>fp, msg
 								print('Error messages saved as {0}'.format(storage_path+'errors'+str(file_idx)+'.txt'))

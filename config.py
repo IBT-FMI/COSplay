@@ -1,7 +1,7 @@
-"""Path to json file storing sequences on pyboard
-(only used if no file is send from the host)
+"""Path to json files storing sequences on pyboard
+(useing wildcards), e.g. /library0/sequence*.json
 """
-fileName = 'sequences.json'
+file_name = 'sequences.json'
 
 """Timing accuracy can be 'us' or 'ms'"""
 accuracy = 'us'

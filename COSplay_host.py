@@ -25,7 +25,7 @@ def find_dir(vendor):
 			raise RuntimeError('Multiple versions of ParaVision found. List of folders found: ' + str(general_directory))
 		elif len(general_directory) == 0:
 			raise RuntimeError('No directory found in /opt/PV*/data/mri/') 
-		return max(glob.iglob(general_directory[0] + '*/*/fid'), key = os.path.getctimei)[:-3]   # :-3 removes the fid (which is one of the files the data from the scanner is written to)
+		return max(glob.iglob(general_directory[0] + '*/*/fid'), key = os.path.getctime)[:-3]   # :-3 removes the fid (which is one of the files the data from the scanner is written to)
 	raise ValueError('Finding standard data path is not supported for {0} systems.'.format(vendor))
 
 def main():

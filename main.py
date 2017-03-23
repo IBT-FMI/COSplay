@@ -3,6 +3,8 @@
 import time
 import micropython
 import random
+import glob
+import os
 
 import config as cfg
 import fct
@@ -35,9 +37,66 @@ def callback_arm():
 
 def main():
 
+	#keep the following lines close to the begining of main because laser is switched on until pin_out.value(1)
+	pin_out = pyb.Pin('Y1',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_UP)
+	pin_out.value(1)
+	pin_outLED = pyb.LED(4)
+	
 	global armed
 	global trigger_received
 	global skip_receiving_file
+	
+	serial_port = USB_Port()
+	pkt = Packet(serial_port)
+
+	armedLED = pyb.LED(3)			#indicates when the system is waiting for a trigger
+	triggerLED = pyb.LED(2)
+
+	file_paths = glob.glob(cfg.file_name)
+	if len(file_paths) >= 1:
+		pkt.send(pkt.INS_check_COSgen_folder)
+		answer = pkt.receive()
+		if answer == True:
+			pkt.send(pkt.INS_ask_user)
+			answer = pkt.receive()
+			if answer == pkt.ANS_use_COSgen_seqs:
+				pkt.send(pkt.INS_send_sequences)
+				path = ''
+				if os.path.exists('/sd/')
+					path = '/sd/library0/'	
+				elif os.path.exists('1:/')
+					path = '1:/library0/'			#older versions of the pyboard use 0:/ and 1:/ instead of /flash and /sd
+				elif os.path.exists('/flash/')
+					path = '/flash/library0/'	
+				elif os.path.exists('0:/')
+					path = '0:/library0/'	
+				while os.path.exists(path):
+					path = path[:-2] + str(int(path[:-1])+1)
+				sequence_idx = 0
+				rcvd_pkt = pkt.receive()
+				while type(rcvd_pkt) == dict:
+					with open(path+'sequence'+sequence_idx+'.json','w+')
+					json.dump(rcvd_pkt, fp, sort_keys=True, indent=4, separators=(',',': '))
+					rcvd_pkt = pkt.reveice()
+				file_paths = glob.glob(path+'sequence*.json')
+			
+	else:
+		pkt.send(pkt.INS_check_COSgen_folder)
+		answer = pkt.receive()
+		if answer == True:
+			pkt.send(pkt.INS_send_sequences)
+			path = '/SD/sequences0/'
+			while os.path.exists(path):
+				path = path[:-2] + str(int(path[:-1])+1)
+			sequence_idx = 0
+			rcvd_pkt = pkt.receive()
+			while type(rcvd_pkt) == dict:
+				with open(path+'sequence'+sequence_idx+'.json','w+')
+				json.dump(rcvd_pkt, fp, sort_keys=True, indent=4, separators=(',',': '))
+				rcvd_pkt = pkt.reveice()
+			file_paths = glob.glob(path+'sequence*.json')
+		else:
+			pkt.send('Error: No sequences found! You can creat sequences using COSgen.')
 
 	ticks = None				#Holds the function for time measurment
 	sleep = None				#Corresponding sleep function for ticks
@@ -51,30 +110,22 @@ def main():
 		sleep = time.sleep_ms
 		conversion_factor = 1000
 
-	pin_out = pyb.Pin('Y1',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_UP)
-	pin_out.value(1)
-	pin_outLED = pyb.LED(4)
-	
-	serial_port = USB_Port()
-	armedLED = pyb.LED(3)			#indicates when the system is waiting for a trigger
-	triggerLED = pyb.LED(2)
-	
-	
+
+
 	extint = pyb.ExtInt('X1', pyb.ExtInt.IRQ_FALLING, pyb.Pin.PULL_DOWN, callback_trigger)
 	sw = pyb.Switch()     			
-	sw.callback(callback_rcv_file)			#by pressing the switch the reception of the json file can be skiped
-	seqs = None
-	pkt = Packet(serial_port)
-	while not skip_receiving_file:
-		byte = serial_port.read_byte()
-		if byte is not None:
-			seqs = pkt.process_byte(byte)
-			if type(seqs) is dict:
-				pkt.send('Sequences received!')
-				break
-	if seqs is  None:
-		pkt.send('Loading {0} stored on pyboard!'.format(cfg.fileName))
-		seqs = fct.load(cfg.fileName)
+#	sw.callback(callback_rcv_file)			#by pressing the switch the reception of the json file can be skiped
+#	seqs = None
+#	while not skip_receiving_file:
+#		byte = serial_port.read_byte()
+#		if byte is not None:
+#			seqs = pkt.process_byte(byte)
+#			if type(seqs) is dict:
+#				pkt.send('Sequences received!')
+#				break
+#	if seqs is  None:
+#		pkt.send('Loading {0} stored on pyboard!'.format(cfg.file_name))
+#		seqs = fct.load(cfg.file_name)
 	seqName = "sequence0" # + random.randrange(len(seqs))
 
 	sw.callback(callback_arm)
@@ -113,7 +164,7 @@ def main():
 			end_time = time.ticks_add(start_ticks,duration[i])
 			while time.ticks_diff(scheduled_time,end_time) < 0:
 				if time.ticks_diff(ticks(),scheduled_time) < 0:
-					time.sleep_us(time.ticks_diff(scheduled_time,ticks()))
+					sleep(time.ticks_diff(scheduled_time,ticks()))
 					fct.pulse_delivery(pin_out,seqs[seqName][eventName[i]]["pulse_width"]*conversion_factor,pin_outLED,pkt,ticks,sleep)
 				elif time.ticks_diff(ticks(),scheduled_time) == 0:
 					fct.pulse_delivery(pin_out,seqs[seqName][eventName[i]]["pulse_width"]*conversion_factor,pin_outLED,pkt,ticks,sleep)

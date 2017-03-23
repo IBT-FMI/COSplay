@@ -11,7 +11,8 @@ STX = 0x02			#start of text
 ETX = 0x03			#end of text
 EOT = 0x04			#end of transmission
 SEQ = 0x05			#type of data is a sequence (json)
-STA = 0x06			#type of data is status of pyboard
+MSG = 0x06			#type of data is message for user from pyboard
+INS = 0x07			#instruction form pyboard to COSplay_host 
 # <SOH><LenLow><LenHigh><TYPE><STX><PAYLOAD><ETX><LRC><EOT>
 
 def lrc(str):
@@ -32,6 +33,10 @@ class Packet:
 	STATE_LRC = 7
 	STATE_EOT = 8
 
+	INS_check_COSgen_folder = 0	#COSplay_host shall check for COSgen folder on host computer
+	INS_check_ask_user = 1		#COSplay_host shall ask user whether to use sequences stored on microcontroller or COSgen folder
+	INS_send_sequences = 2		#COSplay_host shall send sequences to microcontroller
+
 	def __init__(self, serial_port, show_packets=False):
 		self.serial_port = serial_port
 		self.show_packets = show_packets
@@ -43,7 +48,7 @@ class Packet:
 		self.state = Packet.STATE_SOH
 
 	def send(self, obj):
-		"""Converts a python object into its json representation and then sends
+		"""Convert a python object into its json representation and then send
     	    	   it using the 'serial_port' passed in the constructor.
     	    	"""
 		data_type = type(obj)
@@ -59,7 +64,12 @@ class Packet:
 			payload_str = obj.encode('ascii')
 			payload_len = len(payload_str)
 			payload_lrc = lrc(payload_str)
-			hdr = bytearray((SOH, payload_len & 0xff, payload_len >> 8, STA, STX)) #header & 0xff masks the lower eight bits(FF is 255) >>8 means shift to the right by 8 bits 
+			hdr = bytearray((SOH, payload_len & 0xff, payload_len >> 8, MSG, STX))
+		elif data_type is int:
+			payload_str = str(obj).encode('ascii')
+			payload_len = len(payload_str)
+			payload_lrc = lrc(payload_str)
+			hdr - bytearray((SOH, payload_len & 0xff, paylaod_len >> 8, INS, STX))
 		else:
 			raise TypeError("Type cannot be send using Packet.")
 		ftr = bytearray((ETX, payload_lrc, EOT))	#footer
@@ -71,7 +81,7 @@ class Packet:
 		self.serial_port.write(ftr)
 
 	def process_byte(self, byte):
-		"""Processes a single byte. Returns a json object when one is
+		"""Process a single byte. Return a json object when one is
     	    	   successfully parsed, otherwise returns None.
     	    	"""
 		if self.show_packets:
@@ -121,8 +131,18 @@ class Packet:
 			if byte == EOT:
 				if self.pkt_type == SEQ:
 					return json.loads(str(self.pkt, 'ascii'))
-				elif self.pkt_type == STA:
+				elif self.pkt_type == MSG:
 					return str(self.pkt, 'ascii')
+				elif self.pkt_type == INS:
+					return int(str(self.pkt, 'ascii'))
+
+	def receive(self):
+		while True:
+			byte = self.serial_port.read_byte()
+			if byte is not None:
+				obj = self.process_byte(byte)
+				if obj is not None:
+					return obj
 
 	def is_safe_to_end(self):
 		if self.state == Packet.STATE_SOH:

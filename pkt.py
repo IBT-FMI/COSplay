@@ -2,8 +2,15 @@
 #
 # It allows objects which can be represented as JSON objects to be sent
 # between two python programs (running on the same or different computers).
+try:
+	from ujson import dumps
+	from ujson import loads
+	#from utime import ticks
+except ImportError:
+	from json import dumps
+	from json import loads
+	#from time import time
 
-import json
 from dump_mem import dump_mem
 
 SOH = 0x01			#start of header
@@ -36,9 +43,11 @@ class Packet:
 	STATE_LRC = 7
 	STATE_EOT = 8
 
-	INS_check_COSgen_folder = 0	#COSplay_host shall check for COSgen folder on host computer
-	INS_check_ask_user = 1		#COSplay_host shall ask user whether to use sequences stored on microcontroller or COSgen folder
-	INS_send_sequences = 2		#COSplay_host shall send sequences to microcontroller
+	ANS_no = 0				#answers form host to instructions/questions form pyboard
+	ANS_yes = 1
+	INS_check_for_sequences_on_host = 2	#COSplay_host shall check for COSgen folder on host computer
+	INS_ask_user = 3			#COSplay_host shall ask user whether to use sequences stored on microcontroller or host
+	INS_send_sequences = 4			#COSplay_host shall send sequences to microcontroller
 
 	def __init__(self, serial_port, show_packets=False):
 		self.serial_port = serial_port
@@ -59,7 +68,7 @@ class Packet:
 		payload_len = None
 		payload_lrc = None
 		if data_type is dict:
-			payload_str = json.dumps(obj).encode('ascii')
+			payload_str = dumps(obj).encode('ascii')
 			payload_len = len(payload_str)
 			payload_lrc = lrc(payload_str)			#longitudinal redundancy check
 			hdr = bytearray((SOH, payload_len & 0xff, payload_len >> 8, SEQ, STX)) #header & 0xff masks the lower eight bits(FF is 255) >>8 means shift to the right by 8 bits 
@@ -72,7 +81,7 @@ class Packet:
 			payload_str = str(obj).encode('ascii')
 			payload_len = len(payload_str)
 			payload_lrc = lrc(payload_str)
-			hdr - bytearray((SOH, payload_len & 0xff, paylaod_len >> 8, INS, STX))
+			hdr = bytearray((SOH, payload_len & 0xff, payload_len >> 8, INS, STX))
 		else:
 			raise TypeError("Type cannot be send using Packet.")
 		ftr = bytearray((ETX, payload_lrc, EOT))	#footer
@@ -82,6 +91,9 @@ class Packet:
 		self.serial_port.write(hdr)
 		self.serial_port.write(payload_str)
 		self.serial_port.write(ftr)
+
+	def write(self,data):
+		self.send(data)
 
 	def process_byte(self, byte):
 		"""Process a single byte. Return a json object when one is
@@ -133,21 +145,26 @@ class Packet:
 			self.state = Packet.STATE_SOH
 			if byte == EOT:
 				if self.pkt_type == SEQ:
-					return json.loads(str(self.pkt, 'ascii'))
+					return loads(str(self.pkt, 'ascii'))
 				elif self.pkt_type == MSG:
 					return str(self.pkt, 'ascii')
 				elif self.pkt_type == INS:
 					return int(str(self.pkt, 'ascii'))
 
-	def receive(self):
-		while True:
+	def receive(self,limit_tries=0):
+#		start_time = time()
+#		while True:
+		i = 0
+		while i <= limit_tries or limit_tries == 0:
 			byte = self.serial_port.read_byte()
 			if byte is not None:
+				limit_tries = 0
+#				timeout=0	#once the functions starts to receive something it does not timeout anymore
 				obj = self.process_byte(byte)
 				if obj is not None:
 					return obj
+			i += 1
+#				print(time()-start_time)
+#			if time()-start_time >= timeout and timeout > 0:
+#				return None
 
-	def is_safe_to_end(self):
-		if self.state == Packet.STATE_SOH:
-			return True
-		return False

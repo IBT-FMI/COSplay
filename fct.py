@@ -1,9 +1,10 @@
-import json
-import time
+import ujson
+import utime
+import os.path
 
 def load(filename):
 	with open(filename) as data_file:
-		data = json.load(data_file)
+		data = ujson.loads(data_file.read())
 	return data
 
 def switch_off(pin_out, pin_outLED):
@@ -14,15 +15,15 @@ def switch_on(pin_out,amplitude,pin_outLED):
 	pin_out.value(0)
 	pin_outLED.on()
 
-def pulse_delivery(pin_out, pulse_width, pin_outLED, pkt,ticks=time.ticks_ms, sleep=time.sleep_ms, amplitude=100):
+def pulse_delivery(pin_out, pulse_width, pin_outLED, pkt,ticks=utime.ticks_ms, sleep=utime.sleep_ms, amplitude=100):
 	start_time = ticks()
 	switch_on(pin_out,amplitude,pin_outLED)
-	scheduled_time = time.ticks_add(start_time,int(pulse_width))
-	if time.ticks_diff(ticks(),scheduled_time) < 0:
-		sleep(time.ticks_diff(scheduled_time,ticks()))
+	scheduled_time = utime.ticks_add(start_time,int(pulse_width))
+	if utime.ticks_diff(ticks(),scheduled_time) < 0:
+		sleep(utime.ticks_diff(scheduled_time,ticks()))
 		switch_off(pin_out,pin_outLED)
-	elif time.ticks_diff(ticks(),scheduled_time) == 0:	
+	elif utime.ticks_diff(ticks(),scheduled_time) == 0:	
 		switch_off(pin_out,pin_outLED)
-	elif time.ticks_diff(ticks(),scheduled_time) > 0:
+	elif utime.ticks_diff(ticks(),scheduled_time) > 0:
 		switch_off(pin_out,pin_outLED)
-		pkt.send('Missed scheduled end time of pulse by {0} us'.format(time.ticks_diff(ticks(),scheduled_time)))
+		pkt.send('Missed scheduled end time of pulse by {0} us'.format(utime.ticks_diff(ticks(),scheduled_time)))

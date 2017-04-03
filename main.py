@@ -1,7 +1,6 @@
 import utime
 import micropython
 import random
-#import glob
 import uos
 import os.path
 import os
@@ -112,6 +111,15 @@ def main():
 	elif len(file_paths) == 0:
 			pkt.send('Error: No sequences found! You can generate sequences using COSgen.')
 
+	storage_path = ''		#path to folder where delivered sequences are stored if not connected to client software on host
+	delivered_sequence_idx = 0	#index for naming the sequence files in storage_path
+	if use_wo_host:
+		path = '/sd/delivered_sequences0'
+		while os.path.exists(path):
+			path = path[:-1] + str(int(path[-1])+1)
+		uos.mkdir(path)
+		
+
 	ticks = None				#Holds the function for utime.measurment
 	sleep = None				#Corresponding sleep function for ticks
 	conversion_factor = 1			#converts seconds to the unit specified in cfg.accuracy
@@ -134,23 +142,23 @@ def main():
 		seq_index = random.randrange(num_seq)
 		seq = fct.load(file_paths[seq_index])
 		pkt.send(str(seq))
-		numOfEvents = len(seq)	
-		rangeOfEvents = range(0,numOfEvents)
-		eventName = ["event0"]
-		T = [int(1/seq[eventName[0]]["frequency"]*conversion_factor)]
-		onset = [seq[eventName[0]]["onset"]*conversion_factor]
-		duration = [(seq[eventName[0]]["onset"]+seq[eventName[0]]["duration"])*conversion_factor]
+		num_of_events = len(seq)	
+		range_of_events = range(0,num_of_events)
+		event_name = ["event0"]
+		T = [int(1/seq[event_name[0]]["frequency"]*conversion_factor)]
+		onset = [seq[event_name[0]]["onset"]*conversion_factor]
+		duration = [(seq[event_name[0]]["onset"]+seq[event_name[0]]["duration"])*conversion_factor]
 		pkt.send('before if')
-		if T[0] < seq[eventName[0]]["pulse_width"]*conversion_factor:
+		if T[0] < seq[event_name[0]]["pulse_width"]*conversion_factor:
 			pkt.send("Invalid sequence {0}. Period is smaller than pulse width. Proceeding with a different sequence.\n".format(file_paths[seq_index]))
 			continue
 		pkt.send('after if')
-		for i in range(1,numOfEvents):
-			eventName.append("event" + str(i))
-			T.append(int(1/seq[eventName[i]]["frequency"]*conversion_factor))
-			onset.append(seq[eventName[i]]["onset"]*conversion_factor)
-			duration.append((seq[eventName[i]]["onset"]+seq[eventName[i]]["duration"])*conversion_factor)
-			if T[i] < seq[eventName[i]]["pulse_width"]*conversion_factor:
+		for i in range(1,num_of_events):
+			event_name.append("event" + str(i))
+			T.append(int(1/seq[event_name[i]]["frequency"]*conversion_factor))
+			onset.append(seq[event_name[i]]["onset"]*conversion_factor)
+			duration.append((seq[event_name[i]]["onset"]+seq[event_name[i]]["duration"])*conversion_factor)
+			if T[i] < seq[event_name[i]]["pulse_width"]*conversion_factor:
 				pkt.send("Invalid sequence {0}. Period is smaller than pulse width. Proceeding with a different sequence.\n".format(file_paths[seq_index]))
 				continue
 
@@ -171,27 +179,37 @@ def main():
 		armedLED.off()
 		extint.disable()
 		
-		for i in rangeOfEvents:
+		for i in range_of_events:
 			
 			scheduled_time= utime.ticks_add(start_ticks,onset[i])
 			end_time= utime.ticks_add(start_ticks,duration[i])
 			while utime.ticks_diff(scheduled_time,end_time) < 0:
 				if utime.ticks_diff(ticks(),scheduled_time) < 0:
 					sleep(utime.ticks_diff(scheduled_time,ticks()))
-					fct.pulse_delivery(pin_out,seq[eventName[i]]["pulse_width"]*conversion_factor,pin_outLED,pkt,ticks,sleep)
+					fct.pulse_delivery(pin_out,seq[event_name[i]]["pulse_width"]*conversion_factor,pin_outLED,pkt,ticks,sleep)
 				elif utime.ticks_diff(ticks(),scheduled_time) == 0:
-					fct.pulse_delivery(pin_out,seq[eventName[i]]["pulse_width"]*conversion_factor,pin_outLED,pkt,ticks,sleep)
+					fct.pulse_delivery(pin_out,seq[event_name[i]]["pulse_width"]*conversion_factor,pin_outLED,pkt,ticks,sleep)
 				elif utime.ticks_diff(ticks(),scheduled_time) > 0:
-					fct.pulse_delivery(pin_out,seq[eventName[i]]["pulse_width"]*conversion_factor,pin_outLED,pkt,ticks,sleep)
-					pkt.send("Missed scheduled onset time of pulse in {0} by {1} {2} ".format(eventName[i],utime.ticks_diff(ticks(),scheduled_time),cfg.accuracy))
+					now = ticks()
+					fct.pulse_delivery(pin_out,seq[event_name[i]]["pulse_width"]*conversion_factor,pin_outLED,pkt,ticks,sleep)
+					pkt.send("Missed scheduled onset time of pulse in {0} by {1} {2} ".format(event_name[i],utime.ticks_diff(now,scheduled_time),cfg.accuracy))
 				scheduled_time = utime.ticks_add(scheduled_time,T[i])
 		if not use_wo_host:
 			pkt.send(seq)
+		else:
+			with open(storage_path+'/sequence'+str(delivered_sequence_idx),'w+') as fp:
+				fp.write(ujson.dumps(seq))
+			delivered_sequence_idx += 1
 		armed = False
 		trigger_received = False
 		triggerLED.off()
 
 
+
+
+
+if os.path.exists('exceptions.txt'):
+	uos.remove('exceptions.txt')
 try:
 	main()
 except Exception as e:

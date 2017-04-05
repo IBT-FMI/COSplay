@@ -41,8 +41,12 @@ class SerialPort(object):
 		"""Reads a byte from the serial port."""
 		if self.is_byte_available():
 			data = self.serial_port.read()
-			if data:
+			if type(data[0]) == int:
 				return data[0]
+			elif type(data[0]) == str:
+				return ord(data[0])
+			else:
+				raise TypeError('serial_port.read() returned unrecognised type {0}'.format(type(data[0])))
 
 	def write(self, data):
 		"""Write data to a serial port."""

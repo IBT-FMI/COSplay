@@ -1,11 +1,4 @@
-import ujson
 import utime
-import os.path
-
-def load(filename):
-	with open(filename) as data_file:
-		data = ujson.loads(data_file.read())
-	return data
 
 def switch_off(pin_out, pin_outLED):
 	pin_out.value(1)

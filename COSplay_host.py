@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import time
 import argparse
@@ -210,62 +210,6 @@ def main():
 					send_sequences(sequences_paths,pkt,verbose)
 				else:
 					print('Microcontroller sent unrecognised instruction! {0}'.format(str(obj)))
-#			"""Loading sequences and sending them to the board"""
-#			seqs = None
-#			
-#			with open(seq_file_name) as data_file:
-#				seqs = json.load(data_file)
-#			
-#			pkt.send(seqs)
-#			if verbose == 1:
-#				print('Sequences sent to board')
-#			elif verbose >= 2:
-#				print('Sent sequences:\n' + str(seqs))
-#			
-#			"""Recieving delivered sequence and storing it in appropriate directory"""
-#			signal.signal(signal.SIGINT, signal_handler_end_program)
-#			print('Press Ctrl+c when you are done to close the program.')	
-#			msg = ''
-#			while keep_reading:
-#				rcvd = None
-#				while rcvd is None:
-#					byte = port.read_byte()
-#					if byte is not None:
-#						rcvd = pkt.process_byte(byte)
-#					elif pkt.is_safe_to_end():
-#						break
-#				if rcvd is not None:
-#					if type(rcvd) is str:
-#						print(rcvd)
-#						if rcvd[:6] == 'Missed':
-#							msg = msg + rcvd + '\n'
-#					else:
-#						if verbose > 1:
-#							print('Received sequence:\n' + str(rcvd))
-#						if storage_path is None:
-#							path = find_dir(vendor)
-#							with open(path+'sequence.json','w+') as fp:
-#								json.dump(rcvd,fp,sort_keys=True,indent=4,separators=(',',': '))
-#								print('Sequence saved as {0}'.format(path+'sequence.json'))
-#							if msg != '':
-#								with open(path+'errors.txt','w+') as fp:
-#									try:
-#										eval('print(msg,file=fp)')
-#									except SyntaxError:
-#										print >>fp, msg
-#									print('Error messages saved as {0}'.format(path+'errors.txt'))
-#						else:
-#							with open(storage_path+'sequece'+str(file_idx)+'.json','w+') as fp:
-#								json.dump(rcvd,fp,sort_keys=True,indent=4,separators=(',',': '))
-#								print('Sequence saved as {0}'.format(storage_path+'sequece'+str(file_idx)+'.json'))
-#								if msg != '':
-#									with open(storage_path+'errors'+str(file_idx)+'.txt','w+') as fp:
-#										try:
-#											eval('print(msg,file=fp)')
-#										except SyntaxError:
-#											print >>fp, msg
-#										print('Error messages saved as {0}'.format(storage_path+'errors'+str(file_idx)+'.txt'))
-#							file_idx += 1
 			port.close_serial()
 		except serial.serialutil.SerialException:
 			print('Serial connection interrupted')

@@ -25,10 +25,7 @@ INS = 0x07			#instruction form pyboard to COSplay_host
 def lrc(str):
 	sum = 0
 	for b in str:
-		try:
-			sum = (sum + b) & 0xff
-		except TypeError:
-			sum = (sum + ord(b)) & 0xff
+		sum = (sum + b) & 0xff
 	return ((sum ^ 0xff) + 1) & 0xff
 
 class Packet:
@@ -92,8 +89,6 @@ class Packet:
 		self.serial_port.write(payload_str)
 		self.serial_port.write(ftr)
 
-	def write(self,data):
-		self.send(data)
 
 	def process_byte(self, byte):
 		"""Process a single byte. Return a json object when one is
@@ -145,11 +140,11 @@ class Packet:
 			self.state = Packet.STATE_SOH
 			if byte == EOT:
 				if self.pkt_type == SEQ:
-					return loads(str(self.pkt, 'ascii'))
+					return loads(self.pkt.decode('ascii'))
 				elif self.pkt_type == MSG:
-					return str(self.pkt, 'ascii')
+					return self.pkt.decode('ascii')
 				elif self.pkt_type == INS:
-					return int(str(self.pkt, 'ascii'))
+					return int(self.pkt.decode('ascii'))
 
 	def receive(self,limit_tries=0):
 #		start_time = time()

@@ -8,7 +8,7 @@ import sys
 import ujson
 
 import config as cfg
-import fct
+from pulse import pulse_delivery
 from stm_usb_port import USB_Port
 from pkt import Packet
 
@@ -34,7 +34,10 @@ def callback_trigger2():
 	global trigger_received
 	trigger_received = True
 
-
+def load(filename):
+	with open(filename) as data_file:
+		data = ujson.loads(data_file.read())
+	return data
 
 def main():
 
@@ -93,7 +96,7 @@ def main():
 			elif os.path.exists('0:'):
 				path = '0:/library0'	
 			while os.path.exists(path):
-				path = path[:-1] + str(int(path[-1])+1)
+				path = path[:-1] + str(int(path[-1])%10+1)
 			uos.mkdir(path)
 			sequence_idx = 0
 			rcvd_pkt = pkt.receive()
@@ -140,7 +143,7 @@ def main():
 
 	while True:
 		seq_index = random.randrange(num_seq)
-		seq = fct.load(file_paths[seq_index])
+		seq = load(file_paths[seq_index])
 		pkt.send(str(seq))
 		num_of_events = len(seq)	
 		range_of_events = range(0,num_of_events)
@@ -186,12 +189,12 @@ def main():
 			while utime.ticks_diff(scheduled_time,end_time) < 0:
 				if utime.ticks_diff(ticks(),scheduled_time) < 0:
 					sleep(utime.ticks_diff(scheduled_time,ticks()))
-					fct.pulse_delivery(pin_out,seq[event_name[i]]["pulse_width"]*conversion_factor,pin_outLED,pkt,ticks,sleep)
+					pulse_delivery(pin_out,seq[event_name[i]]["pulse_width"]*conversion_factor,pin_outLED,pkt,ticks,sleep)
 				elif utime.ticks_diff(ticks(),scheduled_time) == 0:
-					fct.pulse_delivery(pin_out,seq[event_name[i]]["pulse_width"]*conversion_factor,pin_outLED,pkt,ticks,sleep)
+					pulse_delivery(pin_out,seq[event_name[i]]["pulse_width"]*conversion_factor,pin_outLED,pkt,ticks,sleep)
 				elif utime.ticks_diff(ticks(),scheduled_time) > 0:
 					now = ticks()
-					fct.pulse_delivery(pin_out,seq[event_name[i]]["pulse_width"]*conversion_factor,pin_outLED,pkt,ticks,sleep)
+					pulse_delivery(pin_out,seq[event_name[i]]["pulse_width"]*conversion_factor,pin_outLED,pkt,ticks,sleep)
 					pkt.send("Missed scheduled onset time of pulse in {0} by {1} {2} ".format(event_name[i],utime.ticks_diff(now,scheduled_time),cfg.accuracy))
 				scheduled_time = utime.ticks_add(scheduled_time,T[i])
 		if not use_wo_host:

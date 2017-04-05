@@ -84,8 +84,6 @@ def main():
 			answer = pkt.receive()
 		if answer == pkt.ANS_yes:
 			pkt.send(pkt.INS_send_sequences)
-		#	path = '/sd/library0/'
-		#	pkt.send(path)
 			path = ''
 			if os.path.exists('/sd'):
 				path = '/sd/library0'	
@@ -103,11 +101,8 @@ def main():
 			while type(rcvd_pkt) == dict:
 				with open(path+'/sequence'+str(sequence_idx)+'.json','w+') as fp:
 					fp.write(ujson.dumps(rcvd_pkt))
-		#		pkt.send(str(rcvd_pkt))
 				rcvd_pkt = pkt.receive()
 				sequence_idx += 1
-		#	file_paths = glob.glob(path+'sequence*.json')
-		#	file_paths = ['/sd/library0/sequence0.json']
 			file_paths = [path + '/' + s for s in uos.listdir(path)]
 			for s in file_paths:
 				pkt.send(s)
@@ -119,7 +114,7 @@ def main():
 	if use_wo_host:
 		path = '/sd/delivered_sequences0'
 		while os.path.exists(path):
-			path = path[:-1] + str(int(path[-1])+1)
+			path = path[:-1] + str(int(path[-1])%10+1)
 		uos.mkdir(path)
 		
 

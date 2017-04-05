@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import time
 import argparse
@@ -28,14 +28,12 @@ def find_current_scan_dir(vendor):
 	raise ValueError('Finding standard data path is not supported for {0} systems.'.format(vendor))
 
 def process_message(obj,error_msgs):
-	if type(obj) != str:
-		raise TypeError('process_message only takes string objects.')
 	print(obj)
 	if obj[:6] == 'Missed':
 		return error_msgs + obj + '\n'
 	return error_msgs
 
-def save_sequence(obj, storage_path, file_idx, error_msgs, verbose=0):
+def save_sequence(obj, storage_path, file_idx, error_msgs, vendor, verbose=0):
 	if type(obj) != dict:
 		raise TypeError('save_sequence only stores sequences in dictionary format.')	
 	if verbose > 1:
@@ -43,10 +41,10 @@ def save_sequence(obj, storage_path, file_idx, error_msgs, verbose=0):
 	if storage_path is None:
 		path = find_current_scan_dir(vendor)
 		with open(path+'sequence.json','w+') as fp:
-			json.dump(rcvd,fp,sort_keys=True,indent=4,separators=(',',': '))
+			json.dump(obj,fp,sort_keys=True,indent=4,separators=(',',': '))
 			print('Sequence saved as {0}'.format(path+'sequence.json'))
 		if error_msgs != '':
-			with open(path+'errors.txt','w+') as fp:
+			with open(path+'sequence_errors.txt','w+') as fp:
 				try:
 					eval('print(error_msgs,file=fp)')
 				except SyntaxError:
@@ -57,7 +55,7 @@ def save_sequence(obj, storage_path, file_idx, error_msgs, verbose=0):
 			json.dump(obj,fp,sort_keys=True,indent=4,separators=(',',': '))
 			print('Sequence saved as {0}'.format(storage_path+'sequence'+str(file_idx)+'.json'))
 			if error_msgs != '':
-				with open(storage_path+'errors'+str(file_idx)+'.txt','w+') as fp:
+				with open(storage_path+'sequence_errors'+str(file_idx)+'.txt','w+') as fp:
 					try:
 						eval('print(error_msgs,file=fp)')
 					except SyntaxError:
@@ -80,7 +78,10 @@ def check_for_sequences(sequences_arg,pkt):
 
 def ask_user(pkt):
 	while True:
-		var = input('Shall the sequences on the host be used instead of the sequences on the pyboard? (Y/n)')
+		try:
+			var = raw_input('Shall the sequences on the host be used instead of the sequences on the pyboard? (Y/n)')
+		except NameError:
+			var = input('Shall the sequences on the host be used instead of the sequences on the pyboard? (Y/n)')
 		if var == 'Y':
 			return pkt.ANS_yes
 		elif var == 'n':
@@ -192,24 +193,20 @@ def main():
 				obj = pkt.receive(limit_tries=2000)
 				if obj == None:
 					continue
-				if type(obj) == str:
+				if type(obj) == str or type(obj) == unicode:		#str is unicode in python3
 					error_msgs = process_message(obj,error_msgs)
 				elif type(obj) == dict:
-					print('Save sequece')
-					file_idx =  save_sequence(obj,storage_path,file_idx,error_msgs,verbose)
+					file_idx =  save_sequence(obj,storage_path,file_idx,error_msgs,vendor,verbose)
 				elif obj == pkt.INS_check_for_sequences_on_host:
-					print('check for sequences')
 					answer,sequences_paths = check_for_sequences(args.sequences,pkt)
 					pkt.send(answer)
 				elif obj == pkt.INS_ask_user:
-					print('ask user')
 					answer = ask_user(pkt)
 					pkt.send(answer)
 				elif obj == pkt.INS_send_sequences:
-					print('send sequence')
 					send_sequences(sequences_paths,pkt,verbose)
 				else:
-					print('Microcontroller sent unrecognised instruction! {0}'.format(str(obj)))
+					print('Microcontroller sent unrecognised instruction of type {0}! {1}'.format(type(obj),str(obj)))
 			port.close_serial()
 		except serial.serialutil.SerialException:
 			print('Serial connection interrupted')

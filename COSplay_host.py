@@ -1,4 +1,11 @@
-#!/usr/bin/env python
+#!/bin/bash
+''''which python3 >/dev/null 2>&1 && exec python3 "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
+''''which python2 >/dev/null 2>&1 && (( "$( python2 -c 'import sys; print(sys.version_info[1])' )" >= 6 )) && exec python2 "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
+''''which python >/dev/null 2>&1 && (( $( python -c 'import sys; print(sys.version_info[1])' ) == 3 )) && (( $( python -c 'import sys; print(sys.version_info[1])' ) >= 6 )) && exec python "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
+''''which python >/dev/null 2>&1 && (( $( python -c 'import sys; print(sys.version_info[1])' ) == 2 )) && (( $( python -c 'import sys; print(sys.version_info[1])' ) >=6 )) && exec python "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
+''''true && [[ $( echo "$@" | grep -c -- "--force" ) -eq 0 ]] && exec echo "Error: No supported python version found. (If you want to try to use the OS's default python version run this script with --force)" # '''
+''''exec python "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
+
 
 import time
 import argparse
@@ -6,7 +13,10 @@ import os
 import glob
 import signal
 import serial
-import json
+try:
+	import json
+except ImportError:
+	import simplejson as json
 import serial_port
 from pkt import Packet
 

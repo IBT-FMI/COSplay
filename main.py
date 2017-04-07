@@ -41,7 +41,7 @@ def load(filename):
 
 def main():
 
-	#keep the following lines cluos. to the begining of main because laser is switched on until pin_out.value(1)
+	#keep the following lines close to the begining of main because laser is switched on until pin_out.value(1)
 	pin_out = pyb.Pin('Y1',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_UP)
 	pin_out.value(1)
 	pin_outLED = pyb.LED(4)
@@ -55,8 +55,10 @@ def main():
 
 	armedLED = pyb.LED(3)			#indicates when the system is waiting for a trigger
 	triggerLED = pyb.LED(2)
-
-	file_paths = [cfg.library_path + '/' + s for s in uos.listdir(cfg.library_path)]
+	try:
+		file_paths = [cfg.library_path + '/' + s for s in uos.listdir(cfg.library_path)]
+	except OSError:
+		file_paths = []
 
 	sw = pyb.Switch()
 	sw.callback(callback_use_wo_host)     			
@@ -66,6 +68,7 @@ def main():
 	pyb.LED(3).on()
 	pyb.LED(4).on()
 
+	answer = pkt.ANS_no
 	while not use_wo_host:
 		pkt.send(pkt.INS_check_for_sequences_on_host)
 		answer = pkt.receive(limit_tries=20000)
@@ -86,16 +89,15 @@ def main():
 			pkt.send(pkt.INS_send_sequences)
 			path = ''
 			if os.path.exists('/sd'):
-				path = '/sd/library0'	
+				path = '/sd/sequence_library'
 			elif os.path.exists('1:'):
-				path = '1:/library0'			#older versions of the pyboard use 0:/ and 1:/ instead of /flash and /sd
+				path = '1:/sequence_library'			#older versions of the pyboard use 0:/ and 1:/ instead of /flash and /sd
 			elif os.path.exists('/flash'):
-				path = '/flash/library0'	
+				path = '/flash/sequence_library'
 			elif os.path.exists('0:'):
-				path = '0:/library0'	
-			while os.path.exists(path):
-				path = path[:-1] + str(int(path[-1])%10+1)
-			uos.mkdir(path)
+				path = '0:/sequence_library'
+			if not os.path.exists(path):
+				uos.mkdir(path)
 			sequence_idx = 0
 			rcvd_pkt = pkt.receive()
 			while type(rcvd_pkt) == dict:
@@ -108,14 +110,20 @@ def main():
 				pkt.send(s)
 	elif len(file_paths) == 0:
 			pkt.send('Error: No sequences found! You can generate sequences using COSgen.')
+			raise ValueError('No sequences found on pyboard or host. Copy sequences to the sd card and specify the path in "config.py".')
 
 	storage_path = ''		#path to folder where delivered sequences are stored if not connected to client software on host
 	delivered_sequence_idx = 0	#index for naming the sequence files in storage_path
 	if use_wo_host:
-		path = '/sd/delivered_sequences0'
-		while os.path.exists(path):
-			path = path[:-1] + str(int(path[-1])%10+1)
+		if not os.path.exists('/sd/delivered_sequences'):
+			uos.mkdir('/sd/delivered_sequences')
+		path = '/sd/delivered_sequences/sequences'
+		idx = 0
+		while os.path.exists(path + str(idx)):
+			idx += 1
+		path = path + str(idx)
 		uos.mkdir(path)
+		storage_path = path
 		
 
 	ticks = None				#Holds the function for utime.measurment
@@ -213,3 +221,4 @@ try:
 except Exception as e:
 	with open('exceptions.txt','w+') as fp:
 		sys.print_exception(e,fp)
+	raise e

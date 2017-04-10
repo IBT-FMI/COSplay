@@ -1,0 +1,18 @@
+{
+	"event0": {
+			"onset":10,
+			"duration":20,
+			"pulse_width":0.5,
+			"frequency":1,
+			"amplitude":100,
+			"OUTchannel":"D"
+			}
+	"event1": {
+			"onset":40,
+			"duration":10,
+			"pulse_width":0.5,
+			"frequency":1,
+			"amplitude":100,
+			"OUTchannel":"D"
+			}
+}

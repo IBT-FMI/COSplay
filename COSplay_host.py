@@ -1,8 +1,9 @@
 #!/bin/bash
-''''which python3 >/dev/null 2>&1 && exec python3 "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
-''''which python2 >/dev/null 2>&1 && (( "$( python2 -c 'import sys; print(sys.version_info[1])' )" >= 6 )) && exec python2 "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
-''''which python >/dev/null 2>&1 && (( $( python -c 'import sys; print(sys.version_info[1])' ) == 3 )) && (( $( python -c 'import sys; print(sys.version_info[1])' ) >= 6 )) && exec python "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
-''''which python >/dev/null 2>&1 && (( $( python -c 'import sys; print(sys.version_info[1])' ) == 2 )) && (( $( python -c 'import sys; print(sys.version_info[1])' ) >=6 )) && exec python "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
+
+''''true && for var in {5..1}; do which "python3.$var" >/dev/null 2>&1 && exec "python3.$var" "$0" $( echo "$@" | sed -- 's/--force//g' ); done # '''
+''''which python2.7 >/dev/null 2>&1 && exec python2.7 "$0" $( echo "$@" | sed -- 's/--force//g' ); done # '''
+''''which python >/dev/null 2>&1 && (( $( python -c 'import sys; print(sys.version_info[1])' ) == 3 )) && (( $( python -c 'import sys; print(sys.version_info[1])' ) >=5 )) && exec python "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
+''''which python >/dev/null 2>&1 && (( $( python -c 'import sys; print(sys.version_info[1])' ) == 2 )) && (( $( python -c 'import sys; print(sys.version_info[1])' ) ==7 )) && exec python "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
 ''''true && [[ $( echo "$@" | grep -c -- "--force" ) -eq 0 ]] && exec echo "Error: No supported python version found. (If you want to try to use the OS's default python version run this script with --force)" # '''
 ''''exec python "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
 
@@ -198,12 +199,18 @@ def main():
 
 			signal.signal(signal.SIGINT, signal_handler_end_program)
 			print('Press Ctrl+c when you are done to close the program.')	
+			
+			message_type = None
+			try:
+				message_type = unicode		#str is unicode in python3
+			except NameError:
+				message_type = str
 	
 			while keep_running:
 				obj = pkt.receive(limit_tries=2000)
 				if obj == None:
 					continue
-				if type(obj) == str or type(obj) == unicode:		#str is unicode in python3
+				if type(obj) == message_type:
 					error_msgs = process_message(obj,error_msgs)
 				elif type(obj) == dict:
 					file_idx =  save_sequence(obj,storage_path,file_idx,error_msgs,vendor,verbose)

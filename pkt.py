@@ -2,14 +2,8 @@
 #
 # It allows objects which can be represented as JSON objects to be sent
 # between two python programs (running on the same or different computers).
-try:
-	from ujson import dumps
-	from ujson import loads
-	#from utime import ticks
-except ImportError:
-	from json import dumps
-	from json import loads
-	#from time import time
+
+import tsv
 
 from dump_mem import dump_mem
 
@@ -69,8 +63,8 @@ class Packet:
 		payload_str = None
 		payload_len = None
 		payload_lrc = None
-		if data_type is dict:
-			payload_str = dumps(obj).encode('ascii')
+		if data_type is list:
+			payload_str = tsv.dumps(obj).encode('ascii')
 			payload_len = len(payload_str)
 			payload_lrc = lrc(payload_str)			#longitudinal redundancy check
 			hdr = bytearray((SOH, payload_len & 0xff, payload_len >> 8, SEQ, STX)) #header & 0xff masks the lower eight bits(FF is 255) >>8 means shift to the right by 8 bits 
@@ -145,11 +139,20 @@ class Packet:
 			self.state = Packet.STATE_SOH
 			if byte == EOT:
 				if self.pkt_type == SEQ:
-					return loads(self.pkt.decode('ascii'))
+					try:				# micropython does not have decode attribute for bytearrays
+						return tsv.loads(self.pkt.decode('ascii'))
+					except AttributeError:
+						return tsv.loads(str(self.pkt,'ascii'))
 				elif self.pkt_type == MSG:
-					return self.pkt.decode('ascii')
+					try:
+						return self.pkt.decode('ascii')
+					except AttributeError:
+						return str(self.pkt,'ascii')
 				elif self.pkt_type == INS:
-					return int(self.pkt.decode('ascii'))
+					try:
+						return int(self.pkt.decode('ascii'))
+					except AttributeError:
+						return int(str(self.pkt,'ascii'))
 
 	def receive(self,limit_tries=0):
 #		start_time = time()

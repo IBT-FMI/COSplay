@@ -14,10 +14,8 @@ import os
 import glob
 import signal
 import serial
-try:
-	import json
-except ImportError:
-	import simplejson as json
+import tsv
+
 import serial_port
 from pkt import Packet
 
@@ -39,51 +37,51 @@ def find_current_scan_dir(vendor):
 	raise ValueError('Finding standard data path is not supported for {0} systems.'.format(vendor))
 
 def process_message(obj,error_msgs):
-	print(obj)
+	print(obj + '\n')
 	if obj[:6] == 'Missed':
 		return error_msgs + obj + '\n'
 	return error_msgs
 
 def save_sequence(obj, storage_path, file_idx, error_msgs, vendor, verbose=0):
-	if type(obj) != dict:
+	if type(obj) != list:
 		raise TypeError('save_sequence only stores sequences in dictionary format.')	
 	if verbose > 1:
 		print('Received sequence:\n' + str(rcvd))
 	if storage_path is None:
 		path = find_current_scan_dir(vendor)
-		with open(path+'sequence.json','w+') as fp:
-			json.dump(obj,fp,sort_keys=True,indent=4,separators=(',',': '))
-			print('Sequence saved as {0}'.format(path+'sequence.json'))
+		with open(path+'sequence.tsv','w+') as fp:
+			tsv.dump(obj,fp)
+			print('Sequence saved as {0}'.format(path+'sequence.tsv\n'))
 		if error_msgs != '':
 			with open(path+'sequence_errors.txt','w+') as fp:
 				try:
 					eval('print(error_msgs,file=fp)')
 				except SyntaxError:
 					print >>fp, error_msgs
-				print('Error messages saved as {0}'.format(path+'errors.txt'))
+				print('Error messages saved as {0}'.format(path+'errors.txt\n'))
 	else:
-		with open(storage_path+'sequence'+str(file_idx)+'.json','w+') as fp:
-			json.dump(obj,fp,sort_keys=True,indent=4,separators=(',',': '))
-			print('Sequence saved as {0}'.format(storage_path+'sequence'+str(file_idx)+'.json'))
+		with open(storage_path+'sequence'+str(file_idx)+'.tsv','w+') as fp:
+			tsv.dump(obj,fp)
+			print('Sequence saved as {0}'.format(storage_path+'sequence'+str(file_idx)+'.tsv\n'))
 			if error_msgs != '':
 				with open(storage_path+'sequence_errors'+str(file_idx)+'.txt','w+') as fp:
 					try:
 						eval('print(error_msgs,file=fp)')
 					except SyntaxError:
 						print >>fp, error_msgs
-					print('Error messages saved as {0}'.format(storage_path+'errors'+str(file_idx)+'.txt'))
+					print('Error messages saved as {0}\n'.format(storage_path+'errors'+str(file_idx)+'.txt'))
 	return file_idx + 1
 
 def check_for_sequences(sequences_arg,pkt):
 	if sequences_arg is not None:
 		sequences_paths = glob.glob(sequences_arg)
 		if len(sequences_paths) == 0:
-			print('There are no sequences in {0}.'.format(sequences))
+			print('There are no sequences in {0}.\n'.format(sequences))
 		else:
 			return pkt.ANS_yes, sequences_paths
-	sequences_paths = glob.glob('sequence*.json')			#this must be changed to default location of COSgen
+	sequences_paths = glob.glob('sequence*.tsv')			#this must be changed to default location of COSgen
 	if len(sequences_paths) >= 1:
-		print('Using most recently generated sequences from COSgen! \n')	#insert here the default path for COSgen sequences
+		print('Found sequences on computer!\n')
 		return pkt.ANS_yes, sequences_paths
 	return pkt.ANS_no, sequences_paths
 
@@ -101,17 +99,17 @@ def ask_user(pkt):
 
 def send_sequences(sequences_paths,pkt,verbose):
 	if sequences_paths is not None:
-		print('sending {0} sequences'.format(len(sequences_paths)))
+		print('sending {0} sequences\n'.format(len(sequences_paths)))
 		for path in sequences_paths:	
 			with open(path) as data_file:
-				seq = json.load(data_file)
+				seq = tsv.load(data_file)
 				pkt.send(seq)
 			if verbose == 1:
-				print('Sequence {0} sent to board'.format(path))
+				print('Sequence {0} sent to board\n'.format(path))
 			elif verbose >= 2:
 				print('Sent sequences:\n' + str(seq))
 	else:
-		print('COSgen_path contains no sequences. No sequences were sent!')
+		print('COSgen_path contains no sequences. No sequences were sent!\n')
 	pkt.send(pkt.ANS_no) #Indicates that all sequences have been sent
 
 
@@ -144,7 +142,7 @@ def main():
 			dest='sequences',
 			action='store',
 			type=str,
-			help='Path to json files containing the sequences. This flag can be used if you did not save the sequences generated with COSgen in the default location or if you do not want to use the sequences generated most recently.',
+			help='Path to tsv files containing the sequences. This flag can be used if you did not save the sequences generated with COSgen in the default location or if you do not want to use the sequences generated most recently.',
 			default=None)
 	parser.add_argument('--storage_path',
 			dest='storage_path',
@@ -190,7 +188,7 @@ def main():
 			while not connected:
 				connected = port.connect_serial(port_name)
 				time.sleep(0.25)
-			print('Connection established')
+			print('Connection established\n')
 
 			if verbose >= 2:
 				pkt = Packet(port,show_packets=True)
@@ -198,7 +196,7 @@ def main():
 				pkt = Packet(port)
 
 			signal.signal(signal.SIGINT, signal_handler_end_program)
-			print('Press Ctrl+c when you are done to close the program.')	
+			print('Press Ctrl+c when you are done to close the program.\n')	
 			
 			message_type = None
 			try:
@@ -212,7 +210,7 @@ def main():
 					continue
 				if type(obj) == message_type:
 					error_msgs = process_message(obj,error_msgs)
-				elif type(obj) == dict:
+				elif type(obj) == list:
 					file_idx =  save_sequence(obj,storage_path,file_idx,error_msgs,vendor,verbose)
 				elif obj == pkt.INS_check_for_sequences_on_host:
 					answer,sequences_paths = check_for_sequences(args.sequences,pkt)
@@ -223,9 +221,9 @@ def main():
 				elif obj == pkt.INS_send_sequences:
 					send_sequences(sequences_paths,pkt,verbose)
 				else:
-					print('Microcontroller sent unrecognised instruction of type {0}! {1}'.format(type(obj),str(obj)))
+					print('\n\nMicrocontroller sent unrecognised instruction of type {0}! {1}\n\n'.format(type(obj),str(obj)))
 			port.close_serial()
 		except serial.serialutil.SerialException:
-			print('Serial connection interrupted')
+			print('Serial connection interrupted\n')
 			port_name = None
 main()

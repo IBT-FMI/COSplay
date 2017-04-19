@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ''''true && for var in {5..1}; do which "python3.$var" >/dev/null 2>&1 && exec "python3.$var" "$0" $( echo "$@" | sed -- 's/--force//g' ); done # '''
-''''which python2.7 >/dev/null 2>&1 && exec python2.7 "$0" $( echo "$@" | sed -- 's/--force//g' ); done # '''
+''''which python2.7 >/dev/null 2>&1 && exec python2.7 "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
 ''''which python >/dev/null 2>&1 && (( $( python -c 'import sys; print(sys.version_info[1])' ) == 3 )) && (( $( python -c 'import sys; print(sys.version_info[1])' ) >=5 )) && exec python "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
 ''''which python >/dev/null 2>&1 && (( $( python -c 'import sys; print(sys.version_info[1])' ) == 2 )) && (( $( python -c 'import sys; print(sys.version_info[1])' ) ==7 )) && exec python "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
 ''''true && [[ $( echo "$@" | grep -c -- "--force" ) -eq 0 ]] && exec echo "Error: No supported python version found. (If you want to try to use the OS's default python version run this script with --force)" # '''
@@ -14,10 +14,10 @@ import os
 import glob
 import signal
 import serial
-import tsv
 
-import serial_port
-from pkt import Packet
+from COSplay import tsv
+from COSplay import serial_port
+from COSplay.pkt import Packet
 
 keep_running = True
 
@@ -46,7 +46,7 @@ def save_sequence(obj, storage_path, file_idx, error_msgs, vendor, verbose=0):
 	if type(obj) != list:
 		raise TypeError('save_sequence only stores sequences in dictionary format.')	
 	if verbose > 1:
-		print('Received sequence:\n' + str(rcvd))
+		print('Received sequence:\n' + str(obj))
 	if storage_path is None:
 		path = find_current_scan_dir(vendor)
 		with open(path+'sequence.tsv','w+') as fp:
@@ -90,8 +90,8 @@ def ask_user(pkt):
 		try:
 			var = raw_input('Shall the sequences on the host be used instead of the sequences on the pyboard? (Y/n)')
 		except NameError:
-			var = input('Shall the sequences on the host be used instead of the sequences on the pyboard? (Y/n)')
-		if var == 'Y':
+			var = input('Shall the sequences on the host be used instead of the sequences on the pyboard? (y/n)')
+		if var == 'y':
 			return pkt.ANS_yes
 		elif var == 'n':
 			return pkt.ANS_no
@@ -115,43 +115,43 @@ def send_sequences(sequences_paths,pkt,verbose):
 
 
 
-def main():
+def run(args):
 
-	parser = argparse.ArgumentParser(prog="COSplay",
-					description="Main program running on host computer for usage with a pyboard running COSplay")
-	parser.add_argument('-v','--verbose',
-			dest='verbose',
-			action='store',
-			type=int,
-			help='Set the verbosity.',
-			default='1')
-	parser.add_argument('--vendor',
-			dest='vendor',
-			action='store',
-			choices=['bruker'],
-			type=str.lower,
-			help='Is needed to find the correct folder. Program knows "bruker" (default="bruker")',
-			default='bruker')
-	parser.add_argument('--port',
-			dest='port',
-			action='store',
-			type=str,
-			help='Name of port pyboard is connected to. Generally not necessary as system should find the right port automatically.',
-			default=None)
-	parser.add_argument('--sequences',
-			dest='sequences',
-			action='store',
-			type=str,
-			help='Path to tsv files containing the sequences. This flag can be used if you did not save the sequences generated with COSgen in the default location or if you do not want to use the sequences generated most recently.',
-			default=None)
-	parser.add_argument('--storage_path',
-			dest='storage_path',
-			action='store',
-			type=str,
-			help='Path to directory where delivered sequences are stored. If not specified the sequence is stored in the folder of the most recent scan.',
-			default=None)
-
-	args = parser.parse_args()
+#	parser = argparse.ArgumentParser(prog="COSplay",
+#					description="Main program running on host computer for usage with a pyboard running COSplay")
+#	parser.add_argument('-v','--verbose',
+#			dest='verbose',
+#			action='store',
+#			type=int,
+#			help='Set the verbosity.',
+#			default='1')
+#	parser.add_argument('--vendor',
+#			dest='vendor',
+#			action='store',
+#			choices=['bruker'],
+#			type=str.lower,
+#			help='Is needed to find the correct folder. Program knows "bruker" (default="bruker")',
+#			default='bruker')
+#	parser.add_argument('--port',
+#			dest='port',
+#			action='store',
+#			type=str,
+#			help='Name of port pyboard is connected to. Generally not necessary as system should find the right port automatically.',
+#			default=None)
+#	parser.add_argument('--sequences',
+#			dest='sequences',
+#			action='store',
+#			type=str,
+#			help='Path to tsv files containing the sequences. This flag can be used if you did not save the sequences generated with COSgen in the default location or if you do not want to use the sequences generated most recently.',
+#			default=None)
+#	parser.add_argument('--storage_path',
+#			dest='storage_path',
+#			action='store',
+#			type=str,
+#			help='Path to directory where delivered sequences are stored. If not specified the sequence is stored in the folder of the most recent scan.',
+#			default=None)
+#
+#	args = parser.parse_args()
 
 	verbose = args.verbose
 
@@ -226,4 +226,3 @@ def main():
 		except serial.serialutil.SerialException:
 			print('Serial connection interrupted\n')
 			port_name = None
-main()

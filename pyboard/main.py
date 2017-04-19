@@ -81,7 +81,7 @@ def main():
 		if len(file_paths) >= 1:
 			pkt.send(pkt.INS_ask_user)
 			answer = pkt.receive()
-		if answer == pkt.ANS_yes:
+		if answer == pkt.ANS_yes or len(file_paths)==0:
 			pkt.send(pkt.INS_send_sequences)
 			path = ''
 			if os.path.exists('/sd'):

@@ -28,14 +28,17 @@ class SerialPort(object):
 		return True
 
 	def close_serial(self):
-		if self.serial_port:
+		if self.serial_port is not None:
 			print('Closing serial...')
 			self.serial_port.close()
 		self.serial_port = None
 	
 	def is_byte_available(self):
-		readable, _, _ = select.select([self.serial_port.fileno()], [], [], 0)
-		return bool(readable)
+		if self.serial_port.is_open:
+			readable, _, _ = select.select([self.serial_port.fileno()], [], [], 0)
+			return bool(readable)
+		else:
+			print('Cannot check if byte is available because port is not open.')
 
 	def read_byte(self):
 		"""Reads a byte from the serial port."""
@@ -50,7 +53,10 @@ class SerialPort(object):
 
 	def write(self, data):
 		"""Write data to a serial port."""
-		self.serial_port.write(data)
+		if self.serial_port.is_open:
+			self.serial_port.write(data)
+		else:
+			print('Cannot write because port is not open.')
 
 def is_micropython_usb_device(port):				#function form rshell project of dhylands
 	"""Checks a USB device to see if it looks like a MicroPython device."""

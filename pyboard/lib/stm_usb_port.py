@@ -1,5 +1,8 @@
-"""This module implements the USB_Port class which allows the pyboard to
-   receive serial data using the pyboard's USB_VCP class.
+"""
+From Dave Hylands json-ipc/stm_usb_port.py
+( https://github.com/dhylands/json-ipc.git )
+This module implements the USB_Port class which allows the pyboard to
+receive serial data using the pyboard's USB_VCP class.
 """
 
 from pyb import USB_VCP

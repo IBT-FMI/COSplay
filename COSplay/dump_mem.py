@@ -1,4 +1,8 @@
-"""Provides the dump_mem function, which dumps memory in hex/ASCII."""
+"""
+From Dave Hylands json-ipc/dump_mem.py
+( https://github.com/dhylands/json-ipc.git )
+Provides the dump_mem function, which dumps memory in hex/ASCII.
+"""
 
 import sys
 try:

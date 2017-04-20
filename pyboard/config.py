@@ -1,5 +1,6 @@
-"""Path to json files storing sequences on pyboard
-(useing wildcards), e.g. /library0/sequence*.json
+"""Path to folder with sequences.
+Should only be changed if sequences are manually copied to a different path.
+Default is '/sd/sequence_library'.
 """
 library_path = '/sd/sequence_library'
 

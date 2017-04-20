@@ -11,16 +11,17 @@ import config as cfg
 from pulse import pulse_delivery
 from stm_usb_port import USB_Port
 from pkt import Packet
+from error_handler import error_handler
 
 micropython.alloc_emergency_exception_buf(100)
 
-use_wo_host = False # use without host.
+use_wo_server = False # use without server.
 armed = False
 trigger_received = False
 
-def callback_use_wo_host():
-	global use_wo_host
-	use_wo_host = True
+def callback_use_wo_server():
+	global use_wo_server
+	use_wo_server = True
 
 def callback_arm():
 	global armed
@@ -42,7 +43,7 @@ def main():
 	pin_out.value(1)
 	pin_outLED = pyb.LED(4)
 	
-	global use_wo_host
+	global use_wo_server
 	global armed
 	global trigger_received
 
@@ -50,23 +51,26 @@ def main():
 	pkt = Packet(serial_port)
 
 	armedLED = pyb.LED(3)			#indicates when the system is waiting for a trigger
-	triggerLED = pyb.LED(2)
+	triggerLED = pyb.LED(2)			#indicates when the system is delivering a sequence
+
+
 	try:
 		file_paths = [cfg.library_path + '/' + s for s in uos.listdir(cfg.library_path)]
 	except OSError:
-		file_paths = []
+		file_paths = []			#if path does not exist listdir raises an OSError
 
 	sw = pyb.Switch()
-	sw.callback(callback_use_wo_host)     			
+	sw.callback(callback_use_wo_server)	#if button is pressed the system can be used without a server running the COSplay server application
 	answer = None
 
 	pyb.LED(2).on()
 	pyb.LED(3).on()
 	pyb.LED(4).on()
 
+	#try to connect to server
 	answer = pkt.ANS_no
-	while not use_wo_host:
-		pkt.send(pkt.INS_check_for_sequences_on_host)
+	while not use_wo_server:
+		pkt.send(pkt.INS_check_for_sequences_on_server)
 		answer = pkt.receive(limit_tries=20000)
 		if answer is not None:
 			break
@@ -106,11 +110,11 @@ def main():
 			file_paths = [path + '/' + s for s in uos.listdir(path)]
 	elif len(file_paths) == 0:
 			pkt.send('Error: No sequences found! You can generate sequences using COSgen.')
-			raise ValueError('No sequences found on pyboard or host. Copy sequences to the sd card and specify the path in "config.py".')
+			raise ValueError('No sequences found on pyboard or server. Copy sequences to the sd card and specify the path in "config.py".')
 
-	storage_path = ''		#path to folder where delivered sequences are stored if not connected to client software on host
+	storage_path = ''		#path to folder where delivered sequences are stored if not connected to client software on server
 	delivered_sequence_idx = 0	#index for naming the sequence files in storage_path
-	if use_wo_host:
+	if use_wo_server:
 		if not os.path.exists('/sd/delivered_sequences'):
 			uos.mkdir('/sd/delivered_sequences')
 		path = '/sd/delivered_sequences/sequences'
@@ -121,12 +125,21 @@ def main():
 		uos.mkdir(path)
 		storage_path = path
 		
+	eh = error_handler(use_wo_server,pkt,storage_path)
 
-	ticks = None				#Holds the function for utime.measurment
+	ticks = None				#Function for utime.measurment
 	sleep = None				#Corresponding sleep function for ticks
 	conversion_factor = 1			#converts seconds to the unit specified in cfg.accuracy
 	if cfg.accuracy == 'us':
 		ticks = utime.ticks_us
+		pth = '/sd/delivered_sequences/sequences'
+		idx = 0
+		while os.path.exists(path + str(idx)):
+			idx += 1
+ath = '/sd/delivered_sequences/sequences'
+		idx = 0
+		while os.path.exists(path + str(idx)):
+			idx += 1
 		sleep = utime.sleep_us
 		conversion_factor = 1000000
 	elif cfg.accuracy == 'ms':
@@ -188,15 +201,15 @@ def main():
 			while utime.ticks_diff(scheduled_time,end_time) < 0:
 				if utime.ticks_diff(ticks(),scheduled_time) < 0:
 					sleep(utime.ticks_diff(scheduled_time,ticks()))
-					pulse_delivery(pin_out,seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,pkt,ticks,sleep)
+					pulse_delivery(pin_out,seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep)
 				elif utime.ticks_diff(ticks(),scheduled_time) == 0:
-					pulse_delivery(pin_out,seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,pkt,ticks,sleep)
+					pulse_delivery(pin_out,seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep)
 				elif utime.ticks_diff(ticks(),scheduled_time) > 0:
 					now = ticks()
-					pulse_delivery(pin_out,seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,pkt,ticks,sleep)
-					pkt.send("Missed scheduled onset time of pulse in {0} by {1} {2} ".format(i,utime.ticks_diff(now,scheduled_time),cfg.accuracy))
+					pulse_delivery(pin_out,seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep)
+					eh.send("Missed scheduled onset time of pulse in {0} by {1} {2} ".format(i,utime.ticks_diff(now,scheduled_time),cfg.accuracy))
 				scheduled_time = utime.ticks_add(scheduled_time,T[i])
-		if not use_wo_host:
+		if not use_wo_server:
 			pkt.send(seq)
 		else:
 			with open(storage_path+'/sequence'+str(delivered_sequence_idx),'w+') as fp:
@@ -208,16 +221,13 @@ def main():
 
 
 
-
-
-#if os.path.exists('exceptions.txt'):
-#	uos.remove('exceptions.txt')
 try:
 	main()
 except Exception as e:
+	#write error message to file and send them to server(does not work for syntax errors)
 	serial_port = USB_Port()
 	pkt = Packet(serial_port)
-	with open('exceptions.txt','w+') as fp:
+	with open('exceptions.txt','w+') as fp:			
 		sys.print_exception(e,fp)
 		pkt.send('Error on pyboard:\n' + fp.read())
 	raise e

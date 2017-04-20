@@ -1,11 +1,17 @@
-# This code should run fine on MicroPython or CPython.
-#
-# It allows objects which can be represented as JSON objects to be sent
-# between two python programs (running on the same or different computers).
+"""
+This file is based on Dave Hylands json-ipc/json_pkt.py
+( https://github.com/dhylands/json-ipc.git )
+"""
 
-import tsv
+try:
+	from utime import sleep
+	import tsv
+	from dump_mem import dump_mem
+except ImportError:
+	from time import sleep
+	from COSplay import tsv
+	from COSplay.dump_mem import dump_mem
 
-from dump_mem import dump_mem
 
 SOH = 0x01			#start of header
 STX = 0x02			#start of text
@@ -56,8 +62,13 @@ class Packet:
 		self.state = Packet.STATE_SOH
 
 	def send(self, obj):
-		"""Convert a python object into its json representation and then send
+		"""Convert a python object into its string representation and then send
     	    	   it using the 'serial_port' passed in the constructor.
+
+		   Parameters
+		   ----------
+		   obj : list, string or int
+		       object that is send via 'serial_port'
     	    	"""
 		data_type = type(obj)
 		payload_str = None
@@ -90,8 +101,21 @@ class Packet:
 
 
 	def process_byte(self, byte):
-		"""Process a single byte. Return a json object when one is
+		"""Process a single byte. Return a object when one is
     	    	   successfully parsed, otherwise returns None.
+
+		   Parameters
+		   ----------
+		   byte : bytes object / bytearray
+		       inbut byte, For micropython and python3 this
+		       should be a bytes object. In python2 a bytearray
+		       can be used.
+
+		   Returns
+		   -------
+		   out : 2d array / string / int
+		       Returns object if package is successfully parsed,
+		       otherwise returns None.
     	    	"""
 		if self.show_packets:
 			if byte >= ord(' ') and byte <= ord('~'):
@@ -154,20 +178,36 @@ class Packet:
 					except AttributeError:
 						return int(str(self.pkt,'ascii'))
 
-	def receive(self,limit_tries=0):
-#		start_time = time()
-#		while True:
+	def receive(self,time_out=0):
+		"""
+		Try to receive an object.
+
+		This function tries to receive an object
+		until 'time_out'. If a byte is received, 'time_out'
+		becomes obsolete and the function continues until an
+		object is received. Returns None upon time out.
+
+		Parameters
+		----------
+		time_out : int
+		    Time in seconds until return if no bytes are received.
+		    If time_out = 0, the function never times out.
+
+		Retruns
+		-------
+		out : object
+		    Received object or None in case of time out.
+		"""
 		i = 0
-		while i <= limit_tries or limit_tries == 0:
+		while time_out == 0 or i <= time_out*10:
 			byte = self.serial_port.read_byte()
 			if byte is not None:
-				limit_tries = 0
-#				timeout=0	#once the functions starts to receive something it does not timeout anymore
+				time_out=0	#once the functions starts to receive something it does not timeout anymore
 				obj = self.process_byte(byte)
 				if obj is not None:
 					return obj
 			i += 1
-#				print(time()-start_time)
-#			if time()-start_time >= timeout and timeout > 0:
-#				return None
+			if time_out != 0:
+				sleep(0.1)
+		return None
 

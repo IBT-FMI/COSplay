@@ -1,7 +1,16 @@
+#!/bin/bash
+
+''''true && for var in {5..1}; do which "python3.$var" >/dev/null 2>&1 && exec "python3.$var" "$0" $( echo "$@" | sed -- 's/--force//g' ); done # '''
+''''which python2.7 >/dev/null 2>&1 && exec python2.7 "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
+''''which python >/dev/null 2>&1 && (( $( python -c 'import sys; print(sys.version_info[1])' ) == 3 )) && (( $( python -c 'import sys; print(sys.version_info[1])' ) >=5 )) && exec python "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
+''''which python >/dev/null 2>&1 && (( $( python -c 'import sys; print(sys.version_info[1])' ) == 2 )) && (( $( python -c 'import sys; print(sys.version_info[1])' ) ==7 )) && exec python "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
+''''true && [[ $( echo "$@" | grep -c -- "--force" ) -eq 0 ]] && exec echo "Error: No supported python version found. (If you want to try to use the OS's default python version run this script with --force)" # '''
+''''exec python "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
+
 __author__ = "Aymanns Florian"
 
 import argparse
-from COSplay.server import run
+import COSplay.server
 
 def main():
 
@@ -42,7 +51,7 @@ def main():
 	args = parser.parse_args()
 
 
-	run(args)
+	COSplay.server.main(args)
 
 if __name__ == '__main__':
 	main()

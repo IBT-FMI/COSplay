@@ -1,5 +1,8 @@
-"""This module implements the SerialPort class, which allows the host to talk
-   to another device using a serial like interface over a UART.
+"""
+Based on Dave Hylands json-ipc/serial_port.py
+( https://github.com/dhylands/json-ipc.git )
+This module implements the SerialPort class, which allows the host to talk
+to another device using a serial like interface over a UART.
 """
 
 import serial
@@ -13,6 +16,23 @@ class SerialPort(object):
 		self.serial_port = None
 
 	def connect_serial(self, port, baud=115200):
+		"""
+		Try to connect to serial port.
+
+	  	This function tries to connect to a serial port
+		named 'port'.
+
+		Parameters
+		----------
+		port : string
+		    name of port (e.g. /dev/ttyACM0)
+
+		Returns
+		-------
+		out : bool
+		    True if connection could be established,
+		    otherwise False.
+		"""
 		try:
 			self.serial_port = serial.Serial(port=port,
                                              		 baudrate=baud,
@@ -28,12 +48,14 @@ class SerialPort(object):
 		return True
 
 	def close_serial(self):
+		"""Close serial connection if it is open."""
 		if self.serial_port is not None:
 			print('Closing serial...')
 			self.serial_port.close()
 		self.serial_port = None
 	
 	def is_byte_available(self):
+		"""Check if byte can be read from serial port."""
 		if self.serial_port.is_open:
 			readable, _, _ = select.select([self.serial_port.fileno()], [], [], 0)
 			return bool(readable)

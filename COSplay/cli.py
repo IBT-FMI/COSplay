@@ -10,7 +10,10 @@
 __author__ = "Aymanns Florian"
 
 import argparse
-import COSplay.server
+try:
+	import COSplay.server as server
+except ImportError:
+	import server
 
 def main():
 
@@ -51,7 +54,7 @@ def main():
 	args = parser.parse_args()
 
 
-	COSplay.server.main(args)
+	server.main(args)
 
 if __name__ == '__main__':
 	main()

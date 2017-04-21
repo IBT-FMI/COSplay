@@ -4,13 +4,21 @@ This file is based on Dave Hylands json-ipc/json_pkt.py
 """
 
 try:
+	#imports for pyboard
 	from utime import sleep
 	import tsv
 	from dump_mem import dump_mem
 except ImportError:
+	#imports on host computer
 	from time import sleep
-	from COSplay import tsv
-	from COSplay.dump_mem import dump_mem
+	try:
+		#if COSplay is installed as package
+		from COSplay import tsv
+		from COSplay.dump_mem import dump_mem
+	except ImportError:
+		#if cli.py is executed directly
+		import tsv
+		from dump_mem import dump_mem
 
 
 SOH = 0x01			#start of header
@@ -19,7 +27,7 @@ ETX = 0x03			#end of text
 EOT = 0x04			#end of transmission
 SEQ = 0x05			#type of data is a sequence (json)
 MSG = 0x06			#type of data is message for user from pyboard
-INS = 0x07			#instruction form pyboard to COSplay_host 
+INS = 0x07			#instruction form pyboard to server 
 # <SOH><LenLow><LenHigh><TYPE><STX><PAYLOAD><ETX><LRC><EOT>
 
 def lrc(str):
@@ -45,11 +53,11 @@ class Packet:
 	STATE_LRC = 7
 	STATE_EOT = 8
 
-	ANS_no = 0				#answers form host to instructions/questions form pyboard
+	ANS_no = 0				#answers form server to instructions/questions form pyboard
 	ANS_yes = 1
-	INS_check_for_sequences_on_host = 2	#COSplay_host shall check for COSgen folder on host computer
-	INS_ask_user = 3			#COSplay_host shall ask user whether to use sequences stored on microcontroller or host
-	INS_send_sequences = 4			#COSplay_host shall send sequences to microcontroller
+	INS_check_for_sequences_on_server = 2	#check for COSgen folder on host computer
+	INS_ask_user = 3			#ask user whether to use sequences stored on microcontroller or host computer
+	INS_send_sequences = 4			#send sequences to microcontroller
 
 	def __init__(self, serial_port, show_packets=False):
 		self.serial_port = serial_port

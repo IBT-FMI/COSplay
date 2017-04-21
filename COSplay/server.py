@@ -2,13 +2,19 @@
 import time
 import argparse
 import os
+import os.path
 import glob
 import signal
 import serial
 
-from COSplay import tsv
-from COSplay import serial_port
-from COSplay.pkt import Packet
+try:
+	from COSplay import tsv
+	from COSplay import serial_port
+	from COSplay.pkt import Packet
+except ImportError:
+	import tsv
+	import serial_port
+	from pkt import Packet
 
 keep_running = True
 
@@ -65,7 +71,7 @@ def process_message(obj,error_msgs):
 		return error_msgs + obj + '\n'
 	return error_msgs
 
-def save_sequence(obj, storage_path, file_idx, error_msgs, vendor, verbose=0):
+def save_sequence(obj, storage_path, error_msgs, vendor, verbose=0):
 	"""
 	Save sequence in storage_path.
 
@@ -80,22 +86,14 @@ def save_sequence(obj, storage_path, file_idx, error_msgs, vendor, verbose=0):
 	storage_path : string
 	    Path to directory, where files shall be stored. If it is None, the
 	    most recent scan directory is used.
-	file_idx : int
-	    If 'storage_path' is not None, 'file_idx' is appended to the
-	    file name.
 	error_msgs : string
 	    String containing error messages. Is stored in same directory as
-	    the sequence. 'file_idx' also applies.
+	    the sequence.
 	vendor : string
 	    Name of MRI vendor.
 	verbose : int, optional
 	    If 'verbose' is larger than 1, the sequence is printed to the screen.
 	    Default is 0.
-
-	Retruns
-	-------
-	out : int
-	    'file_idx' incremeted by one.
 	"""
 	if type(obj) != list:
 		raise TypeError('save_sequence only stores sequences in dictionary format.')	
@@ -114,6 +112,9 @@ def save_sequence(obj, storage_path, file_idx, error_msgs, vendor, verbose=0):
 					print >>fp, error_msgs
 				print('Error messages saved as {0}'.format(path+'errors.txt\n'))
 	else:
+		file_idx = 0
+		while os.path.exists(storage_path+'sequence'+str(file_idx)+'.tsv'):
+			file_idx += 1
 		with open(storage_path+'sequence'+str(file_idx)+'.tsv','w+') as fp:
 			tsv.dump(obj,fp)
 			print('Sequence saved as {0}'.format(storage_path+'sequence'+str(file_idx)+'.tsv\n'))
@@ -124,7 +125,6 @@ def save_sequence(obj, storage_path, file_idx, error_msgs, vendor, verbose=0):
 					except SyntaxError:
 						print >>fp, error_msgs
 					print('Error messages saved as {0}\n'.format(storage_path+'errors'+str(file_idx)+'.txt'))
-	return file_idx + 1
 
 def check_for_sequences(sequences_arg):
 	"""
@@ -169,9 +169,9 @@ def ask_user():
 	"""
 	while True:
 		try:
-			var = raw_input('Shall the sequences on the host be used instead of the sequences on the pyboard? (Y/n)')
+			var = raw_input('Shall the sequences on the computer be used instead of the sequences on the pyboard? (y/n)')
 		except NameError:
-			var = input('Shall the sequences on the host be used instead of the sequences on the pyboard? (y/n)')
+			var = input('Shall the sequences on the computer be used instead of the sequences on the pyboard? (y/n)')
 		if var == 'y':
 			return True
 		elif var == 'n':
@@ -276,7 +276,6 @@ def main(args):
 
 
 
-	file_idx = 0	#this increases for every new sequenc that is stored in storage_path and is included in the file name such that the old sequence is not overridden
 	error_msgs = ''		#stores error messages that occurer while delivering one sequence
 
 	signal.signal(signal.SIGINT, signal_handler_end_program)
@@ -311,8 +310,8 @@ def main(args):
 				if type(obj) == message_type:
 					error_msgs = process_message(obj,error_msgs)
 				elif type(obj) == list:
-					file_idx =  save_sequence(obj,storage_path,file_idx,error_msgs,vendor,verbose)
-				elif obj == pkt.INS_check_for_sequences_on_host:
+					save_sequence(obj,storage_path,error_msgs,vendor,verbose)
+				elif obj == pkt.INS_check_for_sequences_on_server:
 					sequences_paths = check_for_sequences(args.sequences)
 					if sequences_paths is None:
 						pkt.send(pkt.ANS_no)

@@ -7,17 +7,17 @@ class error_handler:
 			self.pkt = pkt
 
 	def send(self,s):
-	"""
-	Store error message in file or send it to server if connected.
+		"""
+		Store error message in file or send it to server if connected.
 
-	This function stores an error message in a file named errorN.txt,
-	where N is the number of the sequence that is currently delivered.
+		This function stores an error message in a file named errorN.txt,
+		where N is the number of the sequence that is currently delivered.
 
-	Parameters
-	----------
-	s : string
-	    string containing error message
-	"""
+		Parameters
+		----------
+		s : string
+		    string containing error message
+		"""
 		if self.use_wo_server:
 			path = self.storage_path + '/sequence'
 			idx = 0

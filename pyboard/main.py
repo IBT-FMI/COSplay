@@ -71,7 +71,7 @@ def main():
 	answer = pkt.ANS_no
 	while not use_wo_server:
 		pkt.send(pkt.INS_check_for_sequences_on_server)
-		answer = pkt.receive(limit_tries=20000)
+		answer = pkt.receive(time_out=1)
 		if answer is not None:
 			break
 
@@ -132,14 +132,6 @@ def main():
 	conversion_factor = 1			#converts seconds to the unit specified in cfg.accuracy
 	if cfg.accuracy == 'us':
 		ticks = utime.ticks_us
-		pth = '/sd/delivered_sequences/sequences'
-		idx = 0
-		while os.path.exists(path + str(idx)):
-			idx += 1
-ath = '/sd/delivered_sequences/sequences'
-		idx = 0
-		while os.path.exists(path + str(idx)):
-			idx += 1
 		sleep = utime.sleep_us
 		conversion_factor = 1000000
 	elif cfg.accuracy == 'ms':

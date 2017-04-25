@@ -58,7 +58,6 @@ class SerialPort(object):
 		"""Check if byte can be read from serial port."""
 		if self.serial_port.is_open:
 			readable, _, _ = select.select([self.serial_port.fileno()], [], [], 0)
-			print(self.serial_port.fileno())
 			return bool(readable)
 		else:
 			print('Cannot check if byte is available because port is not open.')

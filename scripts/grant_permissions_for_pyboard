@@ -1,14 +1,30 @@
-#!/bin/sh
+#!/bin/bash
 
+a=95
+while ls /etc/udev/rules.d/$a* 1> /dev/null 2>&1 && (( $a > 0 )) && ! [[ -e  "/etc/udev/rules.d/$a-pyboard.rules" ]]
+do
+a=$(( $a-1 ))
+done
 
-sudo sh -c 'cat > /etc/udev/rules.d/49-pyboard.rules' <<EOF
+[[ $a ]] || {
+	echo 'Could not find free number for new udev rule file. Consider adding the rules to an existing file.'
+	exit 1
+}
+
+sudo sh -c "cat > /etc/udev/rules.d/$a-pyboard.rules" <<EOF
 # f055:9800, 9801, 9802 MicroPython pyboard
 ATTRS{idVendor}=="f055", ENV{ID_MM_DEVICE_IGNORE}="1"
 ATTRS{idVendor}=="f055", ENV{MTP_NO_PROBE}="1"
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="f055", MODE="0666"
 KERNELS=="ttyACM*", ATTRS{idVendor}=="f055", MODE="0666"
+SYSFS{idVendor}=="f055", ENV{ID_MM_DEVICE_IGNORE}="1"
+SYSFS{idVendor}=="f055", ENV{MTP_NO_PROBE}="1"
+SUBSYSTEMS=="usb", SYSFS{idVendor}=="f055", MODE="0666"
+KERNELS=="ttyACM*", SYSFS{idVendor}=="f055", MODE="0666"
 EOF
+
+echo "Rules were written to /etc/udev/rules.d/$a-pyboard.rules"
 
 sudo udevadm control --reload-rules
 
-echo "Unplug and replug your device to activate the new rules."
+echo "Unplug and replug your device to activate the new rules. If this does not give you the right permissions, the new rules might be overridden by an other rule. In this case you can try to add the rules to a .rules file starting with a higher number."

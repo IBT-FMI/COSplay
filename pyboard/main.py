@@ -204,7 +204,7 @@ def main():
 		if not use_wo_server:
 			pkt.send(seq)
 		else:
-			with open(storage_path+'/sequence'+str(delivered_sequence_idx),'w+') as fp:
+			with open(storage_path+'/sequence'+str(delivered_sequence_idx)+'.tsv','w+') as fp:
 				fp.write(tsv.dumps(seq))
 			delivered_sequence_idx += 1
 		armed = False

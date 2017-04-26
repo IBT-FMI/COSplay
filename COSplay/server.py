@@ -38,7 +38,7 @@ def find_current_scan_dir(vendor):
 
 	Returns
 	-------
-	out : string
+	 string
 	    Path to current scan directory.
 	"""
 	if vendor == 'bruker':
@@ -63,7 +63,7 @@ def process_message(obj,error_msgs):
 
 	Returns
 	-------
-	out : string
+	string
 	    updated 'error_msgs'
 	"""
 	print(obj + '\n')
@@ -139,9 +139,9 @@ def check_for_sequences(sequences_arg):
 	sequences_arg : string
 	    Path to sequence files, can be None.
 
-	Retruns
+	Returns
 	-------
-	out : list
+	list
 	    List of paths to sequence files. None if no sequences were
 	    found.
 	"""
@@ -164,7 +164,7 @@ def ask_user():
 
 	Returns
 	-------
-	out : bool
+	bool
 	    True if sequences on server shall be used, False otherwise.
 	"""
 	while True:
@@ -252,7 +252,17 @@ def connect(port_name=None):
 
 
 def main(args):
+	"""Main function running on MRI computer.
 
+	   This function constantly tries to receive data from pyboard.
+	   It acts according to the instructions received from the board.
+	   Exit this function by pressing CTRL-C.
+
+	   Parameters
+	   ----------
+	   args : namespace
+	       Namespace with arguments
+	"""
 	verbose = args.verbose
 
 	vendor = args.vendor

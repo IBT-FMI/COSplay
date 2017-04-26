@@ -22,6 +22,12 @@ except AttributeError:
 		return bytes(' '.join(['{:02x}'.format(b) for b in buf]), 'ascii')
 
 def print_(s):
+	"""
+	Print string s
+
+	In Python2 print is not a function. This function makes it possible
+	to use it like one.
+	"""
 	print(s)
 
 def dump_mem(buf, prefix='', address=0, line_width=16, show_ascii=True,

@@ -1,6 +1,6 @@
 """
 Based on Dave Hylands json-ipc/serial_port.py
-( https://github.com/dhylands/json-ipc.git )
+(https://github.com/dhylands/json-ipc.git).
 This module implements the SerialPort class, which allows the host to talk
 to another device using a serial like interface over a UART.
 """
@@ -29,7 +29,7 @@ class SerialPort(object):
 
 		Returns
 		-------
-		out : bool
+		bool
 		    True if connection could be established,
 		    otherwise False.
 		"""
@@ -63,7 +63,13 @@ class SerialPort(object):
 			print('Cannot check if byte is available because port is not open.')
 
 	def read_byte(self):
-		"""Reads a byte from the serial port."""
+		"""Reads a byte from the serial port.
+
+		   Returns
+		   -------
+		   int
+		       Value of byte.
+		"""
 		if self.is_byte_available():
 			data = self.serial_port.read()
 			if type(data[0]) == int:
@@ -74,14 +80,32 @@ class SerialPort(object):
 				raise TypeError('serial_port.read() returned unrecognised type {0}'.format(type(data[0])))
 
 	def write(self, data):
-		"""Write data to a serial port."""
+		"""Write data to a serial port.
+
+		   Parameters
+		   ----------
+		   data : string / bytearray
+		       Data to write.
+		"""
 		if self.serial_port.is_open:
 			self.serial_port.write(data)
 		else:
 			print('Cannot write because port is not open.')
 
 def is_micropython_usb_device(port):				#function form rshell project of dhylands
-	"""Checks a USB device to see if it looks like a MicroPython device."""
+	"""Check a USB device to see if it looks like a MicroPython device.
+
+	   Parameters
+	   ----------
+	   port : serial.tools.list_ports object
+	       Port to check. 
+
+	   Returns
+	   -------
+	   bool
+	       True if device connected to 'port' looks like a MicroPython
+	       device, False otherwise.
+	"""
 	if type(port).__name__ == 'Device':
 		# Assume its a pyudev.device.Device
 		if ('ID_BUS' not in port or port['ID_BUS'] != 'usb' or
@@ -101,8 +125,16 @@ def is_micropython_usb_device(port):				#function form rshell project of dhyland
 	return False
 
 def autoscan():						#function form rshell project of dhylands
-	"""autoscan will check all of the serial ports to see if they have
-	a matching VID:PID for a MicroPython board. If it matches."""
+	"""Check all serial ports to see if they are MicroPython devices.
+	
+	   Checks serial ports until it finds a port with matching VID:PID for
+	   a MicroPython board.
+
+	   Returns
+	   -------
+	   string
+	       Full device name/path. None if no MicroPython device was found.
+	"""
 	for port in serial.tools.list_ports.comports():
 		if is_micropython_usb_device(port):
 			return port[0]

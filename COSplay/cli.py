@@ -1,3 +1,5 @@
+"""Command line interface. Also executable as bash script."""
+
 #!/bin/bash
 
 ''''true && for var in {5..1}; do which "python3.$var" >/dev/null 2>&1 && exec "python3.$var" "$0" $( echo "$@" | sed -- 's/--force//g' ); done # '''
@@ -15,8 +17,8 @@ try:
 except ImportError:
 	import server
 
-def main():
-
+def return_parser():
+	"""Return argparse argument parser."""
 	parser = argparse.ArgumentParser(prog="COSplay",
 					description="Main program running on host computer for usage with a pyboard running COSplay")
 	parser.add_argument('-v','--verbose',
@@ -30,7 +32,7 @@ def main():
 			action='store',
 			choices=['bruker'],
 			type=str.lower,
-			help='Is needed to find the correct folder. Program knows "bruker" (default="bruker")',
+			help='Is needed to find the correct folder.',
 			default='bruker')
 	parser.add_argument('--port',
 			dest='port',
@@ -51,8 +53,13 @@ def main():
 			help='Path to directory where delivered sequences are stored. If not specified the sequence is stored in the folder of the most recent scan.',
 			default=None)
 
-	args = parser.parse_args()
+	return parser
 
+def main():
+	"""Process arguments and pass them to server.main."""
+	parser = return_parser()
+
+	args = parser.parse_args()
 
 	server.main(args)
 

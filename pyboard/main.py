@@ -2,8 +2,7 @@ import utime
 import micropython
 import random
 import uos
-import os.path
-import os
+import path as ospath
 import sys
 import tsv
 
@@ -88,15 +87,15 @@ def main():
 		if answer == pkt.ANS_yes or len(file_paths)==0:
 			pkt.send(pkt.INS_send_sequences)
 			path = ''
-			if os.path.exists('/sd'):
+			if ospath.exists('/sd'):
 				path = '/sd/sequence_library'
-			elif os.path.exists('1:'):
+			elif ospath.exists('1:'):
 				path = '1:/sequence_library'			#older versions of the pyboard use 0:/ and 1:/ instead of /flash and /sd
-			elif os.path.exists('/flash'):
+			elif ospath.exists('/flash'):
 				path = '/flash/sequence_library'
-			elif os.path.exists('0:'):
+			elif ospath.exists('0:'):
 				path = '0:/sequence_library'
-			if not os.path.exists(path):
+			if not ospath.exists(path):
 				uos.mkdir(path)
 			for s in uos.listdir(path):
 				uos.remove(path + '/' + s)
@@ -115,11 +114,11 @@ def main():
 	storage_path = ''		#path to folder where delivered sequences are stored if not connected to client software on server
 	delivered_sequence_idx = 0	#index for naming the sequence files in storage_path
 	if use_wo_server:
-		if not os.path.exists('/sd/delivered_sequences'):
+		if not ospath.exists('/sd/delivered_sequences'):
 			uos.mkdir('/sd/delivered_sequences')
 		path = '/sd/delivered_sequences/sequences'
 		idx = 0
-		while os.path.exists(path + str(idx)):
+		while ospath.exists(path + str(idx)):
 			idx += 1
 		path = path + str(idx)
 		uos.mkdir(path)

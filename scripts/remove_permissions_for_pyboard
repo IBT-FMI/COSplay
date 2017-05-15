@@ -36,6 +36,7 @@ KERNELS=="ttyACM*", SYSFS{idVendor}=="f055", MODE="0666"
 exit 1
 fi
 
-sudo udevadm control --reload-rules 1> /dev/null 2>&1 || udevcontrol reload_rules
+sudo udevadm control --reload-rules 1> /dev/null 2>&1 || sudo udevcontrol reload_rules ||{
+echo "Could not reload rules."; exit 1 }
 
 echo "udev rules were successfully reloaded"

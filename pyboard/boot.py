@@ -26,7 +26,6 @@ elif mode == 1:
 	pyb.main('main.py')
 elif mode == 2:
 	pyb.usb_mode('VCP+MSC')
-	pyb.main(None)
 
 import micropython
 micropython.alloc_emergency_exception_buf(100)

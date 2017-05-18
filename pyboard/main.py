@@ -59,20 +59,38 @@ def main():
 		file_paths = []			#if path does not exist listdir raises an OSError
 
 	sw = pyb.Switch()
-	sw.callback(callback_use_wo_server)	#if button is pressed the system can be used without a server running the COSplay server application
-	answer = None
 
 	pyb.LED(2).on()
 	pyb.LED(3).on()
 	pyb.LED(4).on()
 
 	#try to connect to server
-	answer = pkt.ANS_no
-	while not use_wo_server:
-		pkt.send(pkt.INS_check_for_sequences_on_server)
+	answer = None
+	active = 0
+	debounce_time = 20
+	double_click_time = 400
+	send_repetition = 1000	#Generally 1sec should be enough for the computer to answer.
+	reps = 0
+	first_push_time = 0
+	while not use_wo_server or pyb.elapsed_millis(first_push_time)<double_click_time:
+		reps += 1
+		if reps%send_repetition == 0:
+			pkt.send(pkt.INS_check_for_sequences_on_server)
 		answer = pkt.receive(time_out=1)
 		if answer is not None:
 			break
+		if sw() == True:
+			active += 1
+		else:
+			active = 0
+			continue
+		if active == debounce_time:
+			if first_push_time == 0:
+				first_push_time = pyb.millis()
+				use_wo_server = True
+			elif pyb.elapsed_millis(first_push_time) < double_click_time:
+				open('/flash/bootincopymode','a').close()
+				pyb.hard_reset()
 
 	pyb.LED(2).off()
 	pyb.LED(3).off()

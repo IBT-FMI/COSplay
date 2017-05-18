@@ -198,7 +198,7 @@ class Packet:
 		Parameters
 		----------
 		time_out : int
-		    Time in seconds until return if no bytes are received.
+		    Approximate time in ms until return if no bytes are received.
 		    If time_out = 0, the function never times out.
 
 		Retruns
@@ -207,7 +207,7 @@ class Packet:
 		    Received object or None in case of time out.
 		"""
 		i = 0
-		while time_out == 0 or i <= time_out*10:
+		while time_out == 0 or i < time_out:
 			byte = self.serial_port.read_byte()
 			if byte is not None:
 				time_out=0	#once the functions starts to receive something it does not timeout anymore
@@ -215,7 +215,6 @@ class Packet:
 				if obj is not None:
 					return obj
 			i += 1
-			if time_out != 0:
-				sleep(0.1)
+			sleep(0.001)
 		return None
 

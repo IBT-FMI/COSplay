@@ -14,17 +14,8 @@ from error_handler import error_handler
 
 micropython.alloc_emergency_exception_buf(100)
 
-use_wo_server = False # use without server.
-armed = False
 trigger_received = False
 
-def callback_use_wo_server():
-	global use_wo_server
-	use_wo_server = True
-
-def callback_arm():
-	global armed
-	armed = True
 
 def callback_trigger(line):
 	global trigger_received
@@ -42,8 +33,7 @@ def main():
 	pin_out.value(1)
 	pin_outLED = pyb.LED(4)
 	
-	global use_wo_server
-	global armed
+	use_wo_server = False
 	global trigger_received
 
 	serial_port = USB_Port()
@@ -54,9 +44,11 @@ def main():
 
 
 	try:
-		file_paths = [cfg.library_path + '/' + s for s in uos.listdir(cfg.library_path)]
+		file_paths = [cfg.library_path + '/' + s for s in ospath.listdir_nohidden(cfg.library_path)]
 	except OSError:
 		file_paths = []			#if path does not exist listdir raises an OSError
+	
+	print(file_paths)
 
 	sw = pyb.Switch()
 
@@ -188,11 +180,16 @@ def main():
 				continue
 
 		pkt.send('Ready to be armed!')
-		sw.callback(callback_arm)
-		while not armed:
-			utime.sleep(0.5)
+		trigger_received = False
+		sw.callback(None)
+		active = 0
+		while active < 20:
+			if sw() == True:
+				active += 1
+			else:
+				active = 0
+			pyb.delay(1)
 		armedLED.on()
-		armed = False
 		
 		sw.callback(callback_trigger2)			#for test purposes the switch can be used to trigger
 		extint.enable()
@@ -224,8 +221,6 @@ def main():
 			with open(storage_path+'/sequence'+str(delivered_sequence_idx)+'.tsv','w+') as fp:
 				fp.write(tsv.dumps(seq))
 			delivered_sequence_idx += 1
-		armed = False
-		trigger_received = False
 		triggerLED.off()
 
 

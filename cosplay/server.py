@@ -1,4 +1,3 @@
-
 import time
 import argparse
 import os
@@ -8,9 +7,9 @@ import signal
 import serial
 
 try:
-	from COSplay import tsv
-	from COSplay import serial_port
-	from COSplay.pkt import Packet
+	from cosplay import tsv
+	from cosplay import serial_port
+	from cosplay.pkt import Packet
 except ImportError:
 	import tsv
 	import serial_port
@@ -126,9 +125,19 @@ def save_sequence(obj, storage_path, error_msgs, vendor, verbose=0):
 						print >>fp, error_msgs
 					print('Error messages saved as {0}\n'.format(storage_path+'errors'+str(file_idx)+'.txt'))
 
+def listdir_nohidden(path):
+	for f in os.listdir(path):
+		if not f.startswith('.'):
+			yield f
+
 def check_for_sequences(sequences_arg):
 	"""
 	Check if sequence can be found on the server.
+
+	This function returns a list of all non hidden files in
+	sequences_arg if sequences_arg is a directory. Otherwise the path can
+	contain shell-style wildcards. If 'sequences_arg' is None, it checks
+	COSgen's default location.
 
 	This functions checks if there are sequence files of the form
 	'sequence*.tsv' in the directory 'sequences_arg'.
@@ -146,7 +155,13 @@ def check_for_sequences(sequences_arg):
 	    found.
 	"""
 	if sequences_arg is not None:
+
 		sequences_paths = glob.glob(sequences_arg)
+		for p in sequences_paths:
+			if os.path.isdir(p):
+				sequences_paths.remove(p)
+				sequences_paths.extend(os.listdir_nohidde(p))
+
 		if len(sequences_paths) == 0:
 			print('There are no sequences in {0}.\n'.format(sequences))
 		else:
@@ -186,7 +201,7 @@ def send_sequences(sequences_paths,pkt,verbose):
 	----------
 	sequences_paths : list
 	    List of paths (strings) to sequences that are sent.
-	pkt : COSplay.pkt Packet object
+	pkt : cosplay.pkt Packet object
 	    Object that sends the sequences.
 	verbose : int
 	    If larger than 1, print path to every sequence sent.
@@ -223,7 +238,7 @@ def connect(port_name=None):
 
 	Returns
 	-------
-	port : COSplay.serial_port.SerialPort object
+	port : cosplay.serial_port.SerialPort object
 	    Port object that is connected. None if no connection could be
 	    establish.
 	"""

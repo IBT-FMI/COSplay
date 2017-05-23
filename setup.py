@@ -9,8 +9,8 @@ setup(
 	keywords = ["fMRI", "stimulus", "pyboard", "bruker"],
 	url = "https://github.com/IBT-FMI/COSplay.git",
 	install_requires = [],
-	provides = ["COSplay"],
-	packages = ["COSplay"],
+	provides = ["cosplay"],
+	packages = ["cosplay"],
 	include_package_data = True,
 	entry_points = {
 		'console_scripts' : ['COSplay = COSplay.cli:main']

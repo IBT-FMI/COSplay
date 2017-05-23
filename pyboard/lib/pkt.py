@@ -13,8 +13,8 @@ except ImportError:
 	from time import sleep
 	try:
 		#if COSplay is installed as package
-		from COSplay import tsv
-		from COSplay.dump_mem import dump_mem
+		from cosplay import tsv
+		from cosplay.dump_mem import dump_mem
 	except ImportError:
 		#if cli.py is executed directly
 		import tsv

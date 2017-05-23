@@ -13,7 +13,7 @@ __author__ = "Aymanns Florian"
 
 import argparse
 try:
-	import COSplay.server as server
+	import cosplay.server as server
 except ImportError:
 	import server
 

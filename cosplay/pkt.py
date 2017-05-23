@@ -1,6 +1,6 @@
 """
 This file is based on Dave Hylands json-ipc/json_pkt.py
-(https://github.com/dhylands/json-ipc.git).
+( https://github.com/dhylands/json-ipc.git )
 """
 
 try:
@@ -13,8 +13,8 @@ except ImportError:
 	from time import sleep
 	try:
 		#if COSplay is installed as package
-		from COSplay import tsv
-		from COSplay.dump_mem import dump_mem
+		from cosplay import tsv
+		from cosplay.dump_mem import dump_mem
 	except ImportError:
 		#if cli.py is executed directly
 		import tsv
@@ -31,18 +31,6 @@ INS = 0x07			#instruction form pyboard to server
 # <SOH><LenLow><LenHigh><TYPE><STX><PAYLOAD><ETX><LRC><EOT>
 
 def lrc(str):
-	"""Compute longitudinal redundancy check.
-
-	   Parameters
-	   ----------
-	   str : string
-	       Input byte string.
-
-	   Returns
-	   -------
-	   int
-	       Longitudinal redundancy of input string.
-	"""
 	sum = 0
 	try:
 		for b in str:
@@ -54,36 +42,6 @@ def lrc(str):
 		return ((sum ^ 0xff) + 1) & 0xff
 
 class Packet:
-	"""Package data and send/receive it via serial port.
-
-	   This class packs data and sends/receives it via the
-	   serial_port. Do not change the value of the Attributes listed
-	   below. Use them as follows: ``p.send(p.ANS_yes)``, where ``p``
-	   is an instance of the this class.
-
-	   Parameters
-	   ----------
-	   serial_port : COSplay.serial_port object
-	       Serial port used for sending and receiving data.
-	   show_packets : bool, optional
-	       If true every received byte is printed on the screen in
-	       hex and ascii representation.
-
-	   Attributes
-	   ----------
-	   ANS_yes : int
-	       Positive answer to instructions/questions form pyboard.
-	   ANS_no : int
-	       Negative answer to instructions/questions form pyboard.
-	   INS_check_for_sequences_on_server : int
-	       Instruction to check for COSgen folder on host computer.
-	   INS_ask_user : int
-	       Instruction to ask user whether to use sequences stored on
-	       microcontroller or host computer.
-	   INS_send_sequences : int
-	       Instruction to send sequences to microcontroller.
-	   
-	"""
 
 	STATE_SOH = 0
 	STATE_LEN_0 = 1
@@ -95,8 +53,7 @@ class Packet:
 	STATE_LRC = 7
 	STATE_EOT = 8
 
-	ANS_no = 0				#answers form server to instructions/questions form pyboardi
-	"""Negative answer to instructions/questions form pyboard."""
+	ANS_no = 0				#answers form server to instructions/questions form pyboard
 	ANS_yes = 1
 	INS_check_for_sequences_on_server = 2	#check for COSgen folder on host computer
 	INS_ask_user = 3			#ask user whether to use sequences stored on microcontroller or host computer
@@ -152,19 +109,19 @@ class Packet:
 
 
 	def process_byte(self, byte):
-		"""Process a single byte. Return an object when one is
+		"""Process a single byte. Return a object when one is
     	    	   successfully parsed, otherwise returns None.
 
 		   Parameters
 		   ----------
-		   byte : bytes / bytearray
-		       inbut byte, For MicroPython and Python3 this
-		       should be a bytes object. In Python2 a bytearray
+		   byte : bytes object / bytearray
+		       inbut byte, For micropython and python3 this
+		       should be a bytes object. In python2 a bytearray
 		       can be used.
 
 		   Returns
 		   -------
-		   2d array / string / int
+		   out : 2d array / string / int
 		       Returns object if package is successfully parsed,
 		       otherwise returns None.
     	    	"""
@@ -241,17 +198,16 @@ class Packet:
 		Parameters
 		----------
 		time_out : int
-		    Time in seconds until return if no bytes are received.
+		    Approximate time in ms until return if no bytes are received.
 		    If time_out = 0, the function never times out.
 
-
-		Returns
+		Retruns
 		-------
-		object
+		out : object
 		    Received object or None in case of time out.
 		"""
 		i = 0
-		while time_out == 0 or i <= time_out*10:
+		while time_out == 0 or i < time_out:
 			byte = self.serial_port.read_byte()
 			if byte is not None:
 				time_out=0	#once the functions starts to receive something it does not timeout anymore
@@ -259,7 +215,6 @@ class Packet:
 				if obj is not None:
 					return obj
 			i += 1
-			if time_out != 0:
-				sleep(0.1)
+			sleep(0.001)
 		return None
 

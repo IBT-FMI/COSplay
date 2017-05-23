@@ -13,7 +13,7 @@ setup(
 	packages = ["cosplay"],
 	include_package_data = True,
 	entry_points = {
-		'console_scripts' : ['COSplay = COSplay.cli:main']
+		'console_scripts' : ['COSplay = cosplay.cli:main']
 	},
 	scripts = ['scripts/grant_permissions_for_pyboard']
 	)

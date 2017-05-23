@@ -130,22 +130,20 @@ def listdir_nohidden(path):
 		if not f.startswith('.'):
 			yield f
 
-def check_for_sequences(sequences_arg):
+def check_for_sequences(sequences_arg=None):
 	"""
 	Check if sequence can be found on the server.
 
-	This function returns a list of all non hidden files in
-	sequences_arg if sequences_arg is a directory. Otherwise the path can
-	contain shell-style wildcards. If 'sequences_arg' is None, it checks
-	COSgen's default location.
-
-	This functions checks if there are sequence files of the form
-	'sequence*.tsv' in the directory 'sequences_arg'.
-	If 'sequences_arg' is None, it checks COSgen's default location.
+	This function returns a list of paths to all files ending with
+	'.tsv' in sequence_arg. Shell-style wildcards can be used.
+	sequences_arg can be directories, files or a mixture of both.
+	Directories are search non recursively on the first level.
+	It no sequence_arg is specified the default location of COSgen is
+	used.
 
 	Parameters
 	----------
-	sequences_arg : string
+	sequences_arg : string, optional
 	    Path to sequence files, can be None.
 
 	Returns
@@ -156,14 +154,25 @@ def check_for_sequences(sequences_arg):
 	"""
 	if sequences_arg is not None:
 
-		sequences_paths = glob.glob(sequences_arg)
+		sequences_paths = glob.glob(os.path.expanduser(sequences_arg))
+		extension = []
 		for p in sequences_paths:
 			if os.path.isdir(p):
+				extension.extend([os.path.join(p,s) for s in listdir_nohidden(p)])
+		sequences_paths.extend(extension)
+		i = 0
+		while i < len(sequences_paths):
+			p = sequences_paths[i]
+			if os.path.isdir(p):
 				sequences_paths.remove(p)
-				sequences_paths.extend(os.listdir_nohidde(p))
+				continue
+			if not p.endswith('.tsv'):
+				sequences_paths.remove(p)
+				continue
+			i += 1
 
 		if len(sequences_paths) == 0:
-			print('There are no sequences in {0}.\n'.format(sequences))
+			print('There are no sequences in {0}.\n'.format(sequences_arg))
 		else:
 			return sequences_paths
 	sequences_paths = glob.glob('sequence*.tsv')			#this must be changed to default location of COSgen
@@ -342,6 +351,8 @@ def main(args):
 						pkt.send(pkt.ANS_no)
 					else:
 						pkt.send(pkt.ANS_yes)
+					print('Sequences found on computer:')
+					print(sequences_paths)
 				elif obj == pkt.INS_ask_user:
 					answer = ask_user()
 					if answer == True:

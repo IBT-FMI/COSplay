@@ -163,7 +163,7 @@ def main():
 		range_of_events = range(num_of_events-1)
 		onset_column = seq[0].index('onset')
 		frequency_column = seq[0].index('frequency')
-		pulse_end_column = seq[0].index('pulse_end')
+		pulse_end_column = seq[0].index('duration')
 		pulse_width_column = seq[0].index('pulse_width')
 		T = [int(1./seq[1][frequency_column]*conversion_factor)]
 		onset = [int(seq[1][onset_column]*conversion_factor)]
@@ -190,6 +190,7 @@ def main():
 				active = 0
 			pyb.delay(1)
 		armedLED.on()
+		pkt.send('System armed!')
 		
 		sw.callback(callback_trigger2)			#for test purposes the switch can be used to trigger
 		extint.enable()

@@ -1,3 +1,5 @@
+import path as ospath
+
 class error_handler:
 	def __init__(self, use_wo_server, pkt=None, storage_path=None):
 		self.use_wo_server = use_wo_server
@@ -21,7 +23,7 @@ class error_handler:
 		if self.use_wo_server:
 			path = self.storage_path + '/sequence'
 			idx = 0
-			while os.path.exists(path + str(idx)):
+			while ospath.exists(path + str(idx)):
 				idx += 1
 			with open(self.storage_path + '/errors'+str(idx)+'.txt','w+') as f:
 				print(s,f)

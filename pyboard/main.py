@@ -10,7 +10,7 @@ import config as cfg
 from pulse import pulse_delivery
 from stm_usb_port import USB_Port
 from pkt import Packet
-from error_handler import error_handler
+from error_handler import ErrorHandler
 
 micropython.alloc_emergency_exception_buf(100)
 
@@ -48,7 +48,6 @@ def main():
 	except OSError:
 		file_paths = []			#if path does not exist listdir raises an OSError
 	
-	print(file_paths)
 
 	sw = pyb.Switch()
 
@@ -124,9 +123,23 @@ def main():
 	storage_path = ''		#path to folder where delivered sequences are stored if not connected to client software on server
 	delivered_sequence_idx = 0	#index for naming the sequence files in storage_path
 	if use_wo_server:
-		if not ospath.exists('/sd/delivered_sequences'):
-			uos.mkdir('/sd/delivered_sequences')
-		path = '/sd/delivered_sequences/sequences'
+		if ospath.exists('/sd'):
+			if not ospath.exists('/sd/delivered_sequences'):
+				uos.mkdir('/sd/delivered_sequences')
+			path = '/sd/delivered_sequences/sequences'
+		elif ospath.exists('1:'):
+			if not ospath.exists('1:/delivered_sequences'):
+				uos.mkdir('1:/delivered_sequences')
+			path = '1:/delivered_sequences/sequences'
+		elif ospath.exists('/flash'):
+			if not ospath.exists('/flash/delivered_sequences'):
+				uos.mkdir('/flash/delivered_sequences')
+			path = '/flash/delivered_sequences/sequences'
+		elif ospath.exists('0:'):
+			if not ospath.exists('0:/delivered_sequences'):
+				uos.mkdir('0:/delivered_sequences')
+			path = '0:/delivered_sequences/sequences'
+			
 		idx = 0
 		while ospath.exists(path + str(idx)):
 			idx += 1
@@ -134,7 +147,7 @@ def main():
 		uos.mkdir(path)
 		storage_path = path
 		
-	eh = error_handler(use_wo_server,pkt,storage_path)
+	eh = ErrorHandler(use_wo_server,pkt,storage_path)
 
 	ticks = None				#Function for utime.measurment
 	sleep = None				#Corresponding sleep function for ticks
@@ -189,6 +202,7 @@ def main():
 			else:
 				active = 0
 			pyb.delay(1)
+		pyb.delay(200)
 		armedLED.on()
 		pkt.send('System armed!')
 		
@@ -214,11 +228,12 @@ def main():
 				elif utime.ticks_diff(ticks(),scheduled_time) > 0:
 					now = ticks()
 					pulse_delivery(pin_out,seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep)
-					eh.send("Missed scheduled onset time of pulse in {0} by {1} {2} ".format(i,utime.ticks_diff(now,scheduled_time),cfg.accuracy))
+					eh.send("Missed scheduled onset time of pulse in event {0} by {1} {2} ".format(i,utime.ticks_diff(now,scheduled_time),cfg.accuracy))
 				scheduled_time = utime.ticks_add(scheduled_time,T[i])
 		if not use_wo_server:
 			pkt.send(seq)
 		else:
+			eh.save()
 			with open(storage_path+'/sequence'+str(delivered_sequence_idx)+'.tsv','w+') as fp:
 				fp.write(tsv.dumps(seq))
 			delivered_sequence_idx += 1

@@ -1,9 +1,11 @@
 import path as ospath
+import uos
 
-class error_handler:
+class ErrorHandler:
 	def __init__(self, use_wo_server, pkt=None, storage_path=None):
 		self.use_wo_server = use_wo_server
 		if use_wo_server:
+			self.msgstr = ''
 			self.storage_path = storage_path
 		else:
 			self.pkt = pkt
@@ -21,12 +23,17 @@ class error_handler:
 		    string containing error message
 		"""
 		if self.use_wo_server:
-			path = self.storage_path + '/sequence'
-			idx = 0
-			while ospath.exists(path + str(idx)):
-				idx += 1
-			with open(self.storage_path + '/errors'+str(idx)+'.txt','w+') as f:
-				print(s,f)
+			self.msgstr = self.msgstr + s + '\n'
 
 		else:
 			self.pkt.send(s)
+
+	def save(self):
+		if not self.use_wo_server:
+			return
+		idx = 0
+		while ospath.exists(self.storage_path + '/sequence' + str(idx) + '.tsv'):
+			idx += 1
+		with open(self.storage_path + '/errors'+str(idx)+'.txt','w+') as f:
+			f.write(self.msgstr)
+		self.msgstr = ''

@@ -176,11 +176,12 @@ def main():
 		range_of_events = range(num_of_events-1)
 		onset_column = seq[0].index('onset')
 		frequency_column = seq[0].index('frequency')
-		pulse_end_column = seq[0].index('duration')
+		duration_column = seq[0].index('duration')
 		pulse_width_column = seq[0].index('pulse_width')
 		T = [int(1./seq[1][frequency_column]*conversion_factor)]
 		onset = [int(seq[1][onset_column]*conversion_factor)]
-		pulse_end = [int((seq[1][onset_column]+seq[1][pulse_end_column])*conversion_factor)]
+		pulse_end = [int((seq[1][onset_column]+seq[1][duration_column])*conversion_factor)]
+		num_pulses = [int(seq[1][duration_column]*conversion_factor/T[0])]
 		if T[0] < seq[1][pulse_width_column]*conversion_factor:
 			pkt.send("Invalid sequence {0}. Period is smaller than pulse width. Proceeding with a different sequence.\n".format(file_paths[seq_index]))
 			continue
@@ -188,9 +189,11 @@ def main():
 			T.append(int(1./seq[i][frequency_column]*conversion_factor))
 			onset.append(int(seq[i][onset_column]*conversion_factor))
 			pulse_end.append(int((seq[i][onset_column]+seq[i][pulse_end_column]))*conversion_factor)
+			num_pulses.append(int(seq[i][duration_column]*conversion_factor/T[i-1]))
 			if T[i-1] < seq[i][pulse_width_column]*conversion_factor:
 				pkt.send("Invalid sequence {0}. Period is smaller than pulse width. Proceeding with a different sequence.\n".format(file_paths[seq_index]))
 				continue
+
 
 		pkt.send('Ready to be armed!')
 		trigger_received = False
@@ -218,8 +221,8 @@ def main():
 		
 		for i in range_of_events:
 			scheduled_time= utime.ticks_add(start_ticks,onset[i])
-			end_time= utime.ticks_add(start_ticks,pulse_end[i])
-			while utime.ticks_diff(scheduled_time,end_time) < 0:
+			pulse = 0
+			while pulse < num_pulses[i]:
 				if utime.ticks_diff(ticks(),scheduled_time) < 0:
 					sleep(utime.ticks_diff(scheduled_time,ticks()))
 					pulse_delivery(pin_out,seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep)
@@ -230,6 +233,7 @@ def main():
 					pulse_delivery(pin_out,seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep)
 					eh.send("Missed scheduled onset time of pulse in event {0} by {1} {2} ".format(i,utime.ticks_diff(now,scheduled_time),cfg.accuracy))
 				scheduled_time = utime.ticks_add(scheduled_time,T[i])
+				pulse += 1
 		if not use_wo_server:
 			pkt.send(seq)
 		else:
@@ -249,5 +253,6 @@ except Exception as e:
 	pkt = Packet(serial_port)
 	with open('exceptions.txt','w+') as fp:			
 		sys.print_exception(e,fp)
+	with open('exceptions.txt','r') as fp:
 		pkt.send('Error on pyboard:\n' + fp.read())
 	raise e

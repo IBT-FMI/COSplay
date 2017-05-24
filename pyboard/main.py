@@ -218,6 +218,7 @@ def main():
 		triggerLED.on()
 		armedLED.off()
 		extint.disable()
+		pkt.send('Trigger received!')
 		
 		for i in range_of_events:
 			scheduled_time= utime.ticks_add(start_ticks,onset[i])

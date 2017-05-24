@@ -163,18 +163,18 @@ def main():
 		range_of_events = range(num_of_events-1)
 		onset_column = seq[0].index('onset')
 		frequency_column = seq[0].index('frequency')
-		duration_column = seq[0].index('duration')
+		pulse_end_column = seq[0].index('pulse_end')
 		pulse_width_column = seq[0].index('pulse_width')
 		T = [int(1./seq[1][frequency_column]*conversion_factor)]
 		onset = [int(seq[1][onset_column]*conversion_factor)]
-		duration = [int((seq[1][onset_column]+seq[1][duration_column])*conversion_factor)]
+		pulse_end = [int((seq[1][onset_column]+seq[1][pulse_end_column])*conversion_factor)]
 		if T[0] < seq[1][pulse_width_column]*conversion_factor:
 			pkt.send("Invalid sequence {0}. Period is smaller than pulse width. Proceeding with a different sequence.\n".format(file_paths[seq_index]))
 			continue
 		for i in range(2,num_of_events):
 			T.append(int(1./seq[i][frequency_column]*conversion_factor))
 			onset.append(int(seq[i][onset_column]*conversion_factor))
-			duration.append(int((seq[i][onset_column]+seq[i][duration_column]))*conversion_factor)
+			pulse_end.append(int((seq[i][onset_column]+seq[i][pulse_end_column]))*conversion_factor)
 			if T[i-1] < seq[i][pulse_width_column]*conversion_factor:
 				pkt.send("Invalid sequence {0}. Period is smaller than pulse width. Proceeding with a different sequence.\n".format(file_paths[seq_index]))
 				continue
@@ -203,7 +203,7 @@ def main():
 		
 		for i in range_of_events:
 			scheduled_time= utime.ticks_add(start_ticks,onset[i])
-			end_time= utime.ticks_add(start_ticks,duration[i])
+			end_time= utime.ticks_add(start_ticks,pulse_end[i])
 			while utime.ticks_diff(scheduled_time,end_time) < 0:
 				if utime.ticks_diff(ticks(),scheduled_time) < 0:
 					sleep(utime.ticks_diff(scheduled_time,ticks()))

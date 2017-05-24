@@ -4,5 +4,7 @@ Default is '/sd/sequence_library'.
 """
 library_path = '/sd/sequence_library'
 
-"""Timing accuracy can be 'us' or 'ms'"""
-accuracy = 'us'
+"""Timing accuracy can be 'us' or 'ms'. 'us' mode only works for sequences
+with a total duration of less than ~19min47s
+"""
+accuracy = 'ms'

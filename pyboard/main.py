@@ -188,7 +188,7 @@ def main():
 		for i in range(2,num_of_events):
 			T.append(int(1./seq[i][frequency_column]*conversion_factor))
 			onset.append(int(seq[i][onset_column]*conversion_factor))
-			pulse_end.append(int((seq[i][onset_column]+seq[i][pulse_end_column]))*conversion_factor)
+			pulse_end.append(int((seq[i][onset_column]+seq[i][duration_column]))*conversion_factor)
 			num_pulses.append(int(seq[i][duration_column]*conversion_factor/T[i-1]))
 			if T[i-1] < seq[i][pulse_width_column]*conversion_factor:
 				pkt.send("Invalid sequence {0}. Period is smaller than pulse width. Proceeding with a different sequence.\n".format(file_paths[seq_index]))

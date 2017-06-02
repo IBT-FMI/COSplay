@@ -192,8 +192,8 @@ class Packet:
 
 		This function tries to receive an object
 		until 'time_out'. If a byte is received, 'time_out'
-		becomes obsolete and the function continues until an
-		object is received. Returns None upon time out.
+		becomes obsolete and the function times out if no more
+		bytes are received for 1s. Returns None upon time out.
 
 		Parameters
 		----------
@@ -210,10 +210,12 @@ class Packet:
 		while time_out == 0 or i < time_out:
 			byte = self.serial_port.read_byte()
 			if byte is not None:
-				time_out=0	#once the functions starts to receive something it does not timeout anymore
+				i=0
+				time_out=1000	#once the functions starts to receive something it times out after 1s
 				obj = self.process_byte(byte)
 				if obj is not None:
 					return obj
+				continue
 			i += 1
 			sleep(0.001)
 		return None

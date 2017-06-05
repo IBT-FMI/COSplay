@@ -8,3 +8,10 @@ library_path = '/flash/sequence_library'
 with a total duration of less than ~19min47s
 """
 accuracy = 'us'
+
+on_value_out_channel1 = 0
+on_value_out_channel2 = 0
+on_value_out_channel3 = 0
+on_value_out_channel4 = 1
+on_value_out_channel5 = 1
+on_value_out_channel6 = 1

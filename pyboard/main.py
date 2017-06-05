@@ -7,7 +7,7 @@ import sys
 import tsv
 
 import config as cfg
-from pulse import pulse_delivery
+from pulse import deliver_pulse
 from stm_usb_port import USB_Port
 from pkt import Packet
 from error_handler import ErrorHandler
@@ -16,6 +16,8 @@ micropython.alloc_emergency_exception_buf(100)
 
 trigger_received = False
 
+class SequenceError(Exception):
+	pass
 
 def callback_trigger(line):
 	global trigger_received
@@ -29,8 +31,18 @@ def callback_trigger2():
 def main():
 
 	#keep the following lines close to the begining of main because laser is switched on until pin_out.value(1)
-	pin_out = pyb.Pin('Y1',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_UP)
-	pin_out.value(1)
+	pin_out1 = pyb.Pin('Y1',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_UP)
+	pin_out1.value(1)
+	pin_out2 = pyb.Pin('Y3',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_UP)
+	pin_out2.value(1)
+	pin_out3 = pyb.Pin('Y5',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_UP)
+	pin_out3.value(1)
+	pin_out4 = pyb.Pin('Y12',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
+	pin_out4.value(0)
+	pin_out5 = pyb.Pin('Y10',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
+	pin_out5.value(0)
+	pin_out6 = pyb.Pin('X8',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
+	pin_out6.value(0)
 	pin_outLED = pyb.LED(4)
 	
 	use_wo_server = False
@@ -178,21 +190,59 @@ def main():
 		frequency_column = seq[0].index('frequency')
 		duration_column = seq[0].index('duration')
 		pulse_width_column = seq[0].index('pulse_width')
+		out_channel_column = seq[0].index('out_channel')
 		T = [int(1./seq[1][frequency_column]*conversion_factor)]
 		onset = [int(seq[1][onset_column]*conversion_factor)]
-		pulse_end = [int((seq[1][onset_column]+seq[1][duration_column])*conversion_factor)]
 		num_pulses = [int(seq[1][duration_column]*conversion_factor/T[0])]
+		if seq[1][out_channel_column] == 1:
+			pin = [pin_out1]
+			on_value = [cfg.on_value_out_channel1] 
+		elif seq[1][out_channel_column] == 2:
+			pin = [pin_out2]
+			on_value = [cfg.on_value_out_channel2]
+		elif seq[1][out_channel_column] == 3:
+			pin = [pin_out3]
+			on_value = [cfg.on_value_out_channel3]
+		elif seq[1][out_channel_column] == 4:
+			pin = [pin_out4]
+			on_value = [cfg.on_value_out_channel4]
+		elif seq[1][out_channel_column] == 5:
+			pin = [pin_out5]
+			on_value = [cfg.on_value_out_channel5]
+		elif seq[1][out_channel_column] == 6:
+			pin = [pin_out6]
+			on_value = [cfg.on_value_out_channel6]
+		else:
+			raise SequenceError('Invalide sequence {0}. Unrecognized out channel {1}.\n'.format(file_paths[seq_index], seq[1][out_channel_column]))
+
 		if T[0] < seq[1][pulse_width_column]*conversion_factor:
-			pkt.send("Invalid sequence {0}. Period is smaller than pulse width. Proceeding with a different sequence.\n".format(file_paths[seq_index]))
-			continue
+			raise SequenceError("Invalid sequence {0}. Period is smaller than pulse width.\n".format(file_paths[seq_index]))
 		for i in range(2,num_of_events):
 			T.append(int(1./seq[i][frequency_column]*conversion_factor))
 			onset.append(int(seq[i][onset_column]*conversion_factor))
-			pulse_end.append(int((seq[i][onset_column]+seq[i][duration_column]))*conversion_factor)
 			num_pulses.append(int(seq[i][duration_column]*conversion_factor/T[i-1]))
+			if seq[i][out_channel_column] == 1:
+				pin.append(pin_out1)
+				on_value.append(cfg.on_value_out_channel1) 
+			elif seq[i][out_channel_column] == 2:
+				pin.append(pin_out2)
+				on_value.append(cfg.on_value_out_channel2) 
+			elif seq[i][out_channel_column] == 3:
+				pin.append(pin_out3)
+				on_value.append(cfg.on_value_out_channel3) 
+			elif seq[i][out_channel_column] == 4:
+				pin.append(pin_out4)
+				on_value.append(cfg.on_value_out_channel4) 
+			elif seq[i][out_channel_column] == 5:
+				pin.append(pin_out5)
+				on_value.append(cfg.on_value_out_channel5) 
+			elif seq[i][out_channel_column] == 6:
+				pin.append(pin_out6)
+				on_value.append(cfg.on_value_out_channel6) 
+			else:
+				raise SequenceError('Invalide sequence {0}. Unrecognized out channel {1}.\n'.format(file_paths[seq_index], seq[i][out_channel_column]))
 			if T[i-1] < seq[i][pulse_width_column]*conversion_factor:
-				pkt.send("Invalid sequence {0}. Period is smaller than pulse width. Proceeding with a different sequence.\n".format(file_paths[seq_index]))
-				continue
+				raise SequenceError("Invalid sequence {0}. Period is smaller than pulse width.\n".format(file_paths[seq_index]))
 
 
 		pkt.send('Ready to be armed!')
@@ -226,12 +276,12 @@ def main():
 			while pulse < num_pulses[i]:
 				if utime.ticks_diff(ticks(),scheduled_time) < 0:
 					sleep(utime.ticks_diff(scheduled_time,ticks()))
-					pulse_delivery(pin_out,seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep)
+					deliver_pulse(pin[i],seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep,on_value[i])
 				elif utime.ticks_diff(ticks(),scheduled_time) == 0:
-					pulse_delivery(pin_out,seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep)
+					deliver_pulse(pin[i],seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep,on_value[i])
 				elif utime.ticks_diff(ticks(),scheduled_time) > 0:
 					now = ticks()
-					pulse_delivery(pin_out,seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep)
+					deliver_pulse(pin[i],seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep,on_value[i])
 					eh.send("Missed scheduled onset time of pulse in event {0} by {1} {2} ".format(i,utime.ticks_diff(now,scheduled_time),cfg.accuracy))
 				scheduled_time = utime.ticks_add(scheduled_time,T[i])
 				pulse += 1

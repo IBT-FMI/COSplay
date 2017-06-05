@@ -1,36 +1,6 @@
 import utime
 
-def switch_off(pin_out, pin_outLED):
-	"""
-	Switch off the stimulus.
-	
-	This function switches off the stimulus(sets pin high)
-	and switches of the corresponding LED.
-	
-	Parameters
-	----------
-	pin_out : pyb.Pin object
-	pin_outLED : pyb.LED object
-	"""
-	pin_out.value(1)
-	pin_outLED.off()
-
-def switch_on(pin_out,amplitude,pin_outLED):
-	"""
-	Switch on the stimulus.
-	
-	This function switches on the stimulus(sets pin low)
-	and switches of the corresponding LED.
-	
-	Parameters
-	----------
-	pin_out : pyb.Pin object
-	pin_outLED : pyb.LED object
-	"""
-	pin_out.value(0)
-	pin_outLED.on()
-
-def pulse_delivery(pin_out, pulse_width, pin_outLED, eh, ticks=utime.ticks_ms, sleep=utime.sleep_ms, amplitude=100):
+def deliver_pulse(pin_out, pulse_width, pin_outLED, eh, ticks=utime.ticks_ms, sleep=utime.sleep_ms, on_state=1):
 	"""
 	Deliver stimulus pulse.
 	
@@ -55,13 +25,17 @@ def pulse_delivery(pin_out, pulse_width, pin_outLED, eh, ticks=utime.ticks_ms, s
 	    should match the ticks function.
 	"""
 	start_time = ticks()
-	switch_on(pin_out,amplitude,pin_outLED)
+	pin_out.value(on_state)
+	pin_outLED.on()
 	scheduled_time = utime.ticks_add(start_time,int(pulse_width))
 	if utime.ticks_diff(ticks(),scheduled_time) < 0:
 		sleep(utime.ticks_diff(scheduled_time,ticks()))
-		switch_off(pin_out,pin_outLED)
+		pin_out.value(not on_state)
+		pin_outLED.off()
 	elif utime.ticks_diff(ticks(),scheduled_time) == 0:	
-		switch_off(pin_out,pin_outLED)
+		pin_out.value(not on_state)
+		pin_outLED.off()
 	elif utime.ticks_diff(ticks(),scheduled_time) > 0:
-		switch_off(pin_out,pin_outLED)
+		pin_out.value(not on_state)
+		pin_outLED.off()
 		eh.send('Missed scheduled end time of pulse by {0} us'.format(utime.ticks_diff(ticks(),scheduled_time)))

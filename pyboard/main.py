@@ -161,17 +161,15 @@ def main():
 		
 	eh = ErrorHandler(use_wo_server,pkt,storage_path)
 
-	ticks = None				#Function for utime.measurment
-	sleep = None				#Corresponding sleep function for ticks
-	conversion_factor = 1			#converts seconds to the unit specified in cfg.accuracy
 	if cfg.accuracy == 'us':
-		ticks = utime.ticks_us
-		sleep = utime.sleep_us
-		conversion_factor = 1000000
+		ticks = utime.ticks_us		#Function for utime.measurment
+		sleep = utime.sleep_us		#Corresponding sleep function for ticks
+		conversion_factor = 1000000	#converts seconds to the unit specified in cfg.accuracy
 	elif cfg.accuracy == 'ms':
 		ticks = utime.ticks_ms
 		sleep = utime.sleep_ms
 		conversion_factor = 1000
+	tmax = int(utime.ticks_add(0,-1)/2)
 
 	extint = pyb.ExtInt('X1', pyb.ExtInt.IRQ_FALLING, pyb.Pin.PULL_DOWN, callback_trigger)
 	extint.disable()
@@ -193,7 +191,10 @@ def main():
 		out_channel_column = seq[0].index('out_channel')
 		T = [int(1./seq[1][frequency_column]*conversion_factor)]
 		onset = [int(seq[1][onset_column]*conversion_factor)]
-		num_pulses = [int(seq[1][duration_column]*conversion_factor/T[0])]
+		onset_sleep = [ onset[0] - onset[0]%tmax ]
+		num_pulses = [round(seq[1][duration_column]*conversion_factor/T[0])]
+		pulse_width = [ int(seq[1][pulse_width_column]*conversion_factor) ]
+		pulse_sleep = [ pulse_width[0] - pulse_width[0]%tmax ]
 		if seq[1][out_channel_column] == 1:
 			pin = [pin_out1]
 			on_value = [cfg.on_value_out_channel1] 
@@ -220,7 +221,10 @@ def main():
 		for i in range(2,num_of_events):
 			T.append(int(1./seq[i][frequency_column]*conversion_factor))
 			onset.append(int(seq[i][onset_column]*conversion_factor))
-			num_pulses.append(int(seq[i][duration_column]*conversion_factor/T[i-1]))
+			onset_sleep.append( onset[i-1] - onset[i-2] - ( onset[i-1] - onset[i-2] ) % tmax ) 
+			num_pulses.append(round(seq[i][duration_column]*conversion_factor/T[i-1]))
+			pulse_width.append(int(seq[i][pulse_width_column]*conversion_factor))
+			pulse_sleep.append(pulse_width[i-1] - pulse_width[i-1]%tmax)
 			if seq[i][out_channel_column] == 1:
 				pin.append(pin_out1)
 				on_value.append(cfg.on_value_out_channel1) 
@@ -269,19 +273,20 @@ def main():
 		armedLED.off()
 		extint.disable()
 		pkt.send('Trigger received!')
-		
 		for i in range_of_events:
+			sleep(onset_sleep[i])
 			scheduled_time= utime.ticks_add(start_ticks,onset[i])
+			pkt.send('scheduled '+str(scheduled_time))
 			pulse = 0
 			while pulse < num_pulses[i]:
 				if utime.ticks_diff(ticks(),scheduled_time) < 0:
 					sleep(utime.ticks_diff(scheduled_time,ticks()))
-					deliver_pulse(pin[i],seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep,on_value[i])
+					deliver_pulse(pin[i],pulse_width[i],pulse_sleep[i],pin_outLED,eh,ticks,sleep,on_value[i])
 				elif utime.ticks_diff(ticks(),scheduled_time) == 0:
-					deliver_pulse(pin[i],seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep,on_value[i])
+					deliver_pulse(pin[i],pulse_width[i],pulse_sleep[i],pin_outLED,eh,ticks,sleep,on_value[i])
 				elif utime.ticks_diff(ticks(),scheduled_time) > 0:
 					now = ticks()
-					deliver_pulse(pin[i],seq[i+1][pulse_width_column]*conversion_factor,pin_outLED,eh,ticks,sleep,on_value[i])
+					deliver_pulse(pin[i],pulse_width[i],pulse_sleep[i],pin_outLED,eh,ticks,sleep,on_value[i])
 					eh.send("Missed scheduled onset time of pulse in event {0} by {1} {2} ".format(i,utime.ticks_diff(now,scheduled_time),cfg.accuracy))
 				scheduled_time = utime.ticks_add(scheduled_time,T[i])
 				pulse += 1

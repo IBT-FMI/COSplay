@@ -1,6 +1,6 @@
 import utime
 
-def deliver_pulse(pin_out, pulse_width, pin_outLED, eh, ticks=utime.ticks_ms, sleep=utime.sleep_ms, on_state=1):
+def deliver_pulse(pin_out, pulse_width, pulse_sleep, pin_outLED, eh, ticks=utime.ticks_ms, sleep=utime.sleep_ms, on_state=1):
 	"""
 	Deliver stimulus pulse.
 	
@@ -28,6 +28,7 @@ def deliver_pulse(pin_out, pulse_width, pin_outLED, eh, ticks=utime.ticks_ms, sl
 	pin_out.value(on_state)
 	pin_outLED.on()
 	scheduled_time = utime.ticks_add(start_time,int(pulse_width))
+	sleep(pulse_sleep)
 	if utime.ticks_diff(ticks(),scheduled_time) < 0:
 		sleep(utime.ticks_diff(scheduled_time,ticks()))
 		pin_out.value(not on_state)

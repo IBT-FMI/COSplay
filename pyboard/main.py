@@ -276,7 +276,6 @@ def main():
 		for i in range_of_events:
 			sleep(onset_sleep[i])
 			scheduled_time= utime.ticks_add(start_ticks,onset[i])
-			pkt.send('scheduled '+str(scheduled_time))
 			pulse = 0
 			while pulse < num_pulses[i]:
 				if utime.ticks_diff(ticks(),scheduled_time) < 0:

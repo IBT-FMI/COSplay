@@ -2,6 +2,7 @@
 Pyboard
 =======
 
+.. graphviz:: workflow.dot
 
 LEDs
 ====
@@ -9,17 +10,21 @@ LEDs
 Green, orange and blue:
     Pyboard tries to connect to software on host computer.
 
+Blue:
+    Copy mode.
+
 Orange:
     Pyboard is armed.
 
 Green:
     Delivering sequence.
 
-Blue:
+Green, Blue:
     Stimulus active.
 
 Red:
     Computer writes to filesystem of pyboard.
+    Warning! Do not unplug or reset the board in this state as file might be corrupted.
 
 Red/Green flashing:
     An error occured while executing the scripts on the board.

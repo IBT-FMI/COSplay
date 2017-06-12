@@ -1,52 +1,52 @@
-COSplay package
+cosplay package
 ===============
 
 Submodules
 ----------
 
-COSplay\.cli module
+cosplay\.cli module
 -------------------
 
-.. automodule:: COSplay.cli
+.. automodule:: cosplay.cli
     :members:
     :undoc-members:
     :show-inheritance:
 
-COSplay\.dump\_mem module
+cosplay\.dump\_mem module
 -------------------------
 
-.. automodule:: COSplay.dump_mem
+.. automodule:: cosplay.dump_mem
     :members:
     :undoc-members:
     :show-inheritance:
 
-COSplay\.pkt module
+cosplay\.pkt module
 -------------------
 
-.. automodule:: COSplay.pkt
+.. automodule:: cosplay.pkt
     :members:
     :show-inheritance:
 
-COSplay\.serial\_port module
+cosplay\.serial\_port module
 ----------------------------
 
-.. automodule:: COSplay.serial_port
+.. automodule:: cosplay.serial_port
     :members:
     :undoc-members:
     :show-inheritance:
 
-COSplay\.server module
+cosplay\.server module
 ----------------------
 
-.. automodule:: COSplay.server
+.. automodule:: cosplay.server
     :members:
     :undoc-members:
     :show-inheritance:
 
-COSplay\.tsv module
+cosplay\.tsv module
 -------------------
 
-.. automodule:: COSplay.tsv
+.. automodule:: cosplay.tsv
     :members:
     :undoc-members:
     :show-inheritance:

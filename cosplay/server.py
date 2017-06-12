@@ -126,19 +126,35 @@ def save_sequence(obj, storage_path, error_msgs, vendor, verbose=0):
 					print('Error messages saved as {0}\n'.format(storage_path+'errors'+str(file_idx)+'.txt'))
 
 def listdir_nohidden(path):
+	"""
+	List all entries in path excluding hidden ones.
+
+	This function implements the same functionality as os.listdir
+	but ignores hidden entires.
+
+	Parameters
+	----------
+	path : string
+	    Path to directory
+
+	Returns
+	-------
+	list
+	    List of all non-hidden entries in the directory.
+	"""
 	for f in os.listdir(path):
 		if not f.startswith('.'):
 			yield f
 
 def check_for_sequences(sequences_arg=None):
 	"""
-	Check if sequence can be found on the server.
+	Try to find sequences.
 
 	This function returns a list of paths to all files ending with
 	'.tsv' in sequence_arg. Shell-style wildcards can be used.
 	sequences_arg can be directories, files or a mixture of both.
-	Directories are search non recursively on the first level.
-	It no sequence_arg is specified the default location of COSgen is
+	Directories are searched non-recursively on the first level.
+	If no sequence_arg is specified, the default location of COSgen is
 	used.
 
 	Parameters
@@ -232,7 +248,7 @@ def send_sequences(sequences_paths,pkt,verbose):
 
 def connect(port_name=None):	
 	"""
-	Establish connection to pyboard
+	Establish connection to pyboard.
 
 	This function tries to connect to 'port_name'. If 'port_name'
 	is None, tries to connect to the first serial port with a
@@ -276,7 +292,7 @@ def connect(port_name=None):
 
 
 def main(args):
-	"""Main function running on MRI computer.
+	"""Main function running on server.
 
 	   This function constantly tries to receive data from pyboard.
 	   It acts according to the instructions received from the board.

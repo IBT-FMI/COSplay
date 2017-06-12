@@ -31,6 +31,7 @@ INS = 0x07			#instruction form pyboard to server
 # <SOH><LenLow><LenHigh><TYPE><STX><PAYLOAD><ETX><LRC><EOT>
 
 def lrc(str):
+	"""Compute the longitudinal redundancy check value."""
 	sum = 0
 	try:
 		for b in str:

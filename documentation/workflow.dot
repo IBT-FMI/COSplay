@@ -1,0 +1,59 @@
+digraph workflow{
+	forcelabels = true;
+	connect [shape=box, margin=0, label = <
+	<TABLE BORDER="0" CELLBORDER="1" CELLPADDING="4">
+		<TR><TD><FONT POINT-SIZE="18">Trying to connect</FONT></TD>
+		</TR>
+		<TR><TD>LED: <FONT COLOR="blue">Blue </FONT><FONT COLOR="orange">Orange </FONT><FONT COLOR="green">Green</FONT></TD>
+		</TR>
+	</TABLE>>];
+
+	copy [shape=box, margin=0, label = <
+	<TABLE BORDER="0" CELLBORDER="1" CELLPADDING="4">
+		<TR><TD><FONT POINT-SIZE="18">Copy mode</FONT></TD>
+		</TR>
+		<TR><TD>LED: <FONT COLOR="blue">Blue </FONT></TD>
+		</TR>
+	</TABLE>>];
+
+	standalone [shape=box, margin=0, label = <
+	<TABLE BORDER="0" CELLBORDER="1" CELLPADDING="0">
+		<TR><TD><FONT POINT-SIZE="18">Stand alone</FONT></TD>
+		</TR>
+		<TR><TD>LED: None</TD>
+		</TR>
+	</TABLE>>];
+
+	connected [shape=box, margin=0, label = <
+	<TABLE BORDER="0" CELLBORDER="1" CELLPADDING="0">
+		<TR><TD><FONT POINT-SIZE="18">Connected</FONT></TD>
+		</TR>
+		<TR><TD>LED: None</TD>
+		</TR>
+	</TABLE>>];
+
+	armed [shape=box, margin=0, label = <
+	<TABLE BORDER="0" CELLBORDER="1" CELLPADDING="4">
+		<TR><TD><FONT POINT-SIZE="18">Armed</FONT></TD>
+		</TR>
+		<TR><TD>LED: <FONT COLOR="orange">Orange</FONT></TD>
+		</TR>
+	</TABLE>>];
+
+	delivering [shape=box, margin=0, label = <
+	<TABLE BORDER="0" CELLBORDER="1" CELLPADDING="4">
+		<TR><TD><FONT POINT-SIZE="18">Delivering sequence</FONT></TD>
+		</TR>
+		<TR><TD>LED: <FONT COLOR="blue">Blue</FONT> for stimulus active, <FONT COLOR="green">Green</FONT> for sequence active</TD>
+		</TR>
+	</TABLE>>];
+
+
+	connect:sw -> copy:n [xlabel ="Double click"];
+	connect -> connected
+	connect:se -> standalone:n [xlabel = "                                          Single click "];
+	standalone -> armed:ne [xlabel = "        Single click"];
+	connected -> armed:nw [xlabel = "Single click  "];
+	armed:w -> delivering:w [xlabel = "Trigger/Single click"];
+	delivering:e -> armed:e [label = "Single click after sequence ended"];
+}

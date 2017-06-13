@@ -76,4 +76,4 @@ You can use a programme like 'screen', 'minicom' or 'picocom'.
 Circuit
 =======
 
-.. image:: circuit.pdf
+.. image:: circuit.png

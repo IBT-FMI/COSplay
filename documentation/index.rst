@@ -12,8 +12,8 @@ Welcome to COSplay's documentation!
 
    COSplay
    cli
-   api
    pyboard
+   api
 
 .. Indices and tables
 .. ==================

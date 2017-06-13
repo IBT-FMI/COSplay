@@ -25,6 +25,7 @@ cosplay\.pkt module
 
 .. automodule:: cosplay.pkt
     :members:
+    :undoc-members:
     :show-inheritance:
 
 cosplay\.serial\_port module

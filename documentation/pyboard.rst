@@ -72,3 +72,8 @@ the board.
 
 *NOTE:* Syntax errors are not handled, as they are raise before execution.
 You can use a programme like 'screen', 'minicom' or 'picocom'.
+
+Circuit
+=======
+
+.. image:: circuit.pdf

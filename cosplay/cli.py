@@ -1,7 +1,7 @@
 #"""Command line interface. Also executable as bash script."""
 
 #!/bin/bash
-
+''''''
 ''''true && for var in {6..1}; do which "python3.$var" >/dev/null 2>&1 && exec "python3.$var" "$0" $( echo "$@" | sed -- 's/--force//g' ); done # '''
 ''''which python2.7 >/dev/null 2>&1 && exec python2.7 "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''
 ''''which python >/dev/null 2>&1 && (( $( python -c 'import sys; print(sys.version_info[1])' ) == 3 )) && (( $( python -c 'import sys; print(sys.version_info[1])' ) >=5 )) && exec python "$0" $( echo "$@" | sed -- 's/--force//g' ) # '''

@@ -1,6 +1,6 @@
 """
 From Dave Hylands json-ipc/dump_mem.py
-( https://github.com/dhylands/json-ipc.git )
+( https://github.com/dhylands/json-ipc.git ).
 Provides the dump_mem function, which dumps memory in hex/ASCII.
 """
 

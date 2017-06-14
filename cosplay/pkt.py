@@ -1,6 +1,6 @@
 """
 This file is based on Dave Hylands json-ipc/json_pkt.py
-( https://github.com/dhylands/json-ipc.git )
+( https://github.com/dhylands/json-ipc.git ).
 """
 
 try:
@@ -31,7 +31,8 @@ INS = 0x07			#instruction form pyboard to server
 # <SOH><LenLow><LenHigh><TYPE><STX><PAYLOAD><ETX><LRC><EOT>
 
 def lrc(str):
-	"""Compute the longitudinal redundancy check value."""
+	"""Compute the longitudinal redundancy check value.
+	"""
 	sum = 0
 	try:
 		for b in str:
@@ -200,9 +201,10 @@ class Packet:
 		----------
 		time_out : int
 		    Approximate time in ms until return if no bytes are received.
-		    If time_out = 0, the function never times out.
+		    If time_out = 0, the function only times out if at least one byte
+		    was received and no bytes were received for 1s.
 
-		Retruns
+		Returns
 		-------
 		out : object
 		    Received object or None in case of time out.

@@ -54,12 +54,16 @@ def main():
 	armedLED = pyb.LED(3)			#indicates when the system is waiting for a trigger
 	triggerLED = pyb.LED(2)			#indicates when the system is delivering a sequence
 
-
 	try:
 		file_paths = [cfg.library_path + '/' + s for s in ospath.listdir_nohidden(cfg.library_path)]
-	except OSError:
-		file_paths = []			#if path does not exist listdir raises an OSError
-	
+	except OSError:			#if path does not exist listdir raises an OSError
+		try:
+			file_paths = ['/sd/sequence_library/' + s for s in ospath.listdir_nohidden('/sd/sequence_library/')]
+		except OSError:
+			try:
+				file_paths = ['/flash/sequence_library/' + s for s in ospath.listdir_nohidden('/flash/sequence_library/')]
+			except OSError:
+				file_paths = []
 
 	sw = pyb.Switch()
 

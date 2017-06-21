@@ -40,7 +40,7 @@ Installation
 Open a terminal and go to the COSplay folder you downloaded.
 
 Insert the microSD into the Pyboard and connect it to the computer using the USB cable.
-Copy all files in the pyboard folder to the SD card (``cp pyboard/* mount/point/of/the/sd``).
+Copy all files in the pyboard folder to the SD card (``cp -rf pyboard/* mount/point/of/the/sd``).
 
 *NOTE:* You have to replace  ``mount/point/of/the/sd`` with the actual mount point of the sd card.
 Of course you can also copy the files without using the terminal.
@@ -61,6 +61,8 @@ Setuptools
 
 The module can be installed using setuptools.
 Run ``python setup.py install`` inside the COSplay folder.
+After installation you can start COSplay using the command ``COSplay``.
+Also the scripts for the udev rules can directly be executed via the commands ``grant_permissions_for_pyboard`` and ``remove_permissions_for_pyboard`` after installation.
 
 *NOTE:* If you have multiple python versions installed on your system,
 you might have to change ``python`` to e.g. ``python3`` in the command above.

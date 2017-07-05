@@ -31,7 +31,7 @@ Hardware
 ========
 
 - PyBoard 1.1
-- microSD
+- microSD (recommended)
 - USB cable (A to micro-B)
 
 Installation

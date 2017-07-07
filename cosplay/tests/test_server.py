@@ -2,7 +2,7 @@ from cosplay.pkt import Packet
 import cosplay.server
 from cosplay.serial_port import SerialPort
 
-def main():
+def test_server():
 	sp = SerialPort()
 	sp.connect_serial('/dev/pts/3')
 	pkt = Packet(sp)
@@ -11,4 +11,4 @@ def main():
 	assert pkt.receive()==pkt.ANS_no
 
 if __name__=="__main__":
-	main()
+	test_server()

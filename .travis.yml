@@ -7,6 +7,6 @@ install:
   - pip install .
   - sudo apt-get install -y socat
 script:
-  - socat -d -d pty,raw,echo=0 pty,raw,echo=0 &
-  - COSplay --port /dev/pts/24 --storage_path ~
+  - socat -d -d /dev/pts/2,raw,echo=0 /dev/pts/3,raw,echo=0 &
+  - COSplay --port /dev/pts/2 --storage_path ~ &
   - py.test

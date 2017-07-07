@@ -291,7 +291,7 @@ def connect(port_name=None):
 	return port
 
 
-def main(args):
+def main(verbose, vendor, port_name, sequences, storage_path=None):
 	"""Main function running on server.
 
 	   This function constantly tries to receive data from pyboard.
@@ -300,20 +300,9 @@ def main(args):
 
 	   Parameters
 	   ----------
-	   args : namespace
-	       Namespace with arguments
+	   Change documentaiton for this!!!!!
 	"""
-	verbose = args.verbose
-
-	vendor = args.vendor
-	
 	sequences_paths = None			#List with all paths to all sequences that will be sent to the microcontroller if requested
-
-	port_name = args.port
-
-	storage_path = args.storage_path
-
-
 	
 	if storage_path is None:
 		find_current_scan_dir(vendor)			#this checks if the path can be found to notify the user of potential problems before they start the experiment
@@ -362,7 +351,7 @@ def main(args):
 				elif type(obj) == list:
 					save_sequence(obj,storage_path,error_msgs,vendor,verbose)
 				elif obj == pkt.INS_check_for_sequences_on_server:
-					sequences_paths = check_for_sequences(args.sequences)
+					sequences_paths = check_for_sequences(sequences)
 					if sequences_paths is None:
 						pkt.send(pkt.ANS_no)
 					else:

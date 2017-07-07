@@ -61,7 +61,7 @@ def main():
 
 	args = parser.parse_args()
 
-	server.main(args)
+	server.main(args.verbose, args.vendor, args.port, args.sequences, args.storage_path)
 
 if __name__ == '__main__':
 	main()

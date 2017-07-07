@@ -5,5 +5,8 @@ python:
 install:
   - pip install -r requirements.txt
   - pip install .
+  - apt install socat
 script:
+  - socat -d -d pty,raw,echo=0 pty,raw,echo=0 &
+  - COSplay --port /dev/pts/24 --storage_path ~
   - py.test

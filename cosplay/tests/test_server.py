@@ -5,6 +5,7 @@ import time
 import sys
 
 def test_server(port):
+	print('Port: ',port)
 	sp = SerialPort()
 	connected=False
 	i=0
@@ -17,7 +18,9 @@ def test_server(port):
 	pkt = Packet(sp)
 	pkt.send("Test string!")
 	pkt.send(pkt.INS_check_for_sequences_on_server)
-	assert pkt.receive(time_out=10000)==pkt.ANS_no
+	answer = pkt.receive(time_out=10000)
+	print('Answer: ',answer)
+	assert answer==pkt.ANS_no
 
 if __name__=="__main__":
 	test_server(sys.argv[1])

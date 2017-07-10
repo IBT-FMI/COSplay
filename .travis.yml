@@ -7,6 +7,12 @@ install:
   - pip install .
   - sudo apt-get install -y socat
 script:
-  - socat -d -d /dev/pts/2,raw,echo=0 /dev/pts/3,raw,echo=0 &
-  - COSplay --port /dev/pts/2 --storage_path ~ &
-  - py.test
+  - cd cosplay/tests
+  - socat -d -d pty,raw,echo=0 pty,raw,echo=0 > socatout 2>&1 &
+  - X=$(head -2 socatout)
+  - COSplay --port ${X:42:11} --storage_path ~ > COSplayout 2>&1 &
+  - pytest test_server.py ${X:96:11}
+  - echo "\nsocatout:"
+  - cat socatout
+  - echo "\nCOSplayout:"
+  - cat COSplayout

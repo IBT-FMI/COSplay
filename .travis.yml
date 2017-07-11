@@ -12,4 +12,5 @@ script:
   - COSplay --port "$(head -1 socatout | cut -d ' ' -f 7)" --storage_path ~ > COSplayout 2>&1 &
   - python test_server.py "$(sed -n '2p' socatout | cut -d ' ' -f 7)"
   - cat socatout
+  - kill -SIGINT $!
   - cat COSplayout

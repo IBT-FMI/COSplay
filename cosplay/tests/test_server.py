@@ -1,8 +1,7 @@
 from cosplay.pkt import Packet
 import cosplay.server
 from cosplay.serial_port import SerialPort
-import time
-import sys
+import time, sys, os, errno
 
 def test_pkt(port1, port2):
 	print('Port 1: ',port1)
@@ -49,6 +48,16 @@ def test_server(port):
 	answer = pkt.receive(time_out=200000)
 	print('Answer: ',answer)
 	assert answer==pkt.ANS_no
+	try:
+		os.makedirs(os.expanduser('~/.cosgen'))
+	except OSError as e:
+		if e.errno != errno.EEXIST:
+			raise
+	open(os.expanduser('~/.cosgen/sequence.tsv',a)).close()
+	pkt.send(pkt.INS_check_for_sequences_on_server)
+	answer = pkt.receive(time_out=200000)
+	print('Answer: ',answer)
+	assert answer==pkt.ANS_yes
 
 if __name__=="__main__":
 	test_pkt(sys.argv[1],sys.argv[2])

@@ -1,12 +1,7 @@
 from cosplay.pkt import Packet
 import cosplay.server
 from cosplay.serial_port import SerialPort
-<<<<<<< HEAD
 import time, sys, os.path, errno
-=======
-import time
-import sys
->>>>>>> 8edd72753180c18e934b556dc4524e5d8c9ab8e5
 
 def test_pkt(port1, port2):
 	print('Port 1: ',port1)
@@ -53,7 +48,6 @@ def test_server(port):
 	answer = pkt.receive(time_out=200000)
 	print('Answer: ',answer)
 	assert answer==pkt.ANS_no
-<<<<<<< HEAD
 	try:
 		os.makedirs(os.path.expanduser('~/.cosgen'))
 	except OSError as e:
@@ -64,8 +58,6 @@ def test_server(port):
 	answer = pkt.receive(time_out=200000)
 	print('Answer: ',answer)
 	assert answer==pkt.ANS_yes
-=======
->>>>>>> 8edd72753180c18e934b556dc4524e5d8c9ab8e5
 
 if __name__=="__main__":
 	test_pkt(sys.argv[1],sys.argv[2])

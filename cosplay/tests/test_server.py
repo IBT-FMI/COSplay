@@ -53,7 +53,7 @@ def test_server(port):
 	except OSError as e:
 		if e.errno != errno.EEXIST:
 			raise
-	open(os.path.expanduser('~/.cosgen/sequence.tsv',a)).close()
+	open(os.path.expanduser('~/.cosgen/sequence.tsv','a')).close()
 	pkt.send(pkt.INS_check_for_sequences_on_server)
 	answer = pkt.receive(time_out=200000)
 	print('Answer: ',answer)

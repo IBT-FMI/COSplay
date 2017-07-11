@@ -344,7 +344,6 @@ def main(verbose, vendor, port_name, sequences, storage_path=None):
 	
 			while keep_running:
 				obj = pkt.receive(time_out=2)
-				print('Still running and object received was {0}'.format(str(obj)))
 				if obj == None:
 					continue
 				if type(obj) == message_type:

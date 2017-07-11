@@ -29,7 +29,7 @@ def test_pkt(port1, port2):
 	pkt2 = Packet(sp2)
 
 	pkt1.send("Test string!")
-	s = pkt2.receive(time_out=100000)
+	s = pkt2.receive(time_out=200000)
 	print(s)
 
 def test_server(port):
@@ -46,7 +46,7 @@ def test_server(port):
 	pkt = Packet(sp)
 	pkt.send("Test string!")
 	pkt.send(pkt.INS_check_for_sequences_on_server)
-	answer = pkt.receive(time_out=100000)
+	answer = pkt.receive(time_out=200000)
 	print('Answer: ',answer)
 	assert answer==pkt.ANS_no
 

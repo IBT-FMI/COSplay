@@ -9,6 +9,11 @@ install:
 script:
   - cd cosplay/tests
   - socat -d -d pty,raw,echo=0 pty,raw,echo=0 > socatout 2>&1 &
+  - exec 3<> "$(head -1 socatout | cut -d ' ' -f 7)"
+  - exec 4<> "$(sed -n '2p' socatout | cut -d ' ' -f 7)"
+  - echo "hello?" >&3
+  - read -t1 output <&4
+  - echo "$output"
   - COSplay --port "$(head -1 socatout | cut -d ' ' -f 7)" --storage_path ~ > COSplayout 2>&1 &
   - python test_server.py "$(sed -n '2p' socatout | cut -d ' ' -f 7)"
   - cat socatout

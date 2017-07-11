@@ -252,7 +252,7 @@ def connect(port_name=None):
 
 	This function tries to connect to 'port_name'. If 'port_name'
 	is None, tries to connect to the first serial port with a
-	maching VID:PID for the Micropython Pyboard.
+	maching VID:PID for the MicroPython Pyboard.
 
 	Parameters
 	----------
@@ -338,7 +338,7 @@ def main(verbose, vendor, port_name, sequences, storage_path=None):
 			
 			message_type = None
 			try:
-				message_type = unicode		#str is unicode in python3
+				message_type = unicode		#str is unicode in Python 3
 			except NameError:
 				message_type = str
 	

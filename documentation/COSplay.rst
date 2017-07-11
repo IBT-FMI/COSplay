@@ -64,7 +64,7 @@ Run ``python setup.py install`` inside the COSplay folder.
 After installation you can start COSplay using the command ``COSplay``.
 Also the scripts for the udev rules can directly be executed via the commands ``grant_permissions_for_pyboard`` and ``remove_permissions_for_pyboard`` after installation.
 
-*NOTE:* If you have multiple python versions installed on your system,
+*NOTE:* If you have multiple Python versions installed on your system,
 you might have to change ``python`` to e.g. ``python3`` in the command above.
 
 References

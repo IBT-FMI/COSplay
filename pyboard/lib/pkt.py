@@ -70,7 +70,7 @@ class Packet:
 		self.state = Packet.STATE_SOH
 
 	def send(self, obj):
-		"""Convert a python object into its string representation and then send
+		"""Convert a Python object into its string representation and then send
     	    	   it using the 'serial_port' passed in the constructor.
 
 		   Parameters
@@ -115,9 +115,9 @@ class Packet:
 		   Parameters
 		   ----------
 		   byte : bytes object / bytearray
-		       inbut byte, For micropython and python3 this
-		       should be a bytes object. In python2 a bytearray
-		       can be used.
+		       inbut byte. For MicroPython and Python 3 this
+		       should be a bytes object. In Python 2 a bytearray
+		       should be used.
 
 		   Returns
 		   -------
@@ -171,7 +171,7 @@ class Packet:
 			self.state = Packet.STATE_SOH
 			if byte == EOT:
 				if self.pkt_type == SEQ:
-					try:				# micropython does not have decode attribute for bytearrays
+					try:				# MicroPython does not have decode attribute for bytearrays
 						return tsv.loads(self.pkt.decode('ascii'))
 					except AttributeError:
 						return tsv.loads(str(self.pkt,'ascii'))

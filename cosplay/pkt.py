@@ -1,6 +1,6 @@
 """
 This file is based on Dave Hylands json-ipc/json_pkt.py
-( https://github.com/dhylands/json-ipc.git ).
+( https://github.com/dhylands/json-ipc.git )
 """
 
 try:
@@ -31,8 +31,6 @@ INS = 0x07			#instruction form pyboard to server
 # <SOH><LenLow><LenHigh><TYPE><STX><PAYLOAD><ETX><LRC><EOT>
 
 def lrc(str):
-	"""Compute the longitudinal redundancy check value.
-	"""
 	sum = 0
 	try:
 		for b in str:
@@ -72,7 +70,7 @@ class Packet:
 		self.state = Packet.STATE_SOH
 
 	def send(self, obj):
-		"""Convert a python object into its string representation and then send
+		"""Convert a Python object into its string representation and then send
     	    	   it using the 'serial_port' passed in the constructor.
 
 		   Parameters
@@ -117,9 +115,9 @@ class Packet:
 		   Parameters
 		   ----------
 		   byte : bytes object / bytearray
-		       inbut byte, For micropython and python3 this
-		       should be a bytes object. In python2 a bytearray
-		       can be used.
+		       inbut byte. For MicroPython and Python 3 this
+		       should be a bytes object. In Python 2 a bytearray
+		       should be used.
 
 		   Returns
 		   -------
@@ -173,7 +171,7 @@ class Packet:
 			self.state = Packet.STATE_SOH
 			if byte == EOT:
 				if self.pkt_type == SEQ:
-					try:				# micropython does not have decode attribute for bytearrays
+					try:				# MicroPython does not have decode attribute for bytearrays
 						return tsv.loads(self.pkt.decode('ascii'))
 					except AttributeError:
 						return tsv.loads(str(self.pkt,'ascii'))
@@ -201,10 +199,9 @@ class Packet:
 		----------
 		time_out : int
 		    Approximate time in ms until return if no bytes are received.
-		    If time_out = 0, the function only times out if at least one byte
-		    was received and no bytes were received for 1s.
+		    If time_out = 0, the function never times out.
 
-		Returns
+		Retruns
 		-------
 		out : object
 		    Received object or None in case of time out.

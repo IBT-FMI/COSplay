@@ -191,7 +191,8 @@ def check_for_sequences(sequences_arg=None):
 			print('There are no sequences in {0}.\n'.format(sequences_arg))
 		else:
 			return sequences_paths
-	sequences_paths = glob.glob('sequence*.tsv')			#this must be changed to default location of COSgen
+	#TODO find newest sequences generated with cosgen
+	sequences_paths = glob.glob(os.path.expanduser('~/.cosgen/sequence*.tsv'))
 	if len(sequences_paths) >= 1:
 		print('Found sequences on computer!\n')
 		return sequences_paths

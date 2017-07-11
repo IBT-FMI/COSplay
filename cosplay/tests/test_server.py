@@ -51,5 +51,5 @@ def test_server(port):
 	assert answer==pkt.ANS_no
 
 if __name__=="__main__":
-	#test_server(sys.argv[1])
 	test_pkt(sys.argv[1],sys.argv[2])
+	test_server(sys.argv[1])

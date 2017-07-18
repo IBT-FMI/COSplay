@@ -44,7 +44,7 @@ Dependencies
 Hardware
 --------
 
-- PyBoard 1.13
+- PyBoard 1.1
 - microSD (recommended)
 - USB cable (A to micro-B)
 

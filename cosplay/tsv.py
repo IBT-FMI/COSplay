@@ -8,7 +8,7 @@ def cast(s):
 	Parameters
 	----------
 	s : string
-	    input string
+	    Input strings
 
 	Returns
 	-------
@@ -30,7 +30,7 @@ def loads(s):
 	Parameters
 	----------
 	s : string
-	    string form BIDS sequence tsv file[BIDS]
+	    String form BIDS sequence tsv file[BIDS].
 
 	Returns
 	-------
@@ -53,7 +53,7 @@ def load(file_obj):
 	Parameters
 	----------
 	file_obj : file object
-	    file_obj of BIDS sequence tsv file[BIDS]
+	    File object of BIDS sequence tsv file[BIDS].
 
 	Returns
 	-------
@@ -71,12 +71,12 @@ def dumps(matrix):
 	Parameters
 	----------
 	matrix : 2d array
-	    input matrix
+	    Input matrix.
 
 	Returns
 	-------
 	string
-	    tsv formated string
+	    tsv formated string.
 	"""
 	s = '\t'.join(matrix[0])
 	for i in range(1,len(matrix)):
@@ -95,9 +95,9 @@ def dump(matrix,file_obj):
 	Parameters
 	----------
 	matrix : 2d array
-	    input matrix
+	    Input matrix.
 	file_obj : file_obj
-	    a .write()-supporting file-like object
+	    A .write()-supporting file-like object.
 	"""
 
 	file_obj.write(dumps(matrix))

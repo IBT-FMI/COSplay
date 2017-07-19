@@ -1,5 +1,5 @@
 """
-From Dave Hylands json-ipc/dump_mem.py
+From Dave Hylands' json-ipc/dump_mem.py
 ( https://github.com/dhylands/json-ipc.git ).
 Provides the dump_mem function, which dumps memory in hex/ASCII.
 """
@@ -23,7 +23,7 @@ except AttributeError:
 
 def print_(s):
 	"""
-	Print string s
+	Print string s.
 
 	In Python 2 print is not a function. This function makes it possible
 	to use it like one.

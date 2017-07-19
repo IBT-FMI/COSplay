@@ -55,5 +55,5 @@ digraph workflow{
 	standalone -> armed:ne [xlabel = "        Single click"];
 	connected -> armed:nw [xlabel = "Single click  "];
 	armed:w -> delivering:w [xlabel = "Trigger/Single click"];
-	delivering:e -> armed:e [label = "Single click after sequence ended"];
+	delivering:e -> armed:e [label = "Single click after \n sequence ended"];
 }

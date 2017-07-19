@@ -1,5 +1,5 @@
 """
-Based on Dave Hylands json-ipc/serial_port.py
+Based on Dave Hylands' json-ipc/serial_port.py
 (https://github.com/dhylands/json-ipc.git).
 This module implements the SerialPort class, which allows the host to talk
 to another device using a serial like interface over a UART.
@@ -63,7 +63,7 @@ class SerialPort(object):
 			print('Cannot check if byte is available because port is not open.')
 
 	def read_byte(self):
-		"""Reads a byte from the serial port.
+		"""Read a byte from the serial port.
 
 		   Returns
 		   -------
@@ -80,7 +80,7 @@ class SerialPort(object):
 				raise TypeError('serial_port.read() returned unrecognised type {0}'.format(type(data[0])))
 
 	def write(self, data):
-		"""Write data to a serial port.
+		"""Write data to the serial port.
 
 		   Parameters
 		   ----------

@@ -45,7 +45,7 @@ Copy all files in the pyboard folder to the SD card (``cp -rf pyboard/* mount/po
 *NOTE:* You have to replace  ``mount/point/of/the/sd`` with the actual mount point of the sd card.
 Of course you can also copy the files without using the terminal.
 
-If you want to use the pyboard standalone you can continue reading at :ref:`pyboardStandalone`.
+If you want to use the pyboard standalone you can continue reading at :ref:`pyboard`.
 
 In order to grant the user permission to access the microcontroller a new udev rule is needed.
 Run the script ``grant_permissions_for_pyboard`` inside the ``scripts`` folder to creat the rule (``./scripts/grant_permissions_for_pyboard``).
@@ -54,7 +54,7 @@ You will need root privileges to run the script. You can remove the rule using t
 The following installs a module that can be used in Python programs (``import cosplay``).
 
 If you only want to use the programme as is, an installation is not mandatory. 
-You can you can simply run the executable cli.py (``./cosplay/cli.py``).
+You can simply run the executable cli.py (``./cosplay/cli.py``).
 
 Setuptools
 ----------

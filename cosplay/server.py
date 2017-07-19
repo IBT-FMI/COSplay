@@ -293,15 +293,25 @@ def connect(port_name=None):
 
 
 def main(verbose, vendor, port_name, sequences, storage_path=None):
-	"""Main function running on server.
+	"""
+	Main function running on server.
 
-	   This function constantly tries to receive data from pyboard.
-	   It acts according to the instructions received from the board.
-	   Exit this function by pressing CTRL-C.
+	This function constantly tries to receive data from pyboard.
+	It acts according to the instructions received from the board.
+	Exit this function by pressing CTRL-C.
 
-	   Parameters
-	   ----------
-	   Change documentaiton for this!!!!!
+	Parameters
+	----------
+	verbose : int
+	    Verbosity level.
+	vendor : string
+	    Vendor of the MRI scanner.
+	port_name : string
+	    Port name.
+	sequences : string
+	    Path to sequences (can include wildcards).
+	storage_path : string
+	    String to storage location for delivered sequences.
 	"""
 	sequences_paths = None			#List with all paths to all sequences that will be sent to the microcontroller if requested
 	

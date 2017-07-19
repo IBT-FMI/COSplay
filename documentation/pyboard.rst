@@ -1,3 +1,5 @@
+.. _pyboard:
+
 =======
 Pyboard
 =======
@@ -24,12 +26,10 @@ Green, Blue:
 
 Red:
     Computer writes to filesystem of pyboard.
-    Warning! Do not unplug or reset the board in this state as file might be corrupted.
+    Warning! Do not unplug or reset the board in this state as files might be corrupted.
 
 Red/Green flashing:
     An error occured while executing the scripts on the board.
-
-.. _pyboardStandalone:
 
 Standalone use
 ==============

@@ -39,10 +39,12 @@ def main():
 	pin_out3.value(1)
 	pin_out4 = pyb.Pin('Y12',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
 	pin_out4.value(0)
-	pin_out5 = pyb.Pin('Y10',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
+	pin_out5 = pyb.Pin('X5',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
 	pin_out5.value(0)
-	pin_out6 = pyb.Pin('X8',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
+	dac5 = pyb.DAC(1)
+	pin_out6 = pyb.Pin('X6',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
 	pin_out6.value(0)
+	dac6 = pyb.DAC(2)
 	pin_outLED = pyb.LED(4)
 	
 	use_wo_server = False
@@ -193,6 +195,7 @@ def main():
 		duration_column = seq[0].index('duration')
 		pulse_width_column = seq[0].index('pulse_width')
 		out_channel_column = seq[0].index('out_channel')
+		amplitude_column = seq[0].index('amplitude')
 		T = [int(1./seq[1][frequency_column]*conversion_factor)]
 		onset = [int(seq[1][onset_column]*conversion_factor)]
 		onset_sleep = [ onset[0] - onset[0]%tmax ]
@@ -200,22 +203,28 @@ def main():
 		pulse_width = [ int(seq[1][pulse_width_column]*conversion_factor) ]
 		pulse_sleep = [ pulse_width[0] - pulse_width[0]%tmax ]
 		if seq[1][out_channel_column] == 1:
-			pin = [pin_out1]
+			pin_out_func = [pin_out1.value]
+			amplitude = [1]
 			on_value = [cfg.on_value_out_channel1] 
 		elif seq[1][out_channel_column] == 2:
-			pin = [pin_out2]
+			pin_out_func = [pin_out2.value]
+			amplitude = [1]
 			on_value = [cfg.on_value_out_channel2]
 		elif seq[1][out_channel_column] == 3:
-			pin = [pin_out3]
+			pin_out_func = [pin_out3.value]
+			amplitude = [1]
 			on_value = [cfg.on_value_out_channel3]
 		elif seq[1][out_channel_column] == 4:
-			pin = [pin_out4]
+			pin_out_func = [pin_out4.value]
+			amplitude = [1]
 			on_value = [cfg.on_value_out_channel4]
 		elif seq[1][out_channel_column] == 5:
-			pin = [pin_out5]
+			pin_out_func = [dac5.write]
+			amplitude = [int(seq[1][amplitude_column]*255)]
 			on_value = [cfg.on_value_out_channel5]
 		elif seq[1][out_channel_column] == 6:
-			pin = [pin_out6]
+			pin_out_func = [dac6.write]
+			amplitude = [int(seq[1][amplitude_column]*255)]
 			on_value = [cfg.on_value_out_channel6]
 		else:
 			raise SequenceError('Invalide sequence {0}. Unrecognized out channel {1}.\n'.format(file_paths[seq_index], seq[1][out_channel_column]))
@@ -230,22 +239,28 @@ def main():
 			pulse_width.append(int(seq[i][pulse_width_column]*conversion_factor))
 			pulse_sleep.append(pulse_width[i-1] - pulse_width[i-1]%tmax)
 			if seq[i][out_channel_column] == 1:
-				pin.append(pin_out1)
+				pin_out_func.append(pin_out1.value)
+				amplitude.append(1)
 				on_value.append(cfg.on_value_out_channel1) 
 			elif seq[i][out_channel_column] == 2:
-				pin.append(pin_out2)
+				pin_out_func.append(pin_out2.value)
+				amplitude.append(1)
 				on_value.append(cfg.on_value_out_channel2) 
 			elif seq[i][out_channel_column] == 3:
-				pin.append(pin_out3)
+				pin_out_func.append(pin_out3.value)
+				amplitude.append(1)
 				on_value.append(cfg.on_value_out_channel3) 
 			elif seq[i][out_channel_column] == 4:
-				pin.append(pin_out4)
+				pin_out_func.append(pin_out4.value)
+				amplitude.append(1)
 				on_value.append(cfg.on_value_out_channel4) 
 			elif seq[i][out_channel_column] == 5:
-				pin.append(pin_out5)
+				pin_out_func.append(dac5.write)
+				amplitude.append(int(seq[i][amplitude_column]*255))
 				on_value.append(cfg.on_value_out_channel5) 
 			elif seq[i][out_channel_column] == 6:
-				pin.append(pin_out6)
+				pin_out_func.append(dac6.write)
+				amplitude.append(int(seq[i][amplitude_column]*255))
 				on_value.append(cfg.on_value_out_channel6) 
 			else:
 				raise SequenceError('Invalide sequence {0}. Unrecognized out channel {1}.\n'.format(file_paths[seq_index], seq[i][out_channel_column]))
@@ -279,25 +294,25 @@ def main():
 		pkt.send('Trigger received!')
 		for i in range_of_events:
 			sleep(onset_sleep[i])
-			scheduled_time= utime.ticks_add(start_ticks,onset[i])
+			scheduled_time= utime.ticks_add(start_ticks, onset[i])
 			pulse = 0
 			while pulse < num_pulses[i]:
-				if utime.ticks_diff(ticks(),scheduled_time) < 0:
-					sleep(utime.ticks_diff(scheduled_time,ticks()))
-					deliver_pulse(pin[i],pulse_width[i],pulse_sleep[i],pin_outLED,eh,ticks,sleep,on_value[i])
-				elif utime.ticks_diff(ticks(),scheduled_time) == 0:
-					deliver_pulse(pin[i],pulse_width[i],pulse_sleep[i],pin_outLED,eh,ticks,sleep,on_value[i])
-				elif utime.ticks_diff(ticks(),scheduled_time) > 0:
+				if utime.ticks_diff(ticks(), scheduled_time) < 0:
+					sleep(utime.ticks_diff(scheduled_time, ticks()))
+					deliver_pulse(pin_out_func[i], amplitude[i], pulse_width[i], pulse_sleep[i], pin_outLED, eh, ticks, sleep, on_value[i])
+				elif utime.ticks_diff(ticks(), scheduled_time) == 0:
+					deliver_pulse(pin_out_func[i], amplitude[i], pulse_width[i], pulse_sleep[i], pin_outLED, eh, ticks, sleep, on_value[i])
+				elif utime.ticks_diff(ticks(), scheduled_time) > 0:
 					now = ticks()
-					deliver_pulse(pin[i],pulse_width[i],pulse_sleep[i],pin_outLED,eh,ticks,sleep,on_value[i])
-					eh.send("Missed scheduled onset time of pulse in event {0} by {1} {2} ".format(i,utime.ticks_diff(now,scheduled_time),cfg.accuracy))
-				scheduled_time = utime.ticks_add(scheduled_time,T[i])
+					deliver_pulse(pin_out_func[i], amplitude[i], pulse_width[i],pulse_sleep[i],pin_outLED,eh,ticks,sleep,on_value[i])
+					eh.send("Missed scheduled onset time of pulse in event {0} by {1} {2} ".format(i, utime.ticks_diff(now, scheduled_time), cfg.accuracy))
+				scheduled_time = utime.ticks_add(scheduled_time, T[i])
 				pulse += 1
 		if not use_wo_server:
 			pkt.send(seq)
 		else:
 			eh.save()
-			with open(storage_path+'/sequence'+str(delivered_sequence_idx)+'.tsv','w+') as fp:
+			with open(storage_path+'/sequence'+str(delivered_sequence_idx)+'.tsv', 'w+') as fp:
 				fp.write(tsv.dumps(seq))
 			delivered_sequence_idx += 1
 		triggerLED.off()
@@ -310,8 +325,8 @@ except Exception as e:
 	#write error message to file and send them to server(does not work for syntax errors)
 	serial_port = USB_Port()
 	pkt = Packet(serial_port)
-	with open('exceptions.txt','w+') as fp:			
-		sys.print_exception(e,fp)
-	with open('exceptions.txt','r') as fp:
+	with open('exceptions.txt', 'w+') as fp:			
+		sys.print_exception(e, fp)
+	with open('exceptions.txt', 'r') as fp:
 		pkt.send('Error on pyboard:\n' + fp.read())
 	raise e

@@ -1,7 +1,7 @@
 """Path to folder with sequences.
 Should only be changed if sequences are manually copied to a different path.
 """
-library_path = ''
+library_path = 'sequence_library'
 
 """Timing accuracy can be 'us' or 'ms'."""
 accuracy = 'us'

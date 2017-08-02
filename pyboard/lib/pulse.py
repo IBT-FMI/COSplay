@@ -4,12 +4,18 @@ def deliver_pulse(pin_out_func, amplitude, pulse_width, pulse_sleep, pin_outLED,
 	"""
 	Deliver stimulus pulse.
 	
-	This function delivers a stimulus pulse of specific length.
+	This function delivers a stimulus pulse of specific length and
+	amplitude.
 	
 	Parameters
 	----------
-	pin_out : pyb.Pin object
-	    Channel for pulse.
+	pin_out_func : function
+	    Function to set value of some pin. E.g. pyb.Pin('Y1').value
+	    or pyb.DAC(0).write.
+	amplitude : int
+	    Amplitude of stimulus. Integer between 0 and 255. Only takes
+	    effect if pin_out_func is a write function of a digital to
+	    analog converter.
 	pulse_width : int
 	    Duration of pulse. Unit is ticks (see ticks parameter).
 	    If pulse_width ticks are exceeded before the stimulus is

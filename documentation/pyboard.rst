@@ -79,9 +79,9 @@ You can use a programme like 'screen', 'minicom' or 'picocom'.
 Circuit
 =======
 
-The following figure shows the circuit used with the pyboard. BNC 1-3 can short circuit the incoming BNC. Ports 4-6 can deliver 3.3V TTL pulses.
+The following figure shows the circuit used with the pyboard. BNC 1-3 can short circuit the incoming BNC. Ports 4-6 can deliver 3.3V TTL pulses. Port 5 and 6 further more allow changing the amplitude of the TTL pusle.
 
-.. image:: circuit.png
+.. image:: circuit.pdf
 
 config.py
 =========

@@ -15,6 +15,7 @@ Features
 
 - TTL trigger from MRI scanner can be used
 - 3 TTL output channels (3.3V) and 3 transistor channels
+- 2 TTL output channels with variable amplitude
 - Microcontroller can be used standalone (c.f. :ref:`pyboardStandalone`)
 - Stimulus pulse delivery with  :math:`ms` or :math:`\mu s` accurary
 - Random selection of a sequence from a sequence library
@@ -30,7 +31,7 @@ Dependencies
 Hardware
 ========
 
-- PyBoard 1.1
+- PyBoard 1.1 with MicroPython firmware 1.8.7 or newer
 - microSD (recommended)
 - USB cable (A to micro-B)
 

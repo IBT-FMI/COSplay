@@ -88,7 +88,7 @@ def dumps(matrix):
 
 def dump(matrix,file_obj):
 	"""
-	Serialize matrix as a tsv formated stream to file_obj.
+	Serialize matrix as a .tsv formated stream to file_obj.
 
 	This function converts a matrix into a tsv formated string and stores it in a file.
 

@@ -200,7 +200,7 @@ def check_for_sequences(sequences_arg=None):
 
 def ask_user():
 	"""
-	Ask user whether sequences on server or micro controller shall
+	Ask user whether sequences on server or microcontroller shall
 	be used.
 
 	Returns
@@ -221,7 +221,7 @@ def ask_user():
 
 def send_sequences(sequences_paths,pkt,verbose):
 	"""
-	Send sequences to micro controller.
+	Send sequences to microcontroller.
 
 	Parameters
 	----------
@@ -258,7 +258,7 @@ def connect(port_name=None):
 	Parameters
 	----------
 	port_name : string, optional
-	    Name of port the micro controller is connected to. If None,
+	    Name of port the microcontroller is connected to. If None,
 	    tries to automatically detected port and connect.
 	    Default is None.
 

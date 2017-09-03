@@ -44,13 +44,13 @@ def return_parser():
 			dest='sequences',
 			action='store',
 			type=str,
-			help='Path to tsv files containing the sequences. This flag can be used if you did not save the sequences generated with COSgen in the default location or if you do not want to use the sequences generated most recently.',
+			help='Path to .tsv files containing the sequences. This flag can be used if you did not save the sequences generated with COSgen in the default location or if you do not want to use the sequences generated most recently.',
 			default=None)
 	parser.add_argument('--storage_path',
 			dest='storage_path',
 			action='store',
 			type=str,
-			help='Path to directory where delivered sequences are stored. If not specified the sequence is stored in the folder of the most recent scan.',
+			help='Path to directory where delivered sequences are stored. If not specified, the sequence is stored in the folder of the most recent scan.',
 			default=None)
 
 	return parser

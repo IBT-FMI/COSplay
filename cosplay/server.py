@@ -75,8 +75,8 @@ def save_sequence(obj, storage_path, error_msgs, vendor, verbose=0):
 	Save sequence in storage_path.
 
 	This function saves a sequence and error messages in two separate files.
-	If 'storage_path' is None the files are saved in the most recent scan
-	directory (see find_current_scan_dir).
+	If 'storage_path' is None, the files are saved in the most recent scan
+	directory (see 'find_current_scan_dir').
 
 	Parameters
 	----------

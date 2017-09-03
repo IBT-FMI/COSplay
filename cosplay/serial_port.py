@@ -20,7 +20,7 @@ class SerialPort(object):
 		Try to connect to serial port.
 
 	  	This function tries to connect to a serial port
-		named 'port'.
+		named `port`.
 
 		Parameters
 		----------
@@ -80,7 +80,7 @@ class SerialPort(object):
 				raise TypeError('serial_port.read() returned unrecognised type {0}'.format(type(data[0])))
 
 	def write(self, data):
-		"""Write data to the serial port.
+		"""Write `data` to the serial port.
 
 		   Parameters
 		   ----------

@@ -56,7 +56,7 @@ def return_parser():
 	return parser
 
 def main():
-	"""Process arguments and pass them to server.main."""
+	"""Process arguments and pass them to `server.main`."""
 	parser = return_parser()
 
 	args = parser.parse_args()

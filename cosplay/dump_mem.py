@@ -23,7 +23,7 @@ except AttributeError:
 
 def print_(s):
 	"""
-	Print string s.
+	Print string `s`.
 
 	In Python 2, print is not a function. This function makes it possible
 	to use it like one.

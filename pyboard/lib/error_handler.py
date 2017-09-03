@@ -12,10 +12,10 @@ class ErrorHandler:
 
 	def send(self,s):
 		"""
-		Store error message in file or send it to server if connected.
+		Sends `s` to the server if connected.
 
-		This function stores an error message in a file named errorN.txt,
-		where N is the number of the sequence that is currently delivered.
+		If the server is not connected `s` is stored and can be
+		written to file using the `save` function.
 
 		Parameters
 		----------
@@ -29,6 +29,17 @@ class ErrorHandler:
 			self.pkt.send(s)
 
 	def save(self):
+		"""
+		Save error messages to file.
+
+		This function stores error message in a file named errorN.txt,
+		where N is the number of the sequence that is currently delivered.
+
+		Parameters
+		----------
+		s : string
+		    string containing error message
+		"""
 		if not self.use_wo_server:
 			return
 		idx = 0

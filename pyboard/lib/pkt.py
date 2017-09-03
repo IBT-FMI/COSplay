@@ -191,7 +191,7 @@ class Packet:
 		Try to receive an object.
 
 		This function tries to receive an object
-		until 'time_out'. If a byte is received, 'time_out'
+		until `time_out`. If a byte is received, `time_out`
 		becomes obsolete and the function times out if no more
 		bytes are received for 1s. Returns None upon time out.
 

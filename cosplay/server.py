@@ -51,7 +51,7 @@ def find_current_scan_dir(vendor):
 
 def process_message(obj,error_msgs):
 	"""
-	Add obj to 'error_msgs' if it is an error message.
+	Add obj to `error_msgs` if it is an error message.
 
 	Parameters
 	----------
@@ -63,7 +63,7 @@ def process_message(obj,error_msgs):
 	Returns
 	-------
 	string
-	    updated 'error_msgs'
+	    updated `error_msgs`
 	"""
 	print(obj + '\n')
 	if obj[:6] == 'Missed':
@@ -72,10 +72,10 @@ def process_message(obj,error_msgs):
 
 def save_sequence(obj, storage_path, error_msgs, vendor, verbose=0):
 	"""
-	Save sequence in storage_path.
+	Save sequence in `storage_path`.
 
 	This function saves a sequence and error messages in two separate files.
-	If 'storage_path' is None, the files are saved in the most recent scan
+	If `storage_path` is None, the files are saved in the most recent scan
 	directory (see 'find_current_scan_dir').
 
 	Parameters
@@ -127,9 +127,9 @@ def save_sequence(obj, storage_path, error_msgs, vendor, verbose=0):
 
 def listdir_nohidden(path):
 	"""
-	List all entries in path excluding hidden ones.
+	List all entries in `path` excluding hidden ones.
 
-	This function implements the same functionality as os.listdir
+	This function implements the same functionality as `os.listdir`
 	but ignores hidden entires.
 
 	Parameters
@@ -151,10 +151,10 @@ def check_for_sequences(sequences_arg=None):
 	Try to find sequences.
 
 	This function returns a list of paths to all files ending with
-	'.tsv' in sequence_arg. Shell-style wildcards can be used.
+	'.tsv' in `sequence_arg`. Shell-style wildcards can be used.
 	sequences_arg can be directories, files or a mixture of both.
 	Directories are searched non-recursively on the first level.
-	If no sequence_arg is specified, the default location of COSgen is
+	If no `sequence_arg` is specified, the default location of COSgen is
 	used.
 
 	Parameters
@@ -251,7 +251,7 @@ def connect(port_name=None):
 	"""
 	Establish connection to pyboard.
 
-	This function tries to connect to 'port_name'. If 'port_name'
+	This function tries to connect to `port_name`. If `port_name`
 	is None, tries to connect to the first serial port with a
 	maching VID:PID for the MicroPython Pyboard.
 

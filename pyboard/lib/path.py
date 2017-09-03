@@ -2,9 +2,9 @@ import uos
 
 def exists(path):
 	"""
-	Check if path exists.
+	Check if `path` exists.
 	
-	This function is the equivalent of os.path.exists for the pyboard.
+	This function is the equivalent of `os.path.exists` for the pyboard.
 	
 	Parameters
 	----------

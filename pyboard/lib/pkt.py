@@ -201,7 +201,7 @@ class Packet:
 		    Approximate time in ms until return if no bytes are received.
 		    If time_out = 0, the function never times out.
 
-		Retruns
+		Returns
 		-------
 		out : object
 		    Received object or None in case of time out.

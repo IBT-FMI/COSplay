@@ -12,7 +12,7 @@ class USB_Port:
     def __init__(self):
         self.usb_serial = USB_VCP()
         self.recv_buf = bytearray(1)
-        # Disable Control-C on the USB serail port in case one comes in the 
+        # Disable Control-C on the USB serial port in case one comes in the 
         # data.
         self.usb_serial.setinterrupt(-1)
 

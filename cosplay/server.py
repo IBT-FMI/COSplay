@@ -264,7 +264,7 @@ def connect(port_name=None):
 
 	Returns
 	-------
-	port : cosplay.serial_port.SerialPort object
+	port : `cosplay.serial_port.SerialPort` object
 	    Port object that is connected. None if no connection could be
 	    establish.
 	"""

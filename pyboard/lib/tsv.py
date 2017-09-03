@@ -10,7 +10,7 @@ def cast(s):
 	s : string
 	    input string
 	
-	Retruns
+	Returns
 	-------
 	out : float or string
 	    Float number of string input s, if possible, s otherwise.
@@ -22,7 +22,7 @@ def cast(s):
 
 def loads(s):
 	"""
-	Convert tsv formated string into matrix.
+	Convert tsv formatted string into matrix.
 	
 	This function converts a BIDS sequence tsv string to a matrix.
 	
@@ -31,7 +31,7 @@ def loads(s):
 	s : string
 	    string form BIDS sequence tsv file[BIDS]
 	
-	Retruns
+	Returns
 	-------
 	out : 2d array
 	    First line contains names for columns.
@@ -50,16 +50,16 @@ def loads(s):
 
 def load(file_obj):
 	"""
-	Load BIDS sequence '.tsv' file [BIDS].
+	Load BIDS sequence tsv file [BIDS].
 	
-	This function converts a BIDS sequence '.tsv' file to a matrix.
+	This function converts a BIDS sequence tsv file to a matrix.
 	
 	Parameters
 	----------
 	file_obj : file object
 	    file_obj of BIDS sequence tsv file [BIDS]
 	
-	Retruns
+	Returns
 	-------
 	out : 2d array
 	    First line contains names for columns.
@@ -75,7 +75,7 @@ def load(file_obj):
 
 def dumps(matrix):
 	"""
-	Serialize `matrix` to a tsv formated string.
+	Serialize `matrix` to a tsv formatted string.
 	
 	Parameters
 	----------
@@ -85,7 +85,7 @@ def dumps(matrix):
 	Retruns
 	-------
 	out : string
-	    tsv formated string
+	    tsv formatted string
 	"""
 	s = '\t'.join(matrix[0])
 	for i in range(1,len(matrix)):
@@ -97,9 +97,9 @@ def dumps(matrix):
 
 def dump(matrix,file_obj):
 	"""
-	Serialize `matrix` as a '.tsv' formated stream to `file_obj`.
+	Serialize `matrix` as a tsv formatted stream to `file_obj`.
 	
-	This function converts a matrix into a '.tsv' formated string and stores it in a file.
+	This function converts a matrix into a tsv formatted string and stores it in a file.
 	
 	Parameters
 	----------

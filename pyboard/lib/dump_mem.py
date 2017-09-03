@@ -12,12 +12,12 @@ try:
 			return ubinascii.hexlify(buf, ' ')
 	else:
 		def hexlify(buf):
-			# CPython's hexlify doesn't have the notion of a seperator character
+			# CPython's hexlify doesn't have the notion of a separator character
 			# so we just do this the old fashioned way
 			return bytes(' '.join(['{:02x}'.format(b) for b in buf]), 'ascii')
 except AttributeError:
 	def hexlify(buf):
-		# CPython's hexlify doesn't have the notion of a seperator character
+		# CPython's hexlify doesn't have the notion of a separator character
 		# so we just do this the old fashioned way
 		return bytes(' '.join(['{:02x}'.format(b) for b in buf]), 'ascii')
 

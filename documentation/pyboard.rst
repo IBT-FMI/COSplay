@@ -73,7 +73,7 @@ For debugging purposes, exceptions are stored in ``exceptions.txt`` on
 the board.
 
 *NOTE:* Syntax errors are not handled, as they are raised before execution.
-You can use a programme like 'screen', 'minicom' or 'picocom'.???Wofür kann ich diese benutzen????
+You can use a programme like 'screen', 'minicom' or 'picocom' to debug syntax errors.
 
 Circuit
 =======

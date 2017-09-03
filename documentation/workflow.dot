@@ -20,7 +20,7 @@ digraph workflow{
 
 	standalone [shape=box, margin=0, color=grey82, fillcolor=grey93, fontname="Arial", label = <
 	<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
-		<TR><TD COLSPAN="2"><FONT POINT-SIZE="18">Stand alone</FONT></TD>
+		<TR><TD COLSPAN="2"><FONT POINT-SIZE="18">Standalone</FONT></TD>
 		</TR>
 		<TR><TD>LED:</TD><TD>None</TD>
 		</TR>

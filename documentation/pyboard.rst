@@ -88,7 +88,7 @@ config.py
 Library path
 ------------
 
-If one copies sequences to the board mamually, the path to the directory containing the sequences can be spcified in ``library_path``.
+If one copies sequences to the board manually, the path to the directory containing the sequences can be spcified in ``library_path``.
 
 Accuracy
 --------
@@ -98,5 +98,5 @@ Accuracy
 On values for out channels
 --------------------------
 
-The values in this section are the value a pin takes when a stimulus is delivered.
+The values in this section are the values a pin takes when a stimulus is delivered.
 If no stimulus is to be delivered, the pin takes the oposite value.

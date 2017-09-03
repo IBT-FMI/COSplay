@@ -50,14 +50,14 @@ def loads(s):
 
 def load(file_obj):
 	"""
-	Load BIDS sequence tsv file[BIDS].
+	Load BIDS sequence .tsv file [BIDS].
 	
 	This function converts a BIDS sequence tsv file to a matrix.
 	
 	Parameters
 	----------
 	file_obj : file object
-	    file_obj of BIDS sequence tsv file[BIDS]
+	    file_obj of BIDS sequence tsv file [BIDS]
 	
 	Retruns
 	-------

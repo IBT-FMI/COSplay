@@ -115,7 +115,7 @@ class Packet:
 		   Parameters
 		   ----------
 		   byte : bytes object / bytearray
-		       inbut byte. For MicroPython and Python 3 this
+		       Input byte. For MicroPython and Python 3 this
 		       should be a bytes object. In Python 2 a bytearray
 		       should be used.
 

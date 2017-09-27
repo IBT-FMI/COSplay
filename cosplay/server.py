@@ -95,7 +95,7 @@ def save_sequence(obj, storage_path, error_msgs, vendor, verbose=0):
 	    Default is 0.
 	"""
 	if type(obj) != list:
-		raise TypeError('save_sequence only stores sequences in dictionary format.')	
+		raise TypeError('save_sequence only stores sequences in dictionary format.')
 	if verbose > 1:
 		print('Received sequence:\n' + str(obj))
 	if storage_path is None:
@@ -235,7 +235,7 @@ def send_sequences(sequences_paths,pkt,verbose):
 	"""
 	if sequences_paths is not None:
 		print('sending {0} sequences\n'.format(len(sequences_paths)))
-		for path in sequences_paths:	
+		for path in sequences_paths:
 			with open(path) as data_file:
 				seq = tsv.load(data_file)
 				pkt.send(seq)
@@ -247,7 +247,7 @@ def send_sequences(sequences_paths,pkt,verbose):
 		print('sequences_paths contains no sequences. No sequences were sent!\n')
 	pkt.send(pkt.ANS_no) #Indicates that all sequences have been sent
 
-def connect(port_name=None):	
+def connect(port_name=None):
 	"""
 	Establish connection to pyboard.
 
@@ -274,17 +274,17 @@ def connect(port_name=None):
 	if port_name is not None:
 		print('Trying to connect to {0}...'.format(port_name))
 		i = 0
-		while not connected and i < 100 and keep_running: 
+		while not connected and i < 100 and keep_running:
 			connected = port.connect_serial(port_name)
 			i += 1
 			time.sleep(0.1)
 		if not connected:
 			print('Could not connect to {0}. Trying to auto connect...'.format(port_name))
-	
-	print('Seraching port...')
+
+	print('Searching port...')
 	while not connected and keep_running:
 		port_name = serial_port.autoscan()
-		if port_name is not None:	
+		if port_name is not None:
 			connected = port.connect_serial(port_name)
 	if not connected:
 		return None
@@ -314,7 +314,7 @@ def main(verbose, vendor, port_name, sequences, storage_path=None):
 	    String to storage location for delivered sequences.
 	"""
 	sequences_paths = None			#List with all paths to all sequences that will be sent to the microcontroller if requested
-	
+
 	if storage_path is None:
 		find_current_scan_dir(vendor)			#this checks if the path can be found to notify the user of potential problems before they start the experiment
 		storage_path = None
@@ -329,13 +329,10 @@ def main(verbose, vendor, port_name, sequences, storage_path=None):
 	error_msgs = ''		#stores error messages that occurer while delivering one sequence
 
 	signal.signal(signal.SIGINT, signal_handler_end_program)
-	print('\nPress Ctrl+c when you are done to close the program.\n')	
-
-
+	print('\nPress Ctrl+c when you are done to close the program.\n')
 
 	while keep_running:
 		try:
-
 			port = connect(port_name)
 
 			if port is None:
@@ -343,16 +340,15 @@ def main(verbose, vendor, port_name, sequences, storage_path=None):
 
 			if verbose >= 2:
 				pkt = Packet(port,show_packets=True)
-			else:	
+			else:
 				pkt = Packet(port)
 
-			
 			message_type = None
 			try:
 				message_type = unicode		#str is unicode in Python 3
 			except NameError:
 				message_type = str
-	
+
 			while keep_running:
 				obj = pkt.receive(time_out=2)
 				if obj == None:

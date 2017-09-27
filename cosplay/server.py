@@ -5,6 +5,7 @@ import os.path
 import glob
 import signal
 import serial
+import getpass
 
 try:
 	from cosplay import tsv
@@ -41,11 +42,11 @@ def find_current_scan_dir(vendor):
 	    Path to current scan directory.
 	"""
 	if vendor == 'bruker':
-		general_directory = glob.glob('/opt/PV*/data/mri/')
+		general_directory = glob.glob('/opt/PV*/data/'+getpass.getuser()+'/')
 		if len(general_directory)>1:
 			raise RuntimeError('Multiple versions of ParaVision found. List of folders found: ' + str(general_directory))
 		elif len(general_directory) == 0:
-			raise RuntimeError('No directory found in /opt/PV*/data/mri/. Specify path where the delivered sequences are stored using the --storage_path flag.')
+			raise RuntimeError('No directory found in /opt/PV*/data/'+getpass.getuser()+'/. Specify path where the delivered sequences are stored using the --storage_path flag.')
 		return max(glob.iglob(general_directory[0] + '*/*/fid'), key = os.path.getctime)[:-3]   # :-3 removes the fid (which is one of the files the data from the scanner is written to)
 	raise ValueError('Finding standard data path is not supported for {0} systems.'.format(vendor))
 

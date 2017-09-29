@@ -5,10 +5,8 @@ COSplay
 Overview
 ========
 
-Contrast optimized stimulus player(COSplay) is a software for stimulus delivery in
-stimulus-evoked fMRI experiments. It consists of two parts,
-a program, written in MicroPython, running on a microcontroller (PyBoard) delivering stimulus sequences
-and a program running on the MRI's computer monitoring the delivery.
+Contrast optimized stimulus player (COSplay) is a software for stimulus delivery in stimulus-evoked fMRI experiments.
+It consists of two parts, a program, written in MicroPython, running on a microcontroller (PyBoard) delivering stimulus sequences and a program running on the MRI's computer monitoring the delivery.
 
 Features
 ========

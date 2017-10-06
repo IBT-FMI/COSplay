@@ -40,6 +40,7 @@ Dependencies
 
 - Python_ 2.7 or Python 3.5 and newer
 - PySerial_ 3.3 or newer
+- Setuptools_ 20.7 or newer
 
 Hardware
 --------
@@ -51,3 +52,4 @@ Hardware
 .. _Python: https://www.python.org/
 .. _COSgen: https://github.com/IBT-FMI/COSgen
 .. _PySerial: https://pypi.python.org/pypi/pyserial
+.. _Setuptools: https://pypi.python.org/pypi/setuptools

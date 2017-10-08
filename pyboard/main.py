@@ -41,10 +41,10 @@ def main():
 	pin_out4.value(0)
 	pin_out5 = pyb.Pin('X5',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
 	pin_out5.value(0)
-	dac5 = pyb.DAC(1)
+	#dac5 = pyb.DAC(1)
 	pin_out6 = pyb.Pin('X6',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
 	pin_out6.value(0)
-	dac6 = pyb.DAC(2)
+	#dac6 = pyb.DAC(2)
 	pin_outLED = pyb.LED(4)
 	
 	use_wo_server = False
@@ -219,11 +219,11 @@ def main():
 			amplitude = [1]
 			on_value = [cfg.on_value_out_channel4]
 		elif seq[1][out_channel_column] == 5:
-			pin_out_func = [dac5.write]
+			pin_out_func = [pin_out5.value]
 			amplitude = [int(seq[1][amplitude_column]*255)]
 			on_value = [cfg.on_value_out_channel5]
 		elif seq[1][out_channel_column] == 6:
-			pin_out_func = [dac6.write]
+			pin_out_func = [pin_out6.value]
 			amplitude = [int(seq[1][amplitude_column]*255)]
 			on_value = [cfg.on_value_out_channel6]
 		else:
@@ -255,11 +255,11 @@ def main():
 				amplitude.append(1)
 				on_value.append(cfg.on_value_out_channel4) 
 			elif seq[i][out_channel_column] == 5:
-				pin_out_func.append(dac5.write)
+				pin_out_func.append(pin_out5.value)
 				amplitude.append(int(seq[i][amplitude_column]*255))
 				on_value.append(cfg.on_value_out_channel5) 
 			elif seq[i][out_channel_column] == 6:
-				pin_out_func.append(dac6.write)
+				pin_out_func.append(pin_out6.value)
 				amplitude.append(int(seq[i][amplitude_column]*255))
 				on_value.append(cfg.on_value_out_channel6) 
 			else:

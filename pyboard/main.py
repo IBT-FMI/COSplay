@@ -37,14 +37,14 @@ def main():
 	pin_out2.value(1)
 	pin_out3 = pyb.Pin('Y5',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_UP)
 	pin_out3.value(1)
-	pin_out4 = pyb.Pin('Y12',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
+	pin_out4 = pyb.Pin('Y12',pyb.Pin.OUT_OD)
 	pin_out4.value(0)
-	pin_out5 = pyb.Pin('X5',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
+	pin_out5 = pyb.Pin('X2',pyb.Pin.OUT_OD)
 	pin_out5.value(0)
-	dac5 = pyb.DAC(1)
-	pin_out6 = pyb.Pin('X6',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
+	#dac5 = pyb.DAC(1)
+	pin_out6 = pyb.Pin('X4',pyb.Pin.OUT_OD)
 	pin_out6.value(0)
-	dac6 = pyb.DAC(2)
+	#dac6 = pyb.DAC(2)
 	pin_outLED = pyb.LED(4)
 
 	use_wo_server = False
@@ -219,12 +219,16 @@ def main():
 			amplitude = [1]
 			on_value = [cfg.on_value_out_channel4]
 		elif seq[1][out_channel_column] == 5:
-			pin_out_func = [dac5.write]
-			amplitude = [int(seq[1][amplitude_column]*255)]
+			pin_out_func = [pin_out5.value]
+			amplitude = [1]
+			#pin_out_func = [dac5.write]
+			#amplitude = [int(seq[1][amplitude_column]*255)]
 			on_value = [cfg.on_value_out_channel5]
 		elif seq[1][out_channel_column] == 6:
-			pin_out_func = [dac6.write]
-			amplitude = [int(seq[1][amplitude_column]*255)]
+			pin_out_func = [pin_out6.value]
+			amplitude = [1]
+			#pin_out_func = [dac6.write]
+			#amplitude = [int(seq[1][amplitude_column]*255)]
 			on_value = [cfg.on_value_out_channel6]
 		else:
 			raise SequenceError('Invalide sequence {0}. Unrecognized out channel {1}.\n'.format(file_paths[seq_index], seq[1][out_channel_column]))
@@ -255,12 +259,16 @@ def main():
 				amplitude.append(1)
 				on_value.append(cfg.on_value_out_channel4)
 			elif seq[i][out_channel_column] == 5:
-				pin_out_func.append(dac5.write)
-				amplitude.append(int(seq[i][amplitude_column]*255))
+				pin_out_func.append(pin_out5.value)
+				amplitude.append(1)
+				#pin_out_func.append(dac5.write)
+				#amplitude.append(int(seq[i][amplitude_column]*255))
 				on_value.append(cfg.on_value_out_channel5)
 			elif seq[i][out_channel_column] == 6:
-				pin_out_func.append(dac6.write)
-				amplitude.append(int(seq[i][amplitude_column]*255))
+				pin_out_func.append(pin_out6.value)
+				amplitude.append(1)
+				#pin_out_func.append(dac6.write)
+				#amplitude.append(int(seq[i][amplitude_column]*255))
 				on_value.append(cfg.on_value_out_channel6)
 			else:
 				raise SequenceError('Invalide sequence {0}. Unrecognized out channel {1}.\n'.format(file_paths[seq_index], seq[i][out_channel_column]))

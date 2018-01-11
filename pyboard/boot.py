@@ -17,7 +17,7 @@ pin_out6 = pyb.Pin('X8',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
 pin_out6.value(0)
 
 if path.exists('/flash/bootincopymode'):
-	uos.remove('/flash/bootincopymode')	
+	uos.remove('/flash/bootincopymode')
 	pyb.usb_mode('VCP+MSC')
 	pyb.main('copymodemain.py')
 else:

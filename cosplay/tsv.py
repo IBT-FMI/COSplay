@@ -1,10 +1,10 @@
 def cast(s):
 	"""
 	Cast string to float if possible.
-	
+
 	This functions casts a string to float if possible and returns
 	the string otherwise.
-	
+
 	Parameters
 	----------
 	s : string
@@ -23,10 +23,10 @@ def cast(s):
 def loads(s):
 	"""
 	Convert tsv formatted string into matrix.
-	
+
 	This function converts a 'Brain Image Data Structure' [BIDS] sequence tsv
 	string into a matrix.
-	
+
 	Parameters
 	----------
 	s : string

@@ -1,15 +1,15 @@
 def cast(s):
 	"""
 	Cast string to float if possible.
-	
+
 	This functions casts a string to float if possible and returns
 	the string otherwise.
-	
+
 	Parameters
 	----------
 	s : string
 	    input string
-	
+
 	Returns
 	-------
 	out : float or string
@@ -23,20 +23,20 @@ def cast(s):
 def loads(s):
 	"""
 	Convert tsv formatted string into matrix.
-	
+
 	This function converts a BIDS sequence tsv string to a matrix.
-	
+
 	Parameters
 	----------
 	s : string
 	    string form BIDS sequence tsv file[BIDS]
-	
+
 	Returns
 	-------
 	out : 2d array
 	    First line contains names for columns.
 	    First columns contains event numbers.
-	
+
 	References
 	----------
 	.. [BIDS] Brain Imaging Data Structure Specification
@@ -51,20 +51,20 @@ def loads(s):
 def load(file_obj):
 	"""
 	Load BIDS sequence tsv file [BIDS].
-	
+
 	This function converts a BIDS sequence tsv file to a matrix.
-	
+
 	Parameters
 	----------
 	file_obj : file object
 	    file_obj of BIDS sequence tsv file [BIDS]
-	
+
 	Returns
 	-------
 	out : 2d array
 	    First line contains names for columns.
 	    First columns contains event numbers.
-	
+
 	References
 	----------
 	.. [BIDS] Brain Imaging Data Structure Specification
@@ -76,12 +76,12 @@ def load(file_obj):
 def dumps(matrix):
 	"""
 	Serialize `matrix` to a tsv formatted string.
-	
+
 	Parameters
 	----------
 	matrix : 2d array
 	    input matrix
-	
+
 	Retruns
 	-------
 	out : string
@@ -98,9 +98,9 @@ def dumps(matrix):
 def dump(matrix,file_obj):
 	"""
 	Serialize `matrix` as a tsv formatted stream to `file_obj`.
-	
+
 	This function converts a matrix into a tsv formatted string and stores it in a file.
-	
+
 	Parameters
 	----------
 	matrix : 2d array

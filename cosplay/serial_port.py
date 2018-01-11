@@ -53,7 +53,7 @@ class SerialPort(object):
 			print('Closing serial...')
 			self.serial_port.close()
 		self.serial_port = None
-	
+
 	def is_byte_available(self):
 		"""Check if byte can be read from serial port."""
 		if self.serial_port.is_open:
@@ -126,7 +126,7 @@ def is_micropython_usb_device(port):				#function form rshell project of dhyland
 
 def autoscan():						#function form rshell project of dhylands
 	"""Check all serial ports to see if they are MicroPython devices.
-	
+
 	   Checks serial ports until it finds a port with matching VID:PID for
 	   a MicroPython board.
 

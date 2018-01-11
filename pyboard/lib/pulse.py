@@ -3,10 +3,10 @@ import utime
 def deliver_pulse(pin_out_func, amplitude, pulse_width, pulse_sleep, pin_outLED, eh, ticks=utime.ticks_ms, sleep=utime.sleep_ms, on_state=1):
 	"""
 	Deliver stimulus pulse.
-	
+
 	This function delivers a stimulus pulse of specific length and
 	amplitude.
-	
+
 	Parameters
 	----------
 	pin_out_func : function
@@ -39,7 +39,7 @@ def deliver_pulse(pin_out_func, amplitude, pulse_width, pulse_sleep, pin_outLED,
 		sleep(utime.ticks_diff(scheduled_time,ticks()))
 		pin_out_func(not on_state)
 		pin_outLED.off()
-	elif utime.ticks_diff(ticks(),scheduled_time) == 0:	
+	elif utime.ticks_diff(ticks(),scheduled_time) == 0:
 		pin_out_func(not on_state)
 		pin_outLED.off()
 	elif utime.ticks_diff(ticks(),scheduled_time) > 0:

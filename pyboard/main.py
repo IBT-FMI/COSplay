@@ -46,7 +46,7 @@ def main():
 	pin_out6.value(0)
 	dac6 = pyb.DAC(2)
 	pin_outLED = pyb.LED(4)
-	
+
 	use_wo_server = False
 	global trigger_received
 
@@ -157,14 +157,14 @@ def main():
 			if not ospath.exists('0:/delivered_sequences'):
 				uos.mkdir('0:/delivered_sequences')
 			path = '0:/delivered_sequences/sequences'
-			
+
 		idx = 0
 		while ospath.exists(path + str(idx)):
 			idx += 1
 		path = path + str(idx)
 		uos.mkdir(path)
 		storage_path = path
-		
+
 	eh = ErrorHandler(use_wo_server,pkt,storage_path)
 
 	if cfg.accuracy == 'us':
@@ -205,7 +205,7 @@ def main():
 		if seq[1][out_channel_column] == 1:
 			pin_out_func = [pin_out1.value]
 			amplitude = [1]
-			on_value = [cfg.on_value_out_channel1] 
+			on_value = [cfg.on_value_out_channel1]
 		elif seq[1][out_channel_column] == 2:
 			pin_out_func = [pin_out2.value]
 			amplitude = [1]
@@ -234,34 +234,34 @@ def main():
 		for i in range(2,num_of_events):
 			T.append(int(1./seq[i][frequency_column]*conversion_factor))
 			onset.append(int(seq[i][onset_column]*conversion_factor))
-			onset_sleep.append( onset[i-1] - onset[i-2] - ( onset[i-1] - onset[i-2] ) % tmax ) 
+			onset_sleep.append( onset[i-1] - onset[i-2] - ( onset[i-1] - onset[i-2] ) % tmax )
 			num_pulses.append(round(seq[i][duration_column]*conversion_factor/T[i-1]))
 			pulse_width.append(int(seq[i][pulse_width_column]*conversion_factor))
 			pulse_sleep.append(pulse_width[i-1] - pulse_width[i-1]%tmax)
 			if seq[i][out_channel_column] == 1:
 				pin_out_func.append(pin_out1.value)
 				amplitude.append(1)
-				on_value.append(cfg.on_value_out_channel1) 
+				on_value.append(cfg.on_value_out_channel1)
 			elif seq[i][out_channel_column] == 2:
 				pin_out_func.append(pin_out2.value)
 				amplitude.append(1)
-				on_value.append(cfg.on_value_out_channel2) 
+				on_value.append(cfg.on_value_out_channel2)
 			elif seq[i][out_channel_column] == 3:
 				pin_out_func.append(pin_out3.value)
 				amplitude.append(1)
-				on_value.append(cfg.on_value_out_channel3) 
+				on_value.append(cfg.on_value_out_channel3)
 			elif seq[i][out_channel_column] == 4:
 				pin_out_func.append(pin_out4.value)
 				amplitude.append(1)
-				on_value.append(cfg.on_value_out_channel4) 
+				on_value.append(cfg.on_value_out_channel4)
 			elif seq[i][out_channel_column] == 5:
 				pin_out_func.append(dac5.write)
 				amplitude.append(int(seq[i][amplitude_column]*255))
-				on_value.append(cfg.on_value_out_channel5) 
+				on_value.append(cfg.on_value_out_channel5)
 			elif seq[i][out_channel_column] == 6:
 				pin_out_func.append(dac6.write)
 				amplitude.append(int(seq[i][amplitude_column]*255))
-				on_value.append(cfg.on_value_out_channel6) 
+				on_value.append(cfg.on_value_out_channel6)
 			else:
 				raise SequenceError('Invalide sequence {0}. Unrecognized out channel {1}.\n'.format(file_paths[seq_index], seq[i][out_channel_column]))
 			if T[i-1] < seq[i][pulse_width_column]*conversion_factor:
@@ -281,7 +281,7 @@ def main():
 		pyb.delay(200)
 		armedLED.on()
 		pkt.send('System armed!')
-		
+
 		sw.callback(callback_trigger2)			#for test purposes the switch can be used to trigger
 		extint.enable()
 		while not trigger_received:
@@ -325,7 +325,7 @@ except Exception as e:
 	#write error message to file and send them to server(does not work for syntax errors)
 	serial_port = USB_Port()
 	pkt = Packet(serial_port)
-	with open('exceptions.txt', 'w+') as fp:			
+	with open('exceptions.txt', 'w+') as fp:
 		sys.print_exception(e, fp)
 	with open('exceptions.txt', 'r') as fp:
 		pkt.send('Error on pyboard:\n' + fp.read())

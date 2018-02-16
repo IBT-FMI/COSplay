@@ -1,0 +1,17 @@
+{
+  "@context": "https://raw.githubusercontent.com/codemeta/codemeta/master/codemeta.jsonld",
+  "@type": "Code",
+  "author": [
+
+  ],
+  "identifier": "",
+  "codeRepository": "https://github.com/IBT-FMI/COSplay",
+  "datePublished": "2018-02-16",
+  "dateModified": "2018-02-16",
+  "dateCreated": "2018-02-16",
+  "description": "Contrast Optimized Stimulation player",
+  "keywords": "bids, optogenetics, sensory-stimulation, trigger-events, fMRI, contrast-optimized-stimulation, lab-equipment, TTL, BNC",
+  "license": "BSD",
+  "title": "COSplay",
+  "version": "1.1"
+}

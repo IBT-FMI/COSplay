@@ -12,9 +12,10 @@ digraph workflow{
 
 	copy [shape=box, margin=0, color=grey82, fillcolor=grey93, fontname="Arial", label = <
 	<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
-		<TR><TD COLSPAN="2"><FONT POINT-SIZE="18">Copy mode</FONT></TD>
+		<TR><TD COLSPAN="2"><FONT POINT-SIZE="18">Copy Mode</FONT></TD>
 		</TR>
-		<TR><TD>LED:</TD> <TD BGCOLOR="blue"><FONT COLOR="blue">Blue</FONT></TD>
+		<TR><TD ROWSPAN="2">LED:</TD> <TD BGCOLOR="blue"><FONT COLOR="blue">Blue</FONT> </TD></TR>
+		<TR><TD BGCOLOR="red"><FONT COLOR="white">writing</FONT></TD>
 		</TR>
 	</TABLE>>];
 
@@ -65,14 +66,14 @@ digraph workflow{
 	{rank=same delivering afterdelivery}
 	#{rank=same invis afterdelivery}
 
-	connect:sw -> copy:ne [fontname="Arial", xlabel ="Double   \nclick   "];
+	connect:sw -> copy:ne [fontname="Arial", label ="Double       \nclick       "];
 	copy:nw -> connect:w [fontname="Arial", xlabel ="RST"];
 	connect -> connected
-	connect:se -> standalone:n [fontname="Arial", xlabel = "\n    Single click"];
-	standalone -> armed:ne [fontname="Arial", xlabel = "        Single click"];
-	connected -> armed:nw [fontname="Arial", xlabel = "Single click  "];
+	connect:se -> standalone:n [fontname="Arial", label = " Single click"];
+	standalone -> armed:ne [fontname="Arial", xlabel = "Single click "];
+	connected -> armed:nw [fontname="Arial", xlabel = "Single click "];
 	#armed -> invis -> delivering [style=invis]
-	afterdelivery:n -> armed:e [fontname="Arial", label = "Single click"];
+	afterdelivery:n -> armed:e [fontname="Arial", label = " Single click"];
 	delivering:e -> afterdelivery:w
 	armed:w -> delivering:w [fontname="Arial", xlabel = "Trigger/Single click"];
 }

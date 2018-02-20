@@ -30,7 +30,7 @@
   "dateModified": "2018-02-16",
   "dateCreated": "2018-02-16",
   "description": "Contrast Optimized Stimulation player",
-  "keywords": "bids, optogenetics, sensory-stimulation, trigger-events, fMRI, contrast-optimized-stimulation, lab-equipment, TTL, BNC",
+  "keywords": "bids, optogenetics, sensory-stimulation, trigger-events, fMRI, stimulus-evoked, contrast-optimized-stimulation, lab-equipment, TTL, BNC",
   "license": "BSD",
   "title": "COSplay",
   "version": "1.1"

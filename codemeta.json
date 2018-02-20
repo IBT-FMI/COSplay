@@ -2,7 +2,27 @@
   "@context": "https://raw.githubusercontent.com/codemeta/codemeta/master/codemeta.jsonld",
   "@type": "Code",
   "author": [
-
+    {
+      "@id": "",
+      "@type": "Person",
+      "email": "faymanns@student.ethz.ch",
+      "name": "Florian Aymanns",
+      "affiliation": "Department of Information Technology and Electrical Engineering, ETH Zurich"
+    },
+    {
+      "@id": "",
+      "@type": "Person",
+      "email": "rudin@biomed.ee.ethz.ch",
+      "name": "Markus Rudin",
+      "affiliation": "Institute for Biomedical Engineering, ETH and University of Zurich"
+    },
+    {
+      "@id": "0000-0001-7037-2449",
+      "@type": "Person",
+      "email": "ioanas@biomed.ee.ethz.ch",
+      "name": "Horea-Ioanas Ioan",
+      "affiliation": "Institute for Biomedical Engineering, ETH and University of Zurich"
+    }
   ],
   "identifier": "",
   "codeRepository": "https://github.com/IBT-FMI/COSplay",

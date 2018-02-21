@@ -8,6 +8,8 @@ tags:
 - trigger-events
 - fMRI
 - stimulus-evoked
+- Bruker
+- ParaVision
 - contrast-optimized-stimulation
 - lab-equipment
 - TTL

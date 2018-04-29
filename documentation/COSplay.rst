@@ -12,7 +12,8 @@ Features
 ========
 
 - TTL trigger from MRI scanner can be used
-- 3 TTL output channels (3.3V) and 3 transistor channels
+- 2 TTL output channels (~4.2V)
+- 2 transistor channels (up to ~3.3V)
 - 2 TTL output channels with variable amplitude
 - Microcontroller can be used standalone (c.f. :ref:`pyboard`)
 - Stimulus pulse delivery with  :math:`ms` or :math:`\mu s` accurary

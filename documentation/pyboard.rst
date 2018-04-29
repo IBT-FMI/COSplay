@@ -78,7 +78,8 @@ You can use a programme like 'screen', 'minicom' or 'picocom' to debug syntax er
 Circuit
 =======
 
-The following figure shows the circuit used with the pyboard. BNC 1-3 can short circuit the incoming BNC. Ports 4-6 can deliver 3.3V TTL pulses. Port 5 and 6 further more allow changing the amplitude of the TTL pusle.
+The following figure shows the circuit used with the pyboard. BNC 1 and 2 can short circuit the incoming BNC. Ports 3 and 4 can deliver ~4.2V TTL pulses. Port 5 and 6 allow changing the amplitude of a TTL pusle (max. ~3.3V).
+Exact output values depend on the input voltage of the USB port. 
 
 .. image:: circuit.png
 

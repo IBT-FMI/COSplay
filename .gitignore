@@ -7,3 +7,4 @@ dist
 Testdir
 Testdirectories
 *.swp
+**.DS_Store

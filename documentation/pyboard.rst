@@ -4,10 +4,47 @@
 Pyboard
 =======
 
-.. graphviz:: workflow.dot
+COSplayer - A Reproduceable Device
+==================================
+
+COSplay is designed for and tested on a pyboard-based device with specific input and output capabilities.
+We refer to this device as a COSplayer.
+While the software needs no additional hardware other than the pyboard itself in order to function, trigger delivery to the pyboard, as well as usage of output signals is only feasible given additional components.
+Here we provide instructions on how to reproduce a second-generation COSplayer (usable with COSplay `commit 76db2a9 <https://github.com/IBT-FMI/COSplay/commit/76db2a945aab5add3988f7be122372c400808396>`_. ) and newer).
+A (more cursory) description of the first-generation device can be found in the documentation of older versions.
+
+Components
+----------
+
+To reproduce the COSplayer you will need:
+
+* A MicroPython pyboard v1.1 (without headers and with firmware version 1.9.1 - patched by us).
+* 7 BNC connectors (female).
+* 2 general purpose small-signal transistors (e.g. 2N3904).
+* 2 resistors (68 kiloohm).
+* 2 resistors (10 kiloohm).
+* Stripboard (18x4 section or larger).
+* Connector cables.
+
+Optionally, we recommend procuring:
+
+* Separate header connectors (2.54mm, female).
+* Case, with a configuration permitting the drilling of holes to access circuit inputs/outputs.
+* A small print-out flowchart with LED pattern legend, for usage-guide-independent operation.
+
+Circuit
+-------
+
+The following figure shows the circuit used with the pyboard. BNC 1 and 2 can short circuit the incoming BNC. Ports 3 and 4 can deliver ~4.2V TTL pulses. Port 5 and 6 allow changing the amplitude of a TTL pusle (max. ~3.3V).
+Exact output values depend on the input voltage of the USB port. 
+
+.. image:: circuit.png
+
 
 LED Pattern Legend
 ==================
+
+.. graphviz:: workflow.dot
 
 Green, orange and blue:
     Pyboard tries to connect to software on the host computer.
@@ -75,13 +112,6 @@ the board.
 *NOTE:* Syntax errors are not handled, as they are raised before execution.
 You can use a programme like 'screen', 'minicom' or 'picocom' to debug syntax errors.
 
-Circuit
-=======
-
-The following figure shows the circuit used with the pyboard. BNC 1 and 2 can short circuit the incoming BNC. Ports 3 and 4 can deliver ~4.2V TTL pulses. Port 5 and 6 allow changing the amplitude of a TTL pusle (max. ~3.3V).
-Exact output values depend on the input voltage of the USB port. 
-
-.. image:: circuit.png
 
 config.py
 =========

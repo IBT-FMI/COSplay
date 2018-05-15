@@ -10,7 +10,7 @@ COSplayer - A Reproduceable Device
 COSplay is designed for and tested on a pyboard-based device with specific input and output capabilities.
 We refer to this device as a COSplayer.
 While the software needs no additional hardware other than the pyboard itself in order to function, trigger delivery to the pyboard, as well as usage of output signals is only feasible given additional components.
-Here we provide instructions on how to reproduce a second-generation COSplayer (usable with COSplay `commit 76db2a9 <https://github.com/IBT-FMI/COSplay/commit/76db2a945aab5add3988f7be122372c400808396>`_. ) and newer).
+Here we provide instructions on how to reproduce a second-generation COSplayer (usable with COSplay `commit 76db2a9 <https://github.com/IBT-FMI/COSplay/commit/76db2a945aab5add3988f7be122372c400808396>`_ and newer).
 A (more cursory) description of the first-generation device can be found in the documentation of older versions.
 
 Components
@@ -44,6 +44,7 @@ Exact output values depend on the input voltage of the USB port.
 LED Pattern Legend
 ==================
 
+
 .. graphviz:: workflow.dot
 
 Green, orange and blue:
@@ -72,11 +73,12 @@ Standalone use
 ==============
 
 The pyboard can also be used without COSplay on the host computer.
-To enter this use case press the 'USR' button on the board, when the green,
-orange and blue LED light up simultaneously after the board started.
+To enter this use case press the 'USR' button on the board, when the green, orange, and blue LEDs light up simultaneously after the board started.
 
 To load sequences onto the pyboard you need to enter the copy mode.
-Double click the 'USR' button, when the green, orange and blue LED light up simultaneously after the board started. The board should now present itself to the computer as a mass storage device, and the blue LED should light up. Copy the sequence files into the ``sequence_library`` folder on the board/SD.
+Double click the 'USR' button, when the green, orange, and blue LEDs light up simultaneously after the board started.
+The board should now present itself to the computer as a mass storage device, and the blue LED should light up.
+Copy the sequence files into the ``sequence_library`` folder on the board or SD card.
 
 *NOTE:* Do not forget to safely remove or unmount the board before restarting or disconnecting it --- unlike a normal memory stick, you are using this device as part of a timed scientific experiment, which may be delayed or inevitably compromised by corrupted memory.
 

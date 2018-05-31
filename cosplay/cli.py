@@ -52,6 +52,12 @@ def return_parser():
 			type=str,
 			help='Path to directory where delivered sequences are stored. If not specified, the sequence is stored in the folder of the most recent scan.',
 			default=None)
+	parser.add_argument('--storage_root',
+			dest='storage_root',
+			action='store',
+			type=str,
+			help='Path to directory where delivered sequences are stored. If not specified, the sequence is stored in the folder of the most recent scan.',
+			default=None)
 
 	return parser
 
@@ -61,7 +67,7 @@ def main():
 
 	args = parser.parse_args()
 
-	server.main(args.verbose, args.vendor, args.port, args.sequences, args.storage_path)
+	server.main(args.verbose, args.vendor, args.port, args.sequences, args.storage_path, args.storage_root)
 
 if __name__ == '__main__':
 	main()

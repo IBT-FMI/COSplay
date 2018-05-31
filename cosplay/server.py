@@ -23,7 +23,7 @@ def signal_handler_end_program(signal, frame):
 	global keep_running
 	keep_running = False
 
-def find_current_scan_dir(vendor):
+def find_current_scan_dir(vendor, storage_root=None):
 	"""
 	Find directory of current scan.
 
@@ -42,12 +42,17 @@ def find_current_scan_dir(vendor):
 	    Path to current scan directory.
 	"""
 	if vendor == 'bruker':
-		general_directory = glob.glob('/opt/PV*/data/'+getpass.getuser()+'/')
+		if storage_root:
+			general_directory = [os.path.abspath(os.path.expanduser(storage_root))]
+		else:
+			general_directory = glob.glob('/opt/PV*/data/'+getpass.getuser())
 		if len(general_directory)>1:
 			raise RuntimeError('Multiple versions of ParaVision found. List of folders found: ' + str(general_directory))
 		elif len(general_directory) == 0:
 			raise RuntimeError('No directory found in /opt/PV*/data/'+getpass.getuser()+'/. Specify path where the delivered sequences are stored using the --storage_path flag.')
-		return max(glob.iglob(general_directory[0] + '*/*/fid'), key = os.path.getctime)[:-3]   # :-3 removes the fid (which is one of the files the data from the scanner is written to)
+		dir_files = glob.iglob(general_directory[0] + '/*/*/fid')
+		current_scan_dir = max(dir_files, key = os.path.getctime)[:-3]   # :-3 removes the fid (which is one of the files the data from the scanner is written to)
+		return current_scan_dir
 	raise ValueError('Finding standard data path is not supported for {0} systems.'.format(vendor))
 
 def process_message(obj,error_msgs):
@@ -71,7 +76,10 @@ def process_message(obj,error_msgs):
 		return error_msgs + obj + '\n'
 	return error_msgs
 
-def save_sequence(obj, storage_path, error_msgs, vendor, verbose=0):
+def save_sequence(obj, storage_path, error_msgs, vendor,
+	verbose=0,
+	storage_root=None,
+	):
 	"""
 	Save sequence in `storage_path`.
 
@@ -100,7 +108,7 @@ def save_sequence(obj, storage_path, error_msgs, vendor, verbose=0):
 	if verbose > 1:
 		print('Received sequence:\n' + str(obj))
 	if storage_path is None:
-		path = find_current_scan_dir(vendor)
+		path = find_current_scan_dir(vendor, storage_root=storage_root)
 		with open(path+'sequence.tsv','w+') as fp:
 			tsv.dump(obj,fp)
 			print('Sequence saved as {0}'.format(path+'sequence.tsv\n'))
@@ -293,7 +301,7 @@ def connect(port_name=None):
 	return port
 
 
-def main(verbose, vendor, port_name, sequences, storage_path=None):
+def main(verbose, vendor, port_name, sequences, storage_path=None, storage_root=None):
 	"""
 	Main function running on server.
 
@@ -317,7 +325,7 @@ def main(verbose, vendor, port_name, sequences, storage_path=None):
 	sequences_paths = None			#List with all paths to all sequences that will be sent to the microcontroller if requested
 
 	if storage_path is None:
-		find_current_scan_dir(vendor)			#this checks if the path can be found to notify the user of potential problems before they start the experiment
+		find_current_scan_dir(vendor, storage_root=storage_root)	#this checks if the path can be found to notify the user of potential problems before they start the experiment
 		storage_path = None
 	else:
 		if not os.path.isdir(storage_path):
@@ -357,7 +365,7 @@ def main(verbose, vendor, port_name, sequences, storage_path=None):
 				if type(obj) == message_type:
 					error_msgs = process_message(obj,error_msgs)
 				elif type(obj) == list:
-					save_sequence(obj,storage_path,error_msgs,vendor,verbose)
+					save_sequence(obj,storage_path,error_msgs,vendor,verbose,storage_root)
 				elif obj == pkt.INS_check_for_sequences_on_server:
 					sequences_paths = check_for_sequences(sequences)
 					if sequences_paths is None:

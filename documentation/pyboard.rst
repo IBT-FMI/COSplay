@@ -18,7 +18,7 @@ Components
 
 To reproduce the COSplayer you will need:
 
-* A MicroPython pyboard v1.1 (without headers and with firmware version 1.9.1 - patched by us).
+* A MicroPython pyboard v1.1 (without headers and with firmware version 1.9.1).
 * 7 BNC connectors (female).
 * 2 general purpose small-signal transistors (e.g. 2N3904).
 * 2 resistors (68 kiloohm).
@@ -37,6 +37,10 @@ Circuit
 
 The following figure shows the circuit used with the pyboard. BNC 1 and 2 can short circuit the incoming BNC. Ports 3 and 4 can deliver ~4.2V TTL pulses. Port 5 and 6 allow changing the amplitude of a TTL pusle (max. ~3.3V).
 Exact output values depend on the input voltage of the USB port. 
+
+*NOTE:* The maximum output voltage of the amplitude modulation pins depends on output impedance and the resistive load.
+If this poses difficulties, we suggest enabling the optional analogue buffer on the DAC in the MicroPython firmware (cf `commit 94d2127 <https://github.com/IBT-FMI/micropython/commit/94d21272e2f3f0d4d33c4b80c9a7b8e3816452ee>`_ on our micropython fork).
+The buffer offers lower output impedance, but reduces the output accuracy in turn.
 
 .. image:: circuit.png
 

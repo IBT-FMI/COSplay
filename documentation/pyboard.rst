@@ -35,7 +35,10 @@ Optionally, we recommend procuring:
 Circuit
 -------
 
-The following figure shows the circuit used with the pyboard. BNC 1 and 2 can short circuit the incoming BNC. Ports 3 and 4 can deliver ~4.2V TTL pulses. Port 5 and 6 allow changing the amplitude of a TTL pusle (max. ~3.3V).
+The following figure shows the circuit used with the pyboard.
+BNC ports 1 and 2 can short circuit the incoming BNC.
+Ports 3 and 4 can deliver ~4.2V TTL pulses.
+Ports 5 and 6 allow changing the amplitude of a TTL pusle (max. ~3.3V).
 Exact output values depend on the input voltage of the USB port. 
 
 *NOTE:* The maximum output voltage of the amplitude modulation pins depends on output impedance and the resistive load.
@@ -77,7 +80,7 @@ Standalone use
 ==============
 
 The pyboard can also be used without COSplay on the host computer.
-To enter this use case press the 'USR' button on the board, when the green, orange, and blue LEDs light up simultaneously after the board started.
+To select this usage mode press the 'USR' button on the board, when the green, orange, and blue LEDs light up simultaneously after the board started.
 
 To load sequences onto the pyboard you need to enter the copy mode.
 Double click the 'USR' button, when the green, orange, and blue LEDs light up simultaneously after the board started.

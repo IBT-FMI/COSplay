@@ -4,6 +4,8 @@
 Pyboard
 =======
 
+.. _cosplayer:
+
 COSplayer - A Reproduceable Device
 ==================================
 

@@ -31,8 +31,9 @@ Hardware
 ========
 
 - PyBoard 1.1 with MicroPython firmware 1.8.7 or newer
-- microSD (recommended)
 - USB cable (A to micro-B)
+- microSD (recommended)
+- Additional I/O circuitry (see components and diagram: :ref:`cosplayer`)
 
 Installation
 ============

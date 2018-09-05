@@ -53,6 +53,8 @@ def find_current_scan_dir(vendor, storage_root=None):
 		dir_files = glob.iglob(general_directory[0] + '/*/*/fid')
 		current_scan_dir = max(dir_files, key = os.path.getctime)[:-3]   # :-3 removes the fid (which is one of the files the data from the scanner is written to)
 		return current_scan_dir
+	elif vendor == 'none':
+		return '/var/tmp/COSplay/delivered_sequences'
 	raise ValueError('Finding standard data path is not supported for {0} systems.'.format(vendor))
 
 def process_message(obj,error_msgs):

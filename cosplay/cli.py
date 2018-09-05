@@ -30,7 +30,7 @@ def return_parser():
 	parser.add_argument('--vendor',
 			dest='vendor',
 			action='store',
-			choices=['bruker'],
+			choices=['bruker','none'],
 			type=str.lower,
 			help='Is needed to find the correct folder.',
 			default='bruker')

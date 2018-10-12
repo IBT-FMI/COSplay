@@ -6,7 +6,7 @@ Pyboard
 
 .. _cosplayer:
 
-COSplayer - A Reproduceable Device
+COSplayer - A Reproducible Device
 ==================================
 
 COSplay is designed for and tested on a pyboard-based device with specific input and output capabilities.
@@ -30,9 +30,12 @@ To reproduce the COSplayer you will need:
 
 Optionally, we recommend procuring:
 
-* Separate header connectors (2.54mm, female).
-* Case, with a configuration permitting the drilling of holes to access circuit inputs/outputs.
+* Case, with a configuration permitting the drilling of holes to accommodate circuit inputs/outputs.
 * A small print-out flowchart with LED pattern legend, for usage-guide-independent operation.
+
+Lastly, if the device is intended for frequent manual circuit configuration (i.e. you are interested in further developing the device rather than just using it), we recommend performing all the circuit connections via:
+
+* Separate header connectors (2.54mm, female).
 
 Circuit
 -------

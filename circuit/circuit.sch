@@ -1,0 +1,267 @@
+EESchema Schematic File Version 4
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Connector:Conn_Coaxial J?
+U 1 1 5BC2B97D
+P 3400 2900
+F 0 "J?" H 3500 2784 50  0001 L CNN
+F 1 "BNC 1" H 3500 2830 50  0000 L CNN
+F 2 "" H 3400 2900 50  0001 C CNN
+F 3 " ~" H 3400 2900 50  0001 C CNN
+	1    3400 2900
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Conn_Coaxial J?
+U 1 1 5BC2BA97
+P 3400 3550
+F 0 "J?" H 3500 3434 50  0001 L CNN
+F 1 "BNC 2" H 3500 3480 50  0000 L CNN
+F 2 "" H 3400 3550 50  0001 C CNN
+F 3 " ~" H 3400 3550 50  0001 C CNN
+	1    3400 3550
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Conn_Coaxial J?
+U 1 1 5BC2BC12
+P 7000 3200
+F 0 "J?" H 7099 3176 50  0001 L CNN
+F 1 "BNC 6" H 7099 3130 50  0000 L CNN
+F 2 "" H 7000 3200 50  0001 C CNN
+F 3 " ~" H 7000 3200 50  0001 C CNN
+	1    7000 3200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Conn_Coaxial J?
+U 1 1 5BC2BC8E
+P 6550 3300
+F 0 "J?" H 6649 3276 50  0001 L CNN
+F 1 "BNC 5" H 6649 3230 50  0000 L CNN
+F 2 "" H 6550 3300 50  0001 C CNN
+F 3 " ~" H 6550 3300 50  0001 C CNN
+	1    6550 3300
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Conn_Coaxial J?
+U 1 1 5BC2BCFD
+P 6150 3950
+F 0 "J?" H 6250 3834 50  0001 L CNN
+F 1 "BNC 4" V 6079 4051 50  0000 L CNN
+F 2 "" H 6150 3950 50  0001 C CNN
+F 3 " ~" H 6150 3950 50  0001 C CNN
+	1    6150 3950
+	0    1    1    0   
+$EndComp
+$Comp
+L Transistor_BJT:2N3904 Q?
+U 1 1 5BC2CF67
+P 4000 2700
+F 0 "Q?" H 4191 2654 50  0001 L CNN
+F 1 "2N3904" H 4191 2700 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-92_Inline" H 4200 2625 50  0001 L CIN
+F 3 "https://www.fairchildsemi.com/datasheets/2N/2N3904.pdf" H 4000 2700 50  0001 L CNN
+	1    4000 2700
+	-1   0    0    1   
+$EndComp
+$Comp
+L Transistor_BJT:2N3904 Q?
+U 1 1 5BC2D014
+P 4000 3350
+F 0 "Q?" H 4191 3304 50  0001 L CNN
+F 1 "2N3904" H 4191 3350 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-92_Inline" H 4200 3275 50  0001 L CIN
+F 3 "https://www.fairchildsemi.com/datasheets/2N/2N3904.pdf" H 4000 3350 50  0001 L CNN
+	1    4000 3350
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5BC2D5D1
+P 4550 2700
+F 0 "R?" V 4757 2700 50  0001 C CNN
+F 1 "12kΩ" V 4665 2700 50  0000 C CNN
+F 2 "" V 4480 2700 50  0001 C CNN
+F 3 "~" H 4550 2700 50  0001 C CNN
+	1    4550 2700
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5BC2D622
+P 4550 3350
+F 0 "R?" V 4757 3350 50  0001 C CNN
+F 1 "12kΩ" V 4665 3350 50  0000 C CNN
+F 2 "" V 4480 3350 50  0001 C CNN
+F 3 "~" H 4550 3350 50  0001 C CNN
+	1    4550 3350
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4750 3000 4700 3000
+Wire Wire Line
+	4700 3000 4700 2700
+Wire Wire Line
+	4400 2700 4200 2700
+Wire Wire Line
+	4750 3100 4700 3100
+Wire Wire Line
+	4700 3100 4700 3350
+Wire Wire Line
+	4400 3350 4200 3350
+Wire Wire Line
+	3600 2900 3900 2900
+Wire Wire Line
+	3600 3550 3900 3550
+Wire Wire Line
+	3400 3350 3400 3150
+Wire Wire Line
+	3400 3150 3900 3150
+Wire Wire Line
+	4250 3700 4750 3700
+Connection ~ 3900 3150
+Wire Wire Line
+	3900 3150 4250 3150
+Wire Wire Line
+	3400 2700 3400 2500
+Wire Wire Line
+	3400 2500 3900 2500
+Wire Wire Line
+	4250 2500 4250 3150
+Connection ~ 3900 2500
+Wire Wire Line
+	3900 2500 4250 2500
+Connection ~ 4250 3150
+Wire Wire Line
+	4250 3150 4250 3700
+$Comp
+L Connector:Conn_Coaxial J?
+U 1 1 5BC2BB95
+P 5950 2900
+F 0 "J?" V 5926 3001 50  0001 L CNN
+F 1 "BNC 3" V 5880 3001 50  0000 L CNN
+F 2 "" H 5950 2900 50  0001 C CNN
+F 3 " ~" H 5950 2900 50  0001 C CNN
+	1    5950 2900
+	0    1    -1   0   
+$EndComp
+Wire Wire Line
+	5750 3100 5950 3100
+$Comp
+L Device:R R?
+U 1 1 5BC35525
+P 6050 4850
+F 0 "R?" V 6257 4850 50  0001 C CNN
+F 1 "10kΩ" V 6165 4850 50  0000 C CNN
+F 2 "" V 5980 4850 50  0001 C CNN
+F 3 "~" H 6050 4850 50  0001 C CNN
+	1    6050 4850
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5BC355F0
+P 6450 4650
+F 0 "R?" V 6657 4650 50  0001 C CNN
+F 1 "10kΩ" V 6565 4650 50  0000 C CNN
+F 2 "" V 6380 4650 50  0001 C CNN
+F 3 "~" H 6450 4650 50  0001 C CNN
+	1    6450 4650
+	0    -1   -1   0   
+$EndComp
+$Comp
+L pyboard:pyboard U?
+U 1 1 5BC2B8EA
+P 5250 3350
+F 0 "U?" H 5250 3350 50  0001 C CNN
+F 1 "pyboard" H 5250 3874 50  0000 C CNN
+F 2 "" H 5250 3350 50  0001 C CNN
+F 3 "" H 5250 3350 50  0001 C CNN
+	1    5250 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Conn_Coaxial J?
+U 1 1 5BC2BD8D
+P 5450 4500
+F 0 "J?" H 5550 4384 50  0001 L CNN
+F 1 "Trigger BNC" H 5550 4430 50  0000 L CNN
+F 2 "" H 5450 4500 50  0001 C CNN
+F 3 " ~" H 5450 4500 50  0001 C CNN
+	1    5450 4500
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5750 3000 5750 2900
+Wire Wire Line
+	5450 3900 5450 3950
+Wire Wire Line
+	5950 3950 5450 3950
+Connection ~ 5450 3950
+Wire Wire Line
+	5450 3950 5450 4100
+Wire Wire Line
+	6550 3500 6550 4100
+Wire Wire Line
+	6550 4100 5450 4100
+Connection ~ 5450 4100
+Wire Wire Line
+	5450 4100 5450 4250
+Wire Wire Line
+	5450 4250 7000 4250
+Wire Wire Line
+	7000 4250 7000 3400
+Connection ~ 5450 4250
+Wire Wire Line
+	5450 4250 5450 4300
+Wire Wire Line
+	6350 3300 5750 3300
+Wire Wire Line
+	5750 3200 6800 3200
+Wire Wire Line
+	5750 3500 6150 3500
+Wire Wire Line
+	6150 3500 6150 3750
+Wire Wire Line
+	5750 3600 5750 4500
+Wire Wire Line
+	5750 4500 5650 4500
+Connection ~ 6150 3750
+Wire Wire Line
+	5950 3100 7400 3100
+Wire Wire Line
+	7400 3100 7400 4850
+Wire Wire Line
+	7400 4850 6200 4850
+Connection ~ 5950 3100
+Wire Wire Line
+	5900 4850 5300 4850
+Wire Wire Line
+	5300 3900 5300 4650
+Wire Wire Line
+	6300 4650 5300 4650
+Connection ~ 5300 4650
+Wire Wire Line
+	5300 4650 5300 4850
+Wire Wire Line
+	6600 4650 6750 4650
+Wire Wire Line
+	6750 4650 6750 3750
+Wire Wire Line
+	6150 3750 6750 3750
+$EndSCHEMATC

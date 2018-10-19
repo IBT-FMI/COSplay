@@ -15,6 +15,14 @@ While the software needs no additional hardware other than the pyboard itself in
 Here we provide instructions on how to reproduce a second-generation COSplayer (usable with COSplay `commit 76db2a9 <https://github.com/IBT-FMI/COSplay/commit/76db2a945aab5add3988f7be122372c400808396>`_ and newer).
 A (more cursory) description of the first-generation device can be found in the documentation of older versions.
 
+Assembly
+--------
+
+Given the components listed below, we provide a fully narrated video tutorial of how to assemble the device:
+
+.. raw:: html
+    <iframe src="https://widgets.figshare.com/articles/7227626/embed?show_title=1" width="568" height="426" frameborder="0"></iframe>
+
 Components
 ----------
 

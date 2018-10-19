@@ -46,9 +46,11 @@ def main():
 	pin_out5 = pyb.Pin('X5',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
 	pin_out5.value(not cfg.on_value_out_channel5)
 	dac5 = pyb.DAC(1)
+        dac5.write(not cfg.on_value_out_channel5)
 	pin_out6 = pyb.Pin('X6',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
 	pin_out6.value(not cfg.on_value_out_channel6)
 	dac6 = pyb.DAC(2)
+        dac6.write(not cfg.on_value_out_channel6)
 
 	pin_outLED = pyb.LED(4)
 

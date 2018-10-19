@@ -21,7 +21,10 @@ Assembly
 Given the components listed below, we provide a fully narrated video tutorial of how to assemble the device:
 
 .. raw:: html
-    <iframe src="https://widgets.figshare.com/articles/7227626/embed?show_title=1" width="568" height="426" frameborder="0"></iframe>
+    
+    <div style="position: relative; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+    <iframe src="https://widgets.figshare.com/articles/7227626/embed?show_title=0" width="568" height="426" frameborder="0"></iframe>
+    </div>
 
 Components
 ----------

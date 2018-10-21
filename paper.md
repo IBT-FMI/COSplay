@@ -35,21 +35,21 @@ bibliography: paper.bib
 
 In many research areas, the functioning of complex systems is probed by measuring stimulus-evoked responses.
 Commonly, stimulus train delivery is coordinated by in-house and/or proprietary solutions, which are often ill-documented, expensive, poorly reproducible, high-maintenance, and unsustainable.
-Here we present a fully Free and Open Source (FOSS) and hackable framework consisting of a Micro/Python package and a simple compatible circuit schema (see below),
+Here we present a fully Free and Open Source (FOSS) and hackable framework consisting of a Micro/Python package and a simple compatible circuit schema and device assembly instructions (see below);
 which can be used to build and operate a stimulus train delivery device with up to microsecond accuracy.
 
 ![Circuit schema.](documentation/circuit.png)
 
-The software supports highly diverse types of stimulus trains - which can be specified in a format that accommodates most experimental scenarios, including:
+The software and circuit supports highly diverse types of stimulus output, accommodating most most experimental scenarios, including:
 
-* amplitude modulation (up to 3.3V)
+* amplitude modulation (up to 4.2V)
 * event-related designs
 * block designs
 * tonic stimulation
 * multiple stimulation channels
 * short-circuit output
 
-The package was extensively tested for viability in a functional magnetic resonance imaging (fMRI) setting, and is used in ongoing investigations using optogenetic and electrical stimulation [@drlfom] [@fatihm] [@felix].
+The package was extensively tested for viability in a functional magnetic resonance imaging (fMRI) setting, and is used in ongoing investigations using optogenetic and electrical stimulation [@drlfom].
 The flexible stimulus train specification is BIDS-conform [@BIDS], and can automatically be parsed for analysis by modern neuroimaging software, including SAMRI [@SAMRI].
 
 Additionally, the software seamlessly interfaces with the Bruker ParaVision (TM) directory structure, and is able to reposit stimulus summaries in corresponding data paths.

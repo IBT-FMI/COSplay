@@ -9,7 +9,8 @@ COSplay
 
 COSplay (Contrast optimized stimulus player) is a Python based software solution for the deliveriy of stimulus sequences in stimulus evoked fMRI experiments.
 It is fully compatible with the stimulus sequence optimization package COSgen_. 
-
+The software is best used in conjunction with a COSplayer, an open source device, assembly instructions for which can be found `here`__.
+  
 Features
 --------
 
@@ -51,5 +52,8 @@ Hardware
 
 .. _Python: https://www.python.org/
 .. _COSgen: https://github.com/IBT-FMI/COSgen
+.. _COSplayer: https://figshare.com/articles/A_Guide_to_Assembling_the_COSplayer_an_Open_Source_Device_for_Microsecond-Range_Stimulus_Delivery_with_broad_Application_in_Biomedical_Engineering_and_fMRI/7227626
 .. _PySerial: https://pypi.python.org/pypi/pyserial
 .. _Setuptools: https://pypi.python.org/pypi/setuptools
+
+__ COSplayer_

@@ -1,6 +1,9 @@
 COSplay
 =======
 
+.. image:: http://joss.theoj.org/papers/3ee7ef4edc7b537e19f89225d1d96139/status.svg
+  :target: http://joss.theoj.org/papers/3ee7ef4edc7b537e19f89225d1d96139
+  :alt: Journal of Open Source Software Publication Status
 .. image:: https://readthedocs.org/projects/cosplay/badge/?version=latest
   :target: http://cosplay.readthedocs.io/en/latest/?badge=latest
   :alt: Documentation Status

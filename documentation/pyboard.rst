@@ -155,4 +155,4 @@ On values for out channels
 --------------------------
 
 The values in this section are the values a pin takes when a stimulus is delivered.
-If no stimulus is to be delivered, the pin takes the oposite value.
+If no stimulus is to be delivered, the pin takes the opposite value.

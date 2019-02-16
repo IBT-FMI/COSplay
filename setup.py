@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
 	name = "COSplay",
-	version = "",
+	version = "2.0.dev1",
 	author = "Aymanns Florian",
 	author_email = "faymanns@student.ethz.ch",
 	description = "Stimulus delivery for fMRI experiments.",

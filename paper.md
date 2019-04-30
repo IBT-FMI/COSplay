@@ -53,7 +53,7 @@ The software and circuit supports highly diverse types of stimulus output, accom
 The package was extensively tested for viability in a functional magnetic resonance imaging (fMRI) setting, and is used in ongoing investigations using optogenetic and electrical stimulation [@drlfom].
 The flexible stimulus train specification is BIDS-conformant [@BIDS], and can automatically be parsed for analysis by modern neuroimaging software, including SAMRI [@SAMRI].
 
-Additionally, the software seamlessly interfaces with the Bruker ParaVision (TM) directory structure, and is able to deposit stimulus summaries in corresponding data paths.
+Additionally, the software seamlessly interfaces with the Bruker ParaVision (TM) directory structure, and is able to reposit stimulus summaries in corresponding data paths.
 This makes COSplay excellently suited for automating the workflow and increasing the reproducibility of small animal MRI studies - while not compromising its potential for other scenarios.
 
 # References

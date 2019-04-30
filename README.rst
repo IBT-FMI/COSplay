@@ -36,9 +36,6 @@ COSplay can be installed using Python's `setuptools`.
    cd COSplay
    python setup.py install --user
 
-*Note:* `setuptools` will not manage any dependencies.
-You will have to install Dependencies_ manually, e.g. using ``pip install pyserial``.
-
 Dependencies
 ------------
 

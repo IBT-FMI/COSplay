@@ -60,3 +60,12 @@ Hardware
 .. _Setuptools: https://pypi.python.org/pypi/setuptools
 
 __ COSplayer_
+
+
+Contributing Guidelines
+-----------------------
+
+You can:
+
+- Submit suggestions for improvements via the `GitHub Pull Request tracker <https://github.com/IBT-FMI/COSplay/pulls>`_.
+- Report issues and seek help via the `GitHub Issue tracker <https://github.com/IBT-FMI/COSplay/issues>`_.

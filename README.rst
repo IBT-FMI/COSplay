@@ -11,9 +11,9 @@ COSplay
   :target: https://travis-ci.org/IBT-FMI/COSplay
 
 COSplay (Contrast optimized stimulus player) is a Python based software solution for the deliveriy of stimulus sequences in stimulus evoked fMRI experiments.
-It is fully compatible with the stimulus sequence optimization package COSgen_. 
+It is fully compatible with the stimulus sequence optimization package COSgen_.
 The software is best used in conjunction with a COSplayer, an open source device, assembly instructions for which can be found `here`__.
-  
+
 Features
 --------
 

@@ -8,7 +8,9 @@ setup(
 	description = "Stimulus delivery for fMRI experiments.",
 	keywords = ["fMRI", "stimulus", "pyboard", "bruker"],
 	url = "https://github.com/IBT-FMI/COSplay.git",
-	install_requires = [],
+	install_requires = [
+		'pyserial',
+	],
 	provides = ["cosplay"],
 	packages = ["cosplay"],
 	include_package_data = True,

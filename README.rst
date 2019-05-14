@@ -10,7 +10,7 @@ COSplay
 .. image:: https://travis-ci.org/IBT-FMI/COSplay.svg?branch=master
   :target: https://travis-ci.org/IBT-FMI/COSplay
 
-COSplay (Contrast optimized stimulus player) is a Python based software solution for the deliveriy of stimulus sequences in stimulus evoked fMRI experiments.
+COSplay (Contrast optimized stimulus player) is a Python based software solution for the delivery of stimulus sequences in stimulus evoked experiments (particularly fMRI).
 It is fully compatible with the stimulus sequence optimization package COSgen_.
 The software is best used in conjunction with a COSplayer, an open source device, assembly instructions for which can be found `here`__.
 
@@ -49,6 +49,21 @@ Hardware
 - PyBoard 1.1
 - microSD (recommended)
 - USB cable (A to micro-B)
+
+Minimal Usage Example
+---------------------
+
+To execute a demo sequence on the COSplayer device, please follow the subsequent steps:
+
+1. Install the package on a machine according to the instructions above.
+2. Connect the COSplayer device to the machine. At this point the blue, orange, and green LEDs should light up, according to the `LED legend <https://cosplay.readthedocs.io/en/latest/pyboard.html#led-pattern-legend>`_.
+3. Press the USR button twice. At this point the blue LED should light up, the red LED may also intermittently light up, according to whether data is being written on disk.
+4. After the device is recognised by the host computer, navigate to the `sequences` directory.
+5. Copy a file formatted according to the COSplay/BIDS standard into the directory. An example file is `provided in this repository <sequence.tsv>`_. All values are interpreted as SI base units, seconds and hertz, respectively.
+6. After the file has copied and the red LED is no longer lit, safely remove the volume, and press the RST button.
+7. Click the USR button once to select the standalone operation mode. At this point the LED lighting should transition from blue, orange, and green to none.
+8. Click the USR button again to arm the device. At this point the orange LED should light up.
+9. Click the USR button once more to trigger the sequence. At this point the green LED should light up, and, as stimulation is delivered, the blue LED should intermittently light up as well.
 
 .. _Python: https://www.python.org/
 .. _COSgen: https://github.com/IBT-FMI/COSgen

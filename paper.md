@@ -35,7 +35,7 @@ bibliography: paper.bib
 
 In many research areas, the functioning of complex systems is probed by measuring stimulus-evoked responses.
 Commonly, stimulus train delivery is coordinated by in-house and/or proprietary solutions, which are often ill-documented, expensive, poorly reproducible, high-maintenance, and unsustainable.
-Here we present a fully Free and Open Source (FOSS) and hackable framework consisting of a Micro/Python package and a simple compatible circuit schema;
+Here we present COSplay, a fully Free and Open Source (FOSS) and hackable framework consisting of a Micro/Python package and a simple compatible circuit schema,
 which can be used to build and operate a stimulus train delivery device with up to microsecond accuracy.
 This project includes a complete, step-by-step video tutorial to demonstrate the assembly of the COSplayer [@cosplayer], a free and open source hardware device which serves as the reference implementation for the technology.
 

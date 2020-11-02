@@ -38,6 +38,11 @@ Hardware
 Installation
 ============
 
+Setting up the pyboard
+----------------------
+
+This can be done either via the scanner computer or a separate computer.
+
 Download the package via Git (``git clone https://github.com/IBT-FMI/COSplay.git``) or download and unarchive it manually, or from your terminal (``wget https://github.com/IBT-FMI/COSplay/archive/master.zip && unzip master.zip``)
 
 Open a terminal and go to the COSplay folder you downloaded.
@@ -49,6 +54,11 @@ Copy all files in the pyboard folder to the SD card (``cp -rf pyboard/* mount/po
 Of course you can also copy the files without using the terminal.
 
 If you want to use the pyboard standalone you can continue reading at :ref:`pyboard`.
+
+Setting up the client software
+------------------------------
+
+This must be done on the scanner computer in order to enable client software functionality, such as live reporting and stimulation protocol archiving in the Bruker ParaVision directories.
 
 In order to grant the user permission to access the microcontroller, a new udev rule is needed.
 Run the script ``grant_permissions_for_pyboard`` from inside the ``scripts`` folder to create the rule (``./scripts/grant_permissions_for_pyboard``).

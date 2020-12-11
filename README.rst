@@ -26,7 +26,9 @@ Features
 --------
 
 - TTL trigger from MRI scanner can be used
-- 3 TTL output channels (3.3V) and 3 transistor channels
+- 2 transistor channels
+- 2 TTL output channels (3.3V)
+- 2 amplitude modulation channels
 - Microcontroller can be used standalone (c.f. `Standalone use` section in the docs)
 - Stimulus pulse delivery with  ms or μs accurary
 - Random selection of a sequence from a sequence library

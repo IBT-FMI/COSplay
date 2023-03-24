@@ -16,7 +16,7 @@ Features
 - 2 transistor channels (up to ~3.3V)
 - 2 TTL output channels with variable amplitude
 - Microcontroller can be used standalone (c.f. :ref:`pyboard`)
-- Stimulus pulse delivery with  :math:`ms` or :math:`\mu s` accurary
+- Stimulus pulse delivery with  :math:`ms` or :math:`\mu s` accuracy
 - Random selection of a sequence from a sequence library
 - Piping of sequence file to the directory of the latest scan on the MRI computer
 - Error message forwarding to computer

@@ -30,7 +30,7 @@ Features
 - 2 TTL output channels (3.3V)
 - 2 amplitude modulation channels
 - Microcontroller can be used standalone (c.f. `Standalone use` section in the docs)
-- Stimulus pulse delivery with  ms or μs accurary
+- Stimulus pulse delivery with  ms or μs accuracy
 - Random selection of a sequence from a sequence library
 - Piping of sequence file to the directory of the latest scan on the MRI computer
 - Error message forwarding to computer

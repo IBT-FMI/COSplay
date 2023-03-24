@@ -20,7 +20,7 @@ sudo rm -f /etc/udev/rules.d/$a-pyboard.rules
 echo "/etc/udev/rules.d/$a-pyboard.rules was removed."
 else
 echo $'\n\n'
-echo "md5sum miss match! File was probably altered manually. Make sure there are no rules not related to the pyboard in /etc/udev/rules.d/$a-pyboard.rules and delet it manually."
+echo "md5sum miss match! File was probably altered manually. Make sure there are no rules not related to the pyboard in /etc/udev/rules.d/$a-pyboard.rules and delete it manually."
 echo $'\n\n'
 echo "Lines added by the grant_permissions look as follows:"
 echo "# f055:9800, 9801, 9802 MicroPython pyboard

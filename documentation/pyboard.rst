@@ -90,7 +90,7 @@ Red:
     Warning! Do not unplug or reset the board in this state as files might be corrupted.
 
 Red/Green flashing:
-    An error occured while executing the scripts on the board.
+    An error occurred while executing the scripts on the board.
 
 Standalone use
 ==============
@@ -117,7 +117,7 @@ for every reboot of the pyboard.
 Sequence Errors
 ===============
 
-Before deliverying a sequence, the board checks its consistency.
+Before delivering a sequence, the board checks its consistency.
 If the period is smaller than the pulse width or the values in the out_channel column are not integers between 1 and 6, a SequenceError is raised.
 
 In case the board misses a scheduled onset time or end time of a pulse,
@@ -144,7 +144,7 @@ config.py
 Library path
 ------------
 
-If one copies sequences to the board manually, the path to the directory containing the sequences can be spcified in ``library_path``.
+If one copies sequences to the board manually, the path to the directory containing the sequences can be specified in ``library_path``.
 
 Accuracy
 --------

@@ -141,7 +141,7 @@ def listdir_nohidden(path):
 	List all entries in `path` excluding hidden ones.
 
 	This function implements the same functionality as `os.listdir`
-	but ignores hidden entires.
+	but ignores hidden entries.
 
 	Parameters
 	----------

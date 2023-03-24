@@ -82,7 +82,7 @@ def dumps(matrix):
 	matrix : 2d array
 	    input matrix
 
-	Retruns
+	Returns
 	-------
 	out : string
 	    tsv formatted string

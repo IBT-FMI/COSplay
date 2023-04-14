@@ -35,7 +35,7 @@ To reproduce the COSplayer you will need:
 * 7 BNC connectors (female).
 * 2 general purpose small-signal transistors (e.g. 2N3904).
 * 2 resistors (68 kiloohm).
-* 2 resistors (10 kiloohm).
+* 2 resistors (10 kiloohm, or 120 ohm).
 * Stripboard (18x4 section or larger).
 * Connector cables.
 
@@ -51,15 +51,20 @@ Lastly, if the device is intended for frequent manual circuit configuration (i.e
 Circuit
 -------
 
-The following figure shows the circuit used with the pyboard.
-BNC ports 1 and 2 can short circuit the incoming BNC.
-Ports 3 and 4 can deliver ~4.2V TTL pulses.
-Ports 5 and 6 allow changing the amplitude of a TTL pusle (max. ~3.3V).
-Exact output values depend on the input voltage of the USB port. 
+The following figure shows the circuit used with the pyboard:
 
-*NOTE:* The maximum output voltage of the amplitude modulation pins depends on output impedance and the resistive load.
-If this poses difficulties, we suggest enabling the optional analogue buffer on the DAC in the MicroPython firmware (cf `commit 94d2127 <https://github.com/IBT-FMI/micropython/commit/94d21272e2f3f0d4d33c4b80c9a7b8e3816452ee>`_ on our micropython fork).
-The buffer offers lower output impedance, but reduces the output accuracy in turn.
+* BNC ports **1** and **2** can short circuit the incoming BNC.
+* Ports **3** and **4** can deliver TTL pulses (the voltage is ~4.5V *if* the target device draws no current).
+* Ports **5** and **6** allow changing the amplitude of a TTL pusle (max. ~3.3V).
+* Exact output values depend on the input voltage of the USB port. 
+
+**Important Voltage Notes**:
+
+* The TTL output voltage will drop (possibly below the detection threshold) if the peripheral draws current.
+  In order to adapt to this, the pull-up resistors can be switched to 120 ohm instead of the recommended 10 kiloohm.
+* The maximum output voltage of the amplitude modulation pins depends on output impedance and the resistive load.
+  If this poses difficulties, we suggest enabling the optional analogue buffer on the DAC in the MicroPython firmware (cf `commit 94d2127 <https://github.com/IBT-FMI/micropython/commit/94d21272e2f3f0d4d33c4b80c9a7b8e3816452ee>`_ on our micropython fork).
+  The buffer offers lower output impedance, but reduces the output accuracy in turn.
 
 .. image:: circuit.png
 

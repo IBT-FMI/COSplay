@@ -5,10 +5,8 @@ COSplay
   :target: http://joss.theoj.org/papers/3ee7ef4edc7b537e19f89225d1d96139
   :alt: Journal of Open Source Software Publication Status
 .. image:: https://readthedocs.org/projects/cosplay/badge/?version=latest
-  :target: http://cosplay.readthedocs.io/en/latest/?badge=latest
+  :target: http://cosplay.readthedocs.io/en/latest
   :alt: Documentation Status
-.. image:: https://travis-ci.org/IBT-FMI/COSplay.svg?branch=master
-  :target: https://travis-ci.org/IBT-FMI/COSplay
 
 COSplay (Contrast optimized stimulus player) is a Python based software solution for the delivery of stimulus sequences in stimulus evoked experiments.
 It is fully compatible with the stimulus sequence optimization package COSgen_.

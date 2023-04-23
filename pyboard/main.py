@@ -35,7 +35,7 @@ def main():
 	pin_out1.value(not cfg.on_value_out_channel1)
 	pin_out2 = pyb.Pin('Y3',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_UP)
 	pin_out2.value(not cfg.on_value_out_channel2)
-	
+
     #Open drain pins
 	pin_out3 = pyb.Pin('Y12',pyb.Pin.OUT_OD)
 	pin_out3.value(not cfg.on_value_out_channel3)

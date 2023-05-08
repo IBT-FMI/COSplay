@@ -35,22 +35,22 @@ def main():
 	pin_out1.value(not cfg.on_value_out_channel1)
 	pin_out2 = pyb.Pin('Y3',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_UP)
 	pin_out2.value(not cfg.on_value_out_channel2)
-	
-    #Open drain pins
+
+	#Open drain pins
 	pin_out3 = pyb.Pin('Y12',pyb.Pin.OUT_OD)
 	pin_out3.value(not cfg.on_value_out_channel3)
 	pin_out4 = pyb.Pin('X2',pyb.Pin.OUT_OD)
 	pin_out4.value(not cfg.on_value_out_channel4)
 
-    #Amplitude modulation pins
+	#Amplitude modulation pins
 	pin_out5 = pyb.Pin('X5',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
 	pin_out5.value(not cfg.on_value_out_channel5)
 	dac5 = pyb.DAC(1)
-        dac5.write(not cfg.on_value_out_channel5)
+	dac5.write(not cfg.on_value_out_channel5)
 	pin_out6 = pyb.Pin('X6',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_DOWN)
 	pin_out6.value(not cfg.on_value_out_channel6)
 	dac6 = pyb.DAC(2)
-        dac6.write(not cfg.on_value_out_channel6)
+	dac6.write(not cfg.on_value_out_channel6)
 
 	pin_outLED = pyb.LED(4)
 
@@ -60,12 +60,15 @@ def main():
 	serial_port = USB_Port()
 	pkt = Packet(serial_port)
 
-	armedLED = pyb.LED(3)			#indicates when the system is waiting for a trigger
-	triggerLED = pyb.LED(2)			#indicates when the system is delivering a sequence
+	#indicates when the system is waiting for a trigger:
+	armedLED = pyb.LED(3)
+	#indicates when the system is delivering a sequence:
+	triggerLED = pyb.LED(2)
 
 	try:
 		file_paths = [cfg.library_path + '/' + s for s in ospath.listdir_nohidden(cfg.library_path)]
-	except OSError:			#if path does not exist listdir raises an OSError
+	#if path does not exist listdir raises an OSError:
+	except OSError:
 		try:
 			file_paths = ['/sd/sequence_library/' + s for s in ospath.listdir_nohidden('/sd/sequence_library/')]
 		except OSError:

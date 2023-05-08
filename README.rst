@@ -5,10 +5,8 @@ COSplay
   :target: http://joss.theoj.org/papers/3ee7ef4edc7b537e19f89225d1d96139
   :alt: Journal of Open Source Software Publication Status
 .. image:: https://readthedocs.org/projects/cosplay/badge/?version=latest
-  :target: http://cosplay.readthedocs.io/en/latest/?badge=latest
+  :target: http://cosplay.readthedocs.io/en/latest
   :alt: Documentation Status
-.. image:: https://travis-ci.org/IBT-FMI/COSplay.svg?branch=master
-  :target: https://travis-ci.org/IBT-FMI/COSplay
 
 COSplay (Contrast optimized stimulus player) is a Python based software solution for the delivery of stimulus sequences in stimulus evoked experiments.
 It is fully compatible with the stimulus sequence optimization package COSgen_.
@@ -26,7 +24,9 @@ Features
 --------
 
 - TTL trigger from MRI scanner can be used
-- 3 TTL output channels (3.3V) and 3 transistor channels
+- 2 transistor channels
+- 2 TTL output channels (3.3V)
+- 2 amplitude modulation channels
 - Microcontroller can be used standalone (c.f. `Standalone use` section in the docs)
 - Stimulus pulse delivery with  ms or μs accurary
 - Random selection of a sequence from a sequence library

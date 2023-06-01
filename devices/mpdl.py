@@ -103,4 +103,4 @@ if __name__ == "__main__":
 	firmware_path = _download(firmware_link)
 	print(f"✔️ Downloaded micropython firmware under: `{firmware_path}`.")
 	installed_file =_install(firmware_path, args.destination)
-	print(f"✔️ Downloaded micropython firmware under: `{installed_file}`.")
+	print(f"✔️ Installed micropython firmware under: `{installed_file}`.")

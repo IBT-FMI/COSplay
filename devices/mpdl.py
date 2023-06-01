@@ -68,8 +68,9 @@ def _install(firmware_path,
 	):
 	if os.path.isdir(destination_dir):
 		installed_file = shutil.copy(firmware_path, destination_dir)
-
-	return installed_file
+		return installed_file
+	else:
+		raise ValueError
 
 if __name__ == "__main__":
 	argparser = argparse.ArgumentParser(

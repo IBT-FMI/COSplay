@@ -23,3 +23,4 @@ popd
 	umount ${myboard}
 	sleep 2
 	mpremote fs cp device_files/* :
+	mpremote reset

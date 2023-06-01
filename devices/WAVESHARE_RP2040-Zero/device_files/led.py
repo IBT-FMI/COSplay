@@ -21,7 +21,7 @@ def ws2812():
 
 
 # Create the StateMachine, outputting on Pin(12) — this can vary between devices.
-SM = rp2.StateMachine(0, ws2812, freq=8_000_000, sideset_base=Pin(12))
+SM = rp2.StateMachine(0, ws2812, freq=8_000_000, sideset_base=Pin(16))
 
 def cycle(
 	max_lum=MAX_LUM,

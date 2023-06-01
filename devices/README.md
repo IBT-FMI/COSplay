@@ -8,7 +8,7 @@ where your device name corresponds to the specific microcontroller you want to u
 
 Accepted device name values (i.e. supported devices) are the subdirectory names in this directory, and can be listed as follows:
 
-```
+```console
 user@host:~/COSplay/devices$ ls */ -d
 WAVESHARE_RP2040-Zero/  XIAO-RP2040/
 ```

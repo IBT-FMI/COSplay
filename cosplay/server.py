@@ -141,7 +141,7 @@ def listdir_nohidden(path):
 	List all entries in `path` excluding hidden ones.
 
 	This function implements the same functionality as `os.listdir`
-	but ignores hidden entires.
+	but ignores hidden entries.
 
 	Parameters
 	----------
@@ -264,7 +264,7 @@ def connect(port_name=None):
 
 	This function tries to connect to `port_name`. If `port_name`
 	is None, tries to connect to the first serial port with a
-	maching VID:PID for the MicroPython Pyboard.
+	matching VID:PID for the MicroPython Pyboard.
 
 	Parameters
 	----------

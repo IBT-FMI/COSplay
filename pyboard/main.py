@@ -30,7 +30,7 @@ def callback_trigger2():
 
 def main():
 
-	#keep the following lines close to the begining of main because laser is switched on until pin_out.value(1)
+	#keep the following lines close to the beginning of main because laser is switched on until pin_out.value(1)
 	pin_out1 = pyb.Pin('Y1',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_UP)
 	pin_out1.value(not cfg.on_value_out_channel1)
 	pin_out2 = pyb.Pin('Y3',pyb.Pin.OUT_PP,pull=pyb.Pin.PULL_UP)
@@ -178,7 +178,7 @@ def main():
 	eh = ErrorHandler(use_wo_server,pkt,storage_path)
 
 	if cfg.accuracy == 'us':
-		ticks = utime.ticks_us		#Function for utime.measurment
+		ticks = utime.ticks_us		#Function for utime.measurement
 		sleep = utime.sleep_us		#Corresponding sleep function for ticks
 		conversion_factor = 1000000	#converts seconds to the unit specified in cfg.accuracy
 	elif cfg.accuracy == 'ms':
